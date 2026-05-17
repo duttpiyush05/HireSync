@@ -6,10 +6,12 @@ const cors = require('cors');
 const connectToDB = require('./db/db');
 const freelancerRoutes = require('./routes/freelancer_routes')
 const clientRoutes = require('./routes/client_routes')
+const cookieParser = require('cookie-parser')
 
 connectToDB();
 
 app.use(cors());
+app.use(cookieParser())
 
 
 app.use(express.json());
@@ -20,7 +22,7 @@ app.get('/', (req,res)=>
     res.send("HireSync");
 })
 
-app.get('/freelancers', freelancerRoutes)
-app.get('/clients', clientRoutes)
+app.use('/freelancers', freelancerRoutes)
+app.use('/clients', clientRoutes)
 
 module.exports = app;

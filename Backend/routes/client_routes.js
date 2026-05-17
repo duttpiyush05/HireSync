@@ -9,8 +9,8 @@ router.post('/register',[
   body('fullname.firstname').isLength({min:3}).withMessage("Invalid Name"),
   body('email').isEmail().withMessage("Invalid Email"),
   body('password').isLength({min:6}).withMessage("Password must be Atleast 6 character"),
-  body('contactno').matches("/^[0-9]{10}$/").withMessage("Invalid Contact Number"),
-  body("gender").isIn('male','female','other').withMessage("Invalid Gender")
+  body('contactno').matches(/^[0-9]{10}$/).withMessage("Invalid Contact Number"),
+  body("gender").isIn(['male','female','other']).withMessage("Invalid Gender")
 ], clientController.register)
 
 router.post('/login',[

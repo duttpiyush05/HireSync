@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const freeLancerSchema = new mongoose.Schema({
+const freelancerSchema = new mongoose.Schema({
   fullname :{
     firstname:{
       type : String,
@@ -43,21 +43,22 @@ const freeLancerSchema = new mongoose.Schema({
 
 })
 
-freeLancerSchema.methods.generateToken = function()
+freelancerSchema.methods.generateToken = function()
 {
   const token = jwt.sign({_id:this._id}, process.env.JWT_SECRET, {expiresIn:'24h'})
   return token
 }
 
-freeLancerSchema.methods.hashPassword = async function (password)
+freelancerSchema.statics.hashPassword = async function (password)
 {
   const hashedPassword = await bcrypt.hash(password, 10)
   return hashedPassword
 }
 
-freeLancerSchema.methods.comparePassword = async function (password)
+freelancerSchema.methods.comparePassword = async function (password)
 {
   return await bcrypt.compare(password, this.password)
 }
 
-module.exports = mongoose.model("freelacer", freeLancerSchema)
+const freelancerModel = mongoose.model('freelancer', freelancerSchema)
+module.exports = freelancerModel

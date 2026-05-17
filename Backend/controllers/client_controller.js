@@ -16,12 +16,12 @@ module.exports.register = async (req, res, next) =>
   const isClient = await clientModel.findOne({email})
   if(isClient)
   {
-    return res.status(401).json({message : "User Already Exists"})
+    return res.status(400).json({message : "User Already Exists"})
   }
 
   const hashedPassword = await clientModel.hashPassword(password)
 
-  const client = await clienServices.create({
+  const client = await clientServices.createClient({
     firstname : fullname.firstname,
     lastname : fullname.lastname,
     email : email,
@@ -30,8 +30,8 @@ module.exports.register = async (req, res, next) =>
     gender :  gender
   })
 
-  const token = client.generatetoken()
-  res.cookie('token')
+  const token = await client.generatetoken()
+  res.cookie('token', token)
   res.status(201).json({token, client})
 }
 
@@ -51,7 +51,7 @@ module.exports.login = async (req, res, next) =>
     return res.status(401).json({message : "Invalid Credentails"})
   }
 
-  const passwordMatch = client.comaparePassword(password)
+  const passwordMatch = await client.comaparePassword(password)
   if(!passwordMatch)
   {
     return res.status(401).json({message : "Invalid Credentails"})
@@ -59,20 +59,15 @@ module.exports.login = async (req, res, next) =>
 
   const token = client.generatetoken()
   res.cookie('token', token)
-  res.
   res.status(201).json({token, client})
 }
 
 module.exports.logout = async (req, res, next) =>
 {
-  const token = req.cookie.token || req.headers.authorization?.split(' ')[1]
-  if(!token)
-  {
-    return res.status(401).json({message : "Login Required"})
-  }
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
   await blacklistTokenModel.create({token})
 
-  req.clearCookie(token)
+  res.clearCookie(token)
   res.status(200).json({message : "Logout Successfully"})
 }
 

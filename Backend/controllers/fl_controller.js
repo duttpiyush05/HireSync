@@ -33,10 +33,9 @@ module.exports.register = async (req, res, next) =>
     gender : gender
   })
 
-  const token = await freelancerModel.generateToken()
+  const token = await freelancer.generateToken()
   res.cookie('token', token)
   res.status(201).json({token, freelancer})
-  console.log(freelancer)
 }
 
 module.exports.login = async (req, res, next) =>

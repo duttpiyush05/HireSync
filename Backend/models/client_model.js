@@ -44,11 +44,11 @@ const clientSchema = new mongoose.Schema({
 
 clientSchema.methods.generatetoken = function ()
 {
-  const token = jwt.sign({id:this._id}, process.env.JWT_SECRET,{expiresIn: '24h'})
+  const token = jwt.sign({_id:this._id}, process.env.JWT_SECRET,{expiresIn: '24h'})
   return token
 }
 
-clientSchema.methods.hashPassword = async function (password)
+clientSchema.statics.hashPassword = async function (password)
 {
   const hashedPassword = await bcrypt.hash(password, 10)
   return hashedPassword
@@ -59,4 +59,5 @@ clientSchema.methods.comaparePassword = async function (password)
   return await bcrypt.compare(password, this.password)
 }
 
-module.exports = mongoose.model('client', clientSchema)
+const clientModel = mongoose.model('clients', clientSchema)
+module.exports =  clientModel
