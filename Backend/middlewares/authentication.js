@@ -2,7 +2,7 @@ const freelancerModel = require('../models/fl_model')
 const clientModel = require('../models/client_model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const blackListTokenModel = require('../models/blackListToken')
+const blackListToken = require('../models/blackListTokenModel')
 
 module.exports.authFreelancer = async (req, res, next)=>
 {

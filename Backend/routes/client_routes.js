@@ -16,11 +16,11 @@ router.post('/register',[
 router.post('/login',[
   body('email').isEmail().withMessage("Invalid Email"),
   body('password').isLength({min:6}).withMessage("Invalid Password")
-], clientController.register)
+], clientController.login)
 
 router.get('/logout',authentication.authClient, clientController.logout)
 
-router.get('/profile', authentication.authClient, clientController.profile)
+router.get('/profile', authentication.authClient, clientController.getprofile)
 
 module.exports = router
 

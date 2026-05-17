@@ -1,7 +1,7 @@
 const express = require('express')
 const {body} = require('express-validator')
 const {verify} = require('bcrypt')
-const flModel = require('../models/fl_model')
+// const flModel = require('../models/fl_model')
 const freelancerController = require('../controllers/fl_controller')
 const authentication = require('../middlewares/authentication')
 const router = express.Router()
@@ -21,6 +21,6 @@ router.post('/login', [
 
 router.get('/logout', authentication.authFreelancer, freelancerController.logout)
 
-router.get('/profile', authentication.authFreelancer, freelancerController.profile)
+router.get('/profile', authentication.authFreelancer, freelancerController.getprofile)
 
 module.exports = router
