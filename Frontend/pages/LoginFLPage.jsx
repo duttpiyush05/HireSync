@@ -1,12 +1,40 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useContext } from 'react'
+import { useState} from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import {FLDataContext} from '../src/context/FLContext'
+import { useNavigate } from 'react-router-dom'
 
 const LoginFLPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const [freelancer, setfreelancer] = useContext(FLDataContext)
+  const navigate = useNavigate()
+
+  const handleSubmit = async(e) =>
+  {
+    e.preventDefault()
+    const freelancer = {
+      email : email,
+      password : password
+    }
+
+    console.log(freelancer)
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/login`, freelancer)
+    console.log(response)
+    if(response.status === 200)
+    {
+      const data = response.data
+      localStorage.setItem('token', data.token)
+      setfreelancer(data.freelancer)
+      navigate('/fl/dashboard')
+    }
+
+    setEmail('')
+    setPassword('')
+  }
 
   return (
     <div className='bg-[#0c1324] h-screen w-screen flex items-center justify-center text-white'>
@@ -42,7 +70,7 @@ const LoginFLPage = () => {
             <input 
             required
             value={password}
-            onChange={(e)=> setEmail(e.target.value)}
+            onChange={(e)=> setPassword(e.target.value)}
             type="password" 
             className='w-1/2 px-4 w-[95%] m h-16 rounded-md bg-[#37374b] pl-15 text-lg' 
             placeholder='********' /> 
