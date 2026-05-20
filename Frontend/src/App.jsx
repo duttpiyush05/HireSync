@@ -5,6 +5,7 @@ import RegisterPage from '../pages/RegisterPage'
 import LandingPage from '../pages/LandingPage'
 import LoginFLPage from '../pages/LoginFLPage'
 import FreelancerDashboard from '../pages/FreelancerDashboard'
+import FreelancerAuth from '../pages/FreelancerAuth'
 
 function App() {
   
@@ -16,7 +17,11 @@ function App() {
       <Route path='/' element={<LandingPage />} />
       <Route path='/register' element={<RegisterPage />} />
       <Route path='/fl/login' element={<LoginFLPage/>} />
-      <Route path='/fl/dashboard' element={<FreelancerDashboard/>} />
+      <Route path='/fl/dashboard' element={
+                                            <FreelancerAuth>
+                                              <FreelancerDashboard/>
+                                            </FreelancerAuth >                                          
+                                          } />
 
       </Routes>
 
