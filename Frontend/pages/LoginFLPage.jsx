@@ -21,9 +21,7 @@ const LoginFLPage = () => {
       password : password
     }
 
-    console.log(freelancer)
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/login`, freelancer)
-    console.log(response)
     if(response.status === 200)
     {
       const data = response.data
@@ -37,8 +35,9 @@ const LoginFLPage = () => {
   }
 
   return (
-    <div className='bg-[#0c1324] h-screen w-screen flex items-center justify-center text-white'>
-        <div className='rounded-xl border-white w-[25vw] h-[75vh] bg-[#19192f] shadow-lg'>
+    <div className='bg-[#0c1324] h-screen flex justify-center items-center w-screen text-white'>
+
+        <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg'>
           <div className='text-white flex flex-col justify-center items-center'>
             <h1 className='text-3xl font-bold text-[#6366F1] mt-12 mb-8'>HireSync</h1>
 
@@ -79,8 +78,11 @@ const LoginFLPage = () => {
 
           </form>
 
-          <p className='p-30 text-lg'>Don't have an Account? <Link className='hover:underline font-bold' to="/register " >Register</Link> 
+          <div
+          className='mt-20 flex justify-center'>
+            <p className=' text-lg'>Don't have an Account? <Link className='hover:underline font-bold' to="/register " >Register</Link> 
           </p>
+          </div>
 
         </div>
     </div>

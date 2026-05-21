@@ -65,8 +65,8 @@ const RegisterPage = () => {
       <div className='h-screen w-1/2 flex text-white '>
         <img className='h-full w-full object-cover z-50' src={registerImage} alt="" />
 
-        <div className='absolute z-100 w-full h-20'>
-            <h1 className='text-4xl font-bold p-20 m-10'>HireSync</h1>
+        <div className='absolute z-100 w-full h-20 mt-15 pl-25'>
+            <Link to='/' className='relative text-4xl font-bold '>HireSync</Link>
         </div>
       
         <div className='absolute z-100 self-end w-1/2 pb-20 p-25' >
@@ -86,13 +86,15 @@ const RegisterPage = () => {
 
           <div className='flex w-[80%] mt-8 gap-4 mb-8'>
 
-              <div className='p-5 h-40 rounded-xl bg-[#19192f]'>
+              <div className='p-5 h-40 rounded-xl bg-[#19192f] border-3  border-[#33336e]'>
                 <h2 className='mb-2 text-2xl'><i className="ri-suitcase-line"></i></h2>
                 <h3 className='font-bold mb-2'>Join as Freelancer</h3>
                 <h4 className='text-md text-gray-300'>Find high-end contracts and manage projects.</h4>
               </div>
 
-              <div className='p-5 h-40 rounded-xl bg-[#19192f]'>
+              <div className='p-5 h-40 rounded-xl bg-[#19192f]'
+              onClick={()=> navigate('/client/register')}
+              >
                 <h2 className='mb-2 text-2xl'><i className="ri-building-line"></i></h2>
                 <h3 className='font-bold mb-2'>Join as Client</h3>
                 <h4 className='text-md text-gray-300'>Hire vetted experts for your enterprise needs.</h4>
@@ -157,7 +159,7 @@ const RegisterPage = () => {
 
                 className='bg-[#19192f] w-1/2 px-4 w-[80%] h-12 rounded-md' 
                 type="password" 
-                placeholder='John'/>
+                placeholder='*******'/>
 
 
                  <span className='block text-sm mt-1 mb-6'>*Must be at least 6 characters containing a number and a symbol.</span>
@@ -171,7 +173,7 @@ const RegisterPage = () => {
                 onChange={(e)=> setContactno(e.target.value)}
                 className='bg-[#19192f] w-1/2 px-4 w-[60%] m h-12 rounded-md' 
                 type='text' 
-                placeholder='John'/>
+                placeholder='+91'/>
 
 
                 <select 
@@ -180,7 +182,7 @@ const RegisterPage = () => {
 
                 className='h-12 rounded-md ml-5 p-3 bg-[#19192f] pointer w-1/6'>
                 
-                  <option value="">Gender</option>
+                  <option value="">Select Gender</option>
                   <option value="Male">Male</option>
                   <option value="female">Female</option>
                   <option value="Other">Other</option>

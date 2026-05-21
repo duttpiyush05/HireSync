@@ -6,6 +6,7 @@ import LandingPage from '../pages/LandingPage'
 import LoginFLPage from '../pages/LoginFLPage'
 import FreelancerDashboard from '../pages/FreelancerDashboard'
 import FreelancerAuth from '../pages/FreelancerAuth'
+import FreelancerLogout from '../pages/FreelancerLogout'
 
 function App() {
   
@@ -20,6 +21,10 @@ function App() {
       <Route path='/fl/dashboard' element={
                                             <FreelancerAuth>
                                               <FreelancerDashboard/>
+                                            </FreelancerAuth>                                          
+                                          } />
+      <Route path='/fl/logout' element={ <FreelancerAuth>
+                                              <FreelancerLogout/>
                                             </FreelancerAuth >                                          
                                           } />
 
