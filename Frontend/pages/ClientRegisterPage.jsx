@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import registerImage from '../src/assets/register.png'
-import { FLDataContext } from '../src/context/FLContext'
+import {ClientDataContext} from '../src/context/ClientContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,16 +15,16 @@ const RegisterPage = () => {
   const [gender, setGender] = useState('')
   const [check, setcheck] = useState(false)
   
-  const [freelancerData, setfreelancerData] = useState({})
+  // const [client, setclient] = useState({})
 
-  const [freelancer, setfreelancer] = useContext(FLDataContext)
+  const [client, setclient] = useContext(ClientDataContext)
 
   const navigate = useNavigate()
 
   const submitHandler = async (e) =>
   {
     e.preventDefault()
-    const freelancerData = {
+    const clientData = {
       fullname : {
         firstname : firstname,
         lastname : lastname,
@@ -36,14 +36,13 @@ const RegisterPage = () => {
     }
    
     try{
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/register`, freelancerData)
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/clients/register`, clientData)
       if(response.status === 201)
       {
         const data = response.data
-        setfreelancer(data.freelancer)
+        setclient(data.freelancer)
         localStorage.setItem('token', data.token)
-        console.log(data.user)
-        navigate('/fl/dashboard')
+        navigate('/client/dashboard')
       }
     }catch(err)
     {
@@ -86,13 +85,14 @@ const RegisterPage = () => {
 
           <div className='flex w-[80%] mt-8 gap-4 mb-8'>
 
-              <div className='p-5 h-40 rounded-xl bg-[#19192f] border-3  border-[#33336e]'>
+              <div className='p-5 h-40 rounded-xl bg-[#19192f] '
+              onClick={()=> navigate('/register')}>
                 <h2 className='mb-2 text-2xl'><i className="ri-suitcase-line"></i></h2>
                 <h3 className='font-bold mb-2'>Join as Freelancer</h3>
                 <h4 className='text-md text-gray-300'>Find high-end contracts and manage projects.</h4>
               </div>
 
-              <div className='p-5 h-40 rounded-xl bg-[#19192f]'
+              <div className='p-5 h-40 rounded-xl bg-[#19192f] border-3  border-[#33336e]'
               onClick={()=> navigate('/client/register')}
               >
                 <h2 className='mb-2 text-2xl'><i className="ri-building-line"></i></h2>

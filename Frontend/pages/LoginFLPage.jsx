@@ -37,6 +37,10 @@ const LoginFLPage = () => {
   return (
     <div className='bg-[#0c1324] h-screen flex justify-center items-center w-screen text-white'>
 
+      <div className='absolute w-full h-20 pl-25 self-start mt-[4rem]'>
+                  <Link to='/' className='text-4xl font-bold '>HireSync</Link>
+              </div>
+
         <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg'>
           <div className='text-white flex flex-col justify-center items-center'>
             <h1 className='text-3xl font-bold text-[#6366F1] mt-12 mb-8'>HireSync</h1>
