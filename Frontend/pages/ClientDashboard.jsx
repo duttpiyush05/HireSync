@@ -28,7 +28,7 @@ const ClientDashboard = () => {
 
       <div className='h-full w-full max-w-[1400px] px-4 sm:px-6 lg:px-10'>
 
-        <nav className='w-full border-[#0013be] min-h-[5rem] flex border-b-4 justify-between items-center py-3 relative'>
+        <nav className='w-full border-[#0013be] min-h-[5rem] flex border-b-4 justify-between items-center py-3 relative sticky top-0 z-50 bg-[#15152a] rounded-b'>
 
           {/* Left: Logo + Nav Links */}
           <div className='flex items-center gap-4 flex-1'>
@@ -39,6 +39,7 @@ const ClientDashboard = () => {
               <Link to="/">Find Work</Link>
               <Link to="/">My Jobs</Link>
               <Link to="/">Messages</Link>
+              <Link to="/post-job">Post Job</Link>
               <Link to="/">Invoices</Link>
             </ol>
           </div>
@@ -182,6 +183,203 @@ const ClientDashboard = () => {
               </div>
 
           </div>
+
+
+          <div className='mt-[4rem] mb-[4rem]  shadow-lg flex justify-between`'>
+
+            <h2 className='text-3xl font-bold p-[0rem]'>
+              Top Recent Applicants
+            </h2>
+
+            <Link to="/applicants" className='text-blue-500 hover:text-blue-700 ml-auto font-semibold text-lg'>
+            View All
+            </Link>
+
+          </div>
+          
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 pt-8 sm:pt-[3rem] mt-[2rem] '>
+
+              <div className=' h-auto min-h-[17rem] p-6 border rounded-xl bg-[#151b2d] shadow-xl hover:border-blue-500 transition duration-0 '>
+
+             <div className='text-3xl font-bold p-[0.5rem] flex gap-10'>
+              <div className='border-1 h-20 w-25 rounded-full'></div>
+                <div className='flex justify-between w-full '>
+                  <div className='flex flex-col gap-1'>
+                  Elena Rodriguez
+                  <p className='text-lg text-gray-300 font-semibold'>Senior React Developer</p>
+                </div>
+
+                <div className='p-[0.1rem] rounded-3xl flex gap-5 items-center justify-center text-green-500 bg-[#3e4292] h-3/4 w-4/10 ml-auto'>
+
+                  <i class="ri-flashlight-fill"></i>
+
+                  <h3 className='text-lg font-bold'>98% Match</h3>
+
+                </div>
+
+                <div >
+
+                </div>
+                </div>
+             </div>
+
+             <div className='flex justify-between w-full  mt-[1rem] font-semibold '>
+                <div className='h-[2.5rem]'>Ratings</div>
+                <div className='h-[2.5rem]'>Applied : {new Date().toLocaleDateString()}</div>
+             </div>
+
+             <div className='grid grid-cols-2 gap-4 mt-[1rem] font-semibold text-md'>
+              <Link to="/profile" className='bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 h-15 flex items-center justify-center'>
+                Review Profile
+              </Link>
+              <Link to="/profile" className='bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 h-15 flex items-center justify-center'>
+                Message
+              </Link>
+             </div>
+
+              </div>
+
+              <div className=' h-auto min-h-[17rem] p-6 border rounded-xl bg-[#151b2d] shadow-xl hover:border-blue-500 transition duration-0 '>
+
+             <div className='text-3xl font-bold p-[0.5rem] flex gap-10'>
+              <div className='border-1 h-20 w-25 rounded-full'></div>
+                <div className='flex justify-between w-full '>
+                  <div className='flex flex-col gap-1'>
+                  Elena Rodriguez
+                  <p className='text-lg text-gray-300 font-semibold'>Senior React Developer</p>
+                </div>
+
+                <div className='p-[0.1rem] rounded-3xl flex gap-5 items-center justify-center text-green-500 bg-[#3e4292] h-3/4 w-4/10 ml-auto'>
+
+                  <i class="ri-flashlight-fill"></i>
+
+                  <h3 className='text-lg font-bold'>98% Match</h3>
+
+                </div>
+
+                <div >
+
+                </div>
+                </div>
+             </div>
+
+             <div className='flex justify-between w-full  mt-[1rem] font-semibold '>
+                <div className='h-[2.5rem]'>Ratings</div>
+                <div className='h-[2.5rem]'>Applied : {new Date().toLocaleDateString()}</div>
+             </div>
+
+             <div className='grid grid-cols-2 gap-4 mt-[1rem] font-semibold text-md'>
+              <Link to="/profile" className='bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 h-15 flex items-center justify-center'>
+                Review Profile
+              </Link>
+              <Link to="/profile" className='bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 h-15 flex items-center justify-center'>
+                Message
+              </Link>
+             </div>
+
+              </div>
+
+              <div className=' h-auto min-h-[17rem] p-6 border rounded-xl bg-[#151b2d] shadow-xl hover:border-blue-500 transition duration-0 '>
+
+             <div className='text-3xl font-bold p-[0.5rem] flex gap-10'>
+              <div className='border-1 h-20 w-25 rounded-full'></div>
+                <div className='flex justify-between w-full '>
+                  <div className='flex flex-col gap-1'>
+                  Elena Rodriguez
+                  <p className='text-lg text-gray-300 font-semibold'>Senior React Developer</p>
+                </div>
+
+                <div className='p-[0.1rem] rounded-3xl flex gap-5 items-center justify-center text-green-500 bg-[#3e4292] h-3/4 w-4/10 ml-auto'>
+
+                  <i class="ri-flashlight-fill"></i>
+
+                  <h3 className='text-lg font-bold'>98% Match</h3>
+
+                </div>
+
+                <div >
+
+                </div>
+                </div>
+             </div>
+
+             <div className='flex justify-between w-full  mt-[1rem] font-semibold '>
+                <div className='h-[2.5rem]'>Ratings</div>
+                <div className='h-[2.5rem]'>Applied : {new Date().toLocaleDateString()}</div>
+             </div>
+
+             <div className='grid grid-cols-2 gap-4 mt-[1rem] font-semibold text-md'>
+              <Link to="/profile" className='bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 h-15 flex items-center justify-center'>
+                Review Profile
+              </Link>
+              <Link to="/profile" className='bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 h-15 flex items-center justify-center'>
+                Message
+              </Link>
+             </div>
+
+              </div>
+
+              <div className=' h-auto min-h-[17rem] p-6 border rounded-xl bg-[#151b2d] shadow-xl hover:border-blue-500 transition duration-0 '>
+
+             <div className='text-3xl font-bold p-[0.5rem] flex gap-10'>
+              <div className='border-1 h-20 w-25 rounded-full'></div>
+                <div className='flex justify-between w-full '>
+                  <div className='flex flex-col gap-1'>
+                  Elena Rodriguez
+                  <p className='text-lg text-gray-300 font-semibold'>Senior React Developer</p>
+                </div>
+
+                <div className='p-[0.1rem] rounded-3xl flex gap-5 items-center justify-center text-green-500 bg-[#3e4292] h-3/4 w-4/10 ml-auto'>
+
+                  <i class="ri-flashlight-fill"></i>
+
+                  <h3 className='text-lg font-bold'>98% Match</h3>
+
+                </div>
+
+                <div >
+
+                </div>
+                </div>
+             </div>
+
+             <div className='flex justify-between w-full  mt-[1rem] font-semibold '>
+                <div className='h-[2.5rem]'>Ratings</div>
+                <div className='h-[2.5rem]'>Applied : {new Date().toLocaleDateString()}</div>
+             </div>
+
+             <div className='grid grid-cols-2 gap-4 mt-[1rem] font-semibold text-md'>
+              <Link to="/profile" className='bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 h-15 flex items-center justify-center'>
+                Review Profile
+              </Link>
+              <Link to="/profile" className='bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 h-15 flex items-center justify-center'>
+                Message
+              </Link>
+             </div>
+
+              </div>
+
+
+
+
+            </div>
+
+            <footer className='mt-10 pb-[5rem] w-full bg-[#15152a] rounded-t-2xl'>
+          <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 sm:p-10'>
+            <div>
+              <h2 className='text-2xl sm:text-3xl font-bold mb-2'>HireSync</h2>
+              <p className='text-base text-gray-300'>© 2026 HireSync. All rights reserved.</p>
+            </div>
+
+            <ol className='flex flex-wrap gap-4 sm:gap-8 font-semibold text-base text-gray-300'>
+              <li className='cursor-pointer hover:text-white transition-colors'>Company</li>
+              <li className='cursor-pointer hover:text-white transition-colors'>Resources</li>
+              <li className='cursor-pointer hover:text-white transition-colors'>Support</li>
+              <li className='cursor-pointer hover:text-white transition-colors'>Privacy</li>
+              <li className='cursor-pointer hover:text-white transition-colors'>Terms</li>
+            </ol>
+          </div>
+        </footer>
 
         </div>
 
