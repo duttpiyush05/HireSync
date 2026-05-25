@@ -3,20 +3,11 @@ export const ClientDataContext = React.createContext()
 
 const ClientContext = ({children}) => {
 
-  const [client, setclient] = useState({
-    fullname : {
-      firstname : '',
-      lastname : '',
-    },
-    email : '',
-    pasword : '',
-    contactno : '',
-    gender : ''
-  })
+  const [client, setclient] = useState(null)
 
   return (
     <div>
-      <ClientDataContext.Provider value={[client, setclient]}>
+      <ClientDataContext.Provider value={{client, setclient}}>
         {children}
       </ClientDataContext.Provider>
     </div>

@@ -5,12 +5,12 @@ const LandingPage = () => {
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
 
-      <div className=' h-[100%] w-[75%] border-white bg-[]'>
+      <div className=' h-[100%] w-[75%] border-white'>
       
       <nav className='w-full border-b-2 border-[#0c1324] h-[6rem] flex border-b-1 border-white justifyy-between'>
 
         <div className=' h-full flex items-center gap-4 w-[60rem]'>
-          <h2 className='text-3xl font-bold mr-5'>HireSync</h2>
+          <Link to='/' className='text-3xl font-bold mr-5'>HireSync</Link>
         <ol className='flex gap-[4rem] h-full items-center font-semibold text-md text-gray-300'>
           <Link to="/">Find Work</Link>
           <Link to="/">My Jobs</Link>
@@ -22,7 +22,7 @@ const LandingPage = () => {
         </div>
 
         <div className='text-white w-[50%] flex items-center justify-end'>
-          <i className="ri-notification-2-fill ri-2x"></i>
+         <Link to='fl/login' className='p-[1rem] rounded-lg font-semibold bg-[#212139]'> Sign in</Link>
           <div className='bg-white w-10 h-10 rounded-3xl ml-10 mr-15'>
 
           </div>
@@ -41,14 +41,14 @@ const LandingPage = () => {
             Access a global network of elite professionals ready to bring your vision to life. High-end skills, seamless collaboration.
           </p>
 
-          <i className="ri-search-line absolute ri-2x pt-72 pl-17"></i>
+          <i className="ri-search-line absolute ri-2x pt-80 pl-17"></i>
           <div className='w-[100%] flex justify-center items-center'>
             <input 
-            className='h-[5rem] w-[50rem] align-center pl-20 rounded-full bg-[#37374b] text-lg font-semibold'
+            className='h-[5rem] w-[50rem] align-center pl-20 rounded-full bg-[#37374b] text-lg font-semibold mt-[2rem]'
             type="text" 
             placeholder='Search for jobs, skills or freelancers...'
           />
-          <button className='absolute p-0 bg-[#5371ea] h-[4rem] w-[10rem] rounded-full ml-155 text-lg font-semibold'>
+          <button className='absolute p-0 bg-[#5371ea] h-[4rem] w-[10rem] rounded-full ml-155 mt-[2rem] text-lg font-semibold'>
             Search
           </button>
           </div>
@@ -87,7 +87,6 @@ const LandingPage = () => {
 
               <p className='mt-4 text-xl text-gray-300 font-semibold'>
                 Tap into a borderless talent pool. Find the exact skills you need, regardless of geography.
-
 
               </p>
             </div>
@@ -216,10 +215,10 @@ const LandingPage = () => {
           
           <div className='w-[100%] flex justify-center items-center gap-[2rem] mt-5 text-xl font-semibold'>
             
-            <Link to='/register' className='border-1 h-[5rem] w-[15rem] rounded-full pt-5'>
+            <Link to='/client/register' className='border-1 h-[5rem] w-[15rem] rounded-full pt-6 bg-[#464baf]'>
               Join as Client
             </Link>
-            <Link to='/register' className='border-1 h-[5rem] w-[15rem] rounded-full pt-5'>
+            <Link to='/register' className='border-1 h-[5rem] w-[15rem] rounded-full pt-6'>
               Apply as talent
             </Link>
 
@@ -228,7 +227,7 @@ const LandingPage = () => {
 
       </div>
 
-      <footer  className=' h-[15rem] flex bg-[#111121]'>
+      <footer  className=' h-[15rem] w- flex bg-[#15152a]'>
           <div className='w-[60%] h-full p-[4rem]'>
             <h2 className='text-3xl font-bold mb-3'>HireSync</h2>
             <p className='text-lg'>© 2026 HireSync. All rights reserved.</p>

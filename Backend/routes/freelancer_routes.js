@@ -10,7 +10,7 @@ router.post('/register', [
   body('email').isEmail().withMessage("Invalid Email"),
   body('password').isLength({min:6}).withMessage("Password must be Atleast 6 character"),
   body('contactno').matches(/^[0-9]{10}$/).withMessage("Invalid Contact Number"),
-  body("gender").isIn(['Male','Female','Other']).withMessage("Invalid Gender")
+  body('gender').isIn(['Male','Female','Other']).withMessage("Invalid Gender")
 ], freelancerController.register)
 
 router.post('/login', [

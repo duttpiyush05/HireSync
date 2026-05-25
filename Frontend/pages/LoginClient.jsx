@@ -2,33 +2,34 @@ import React, { useContext } from 'react'
 import { useState} from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import {FLDataContext} from '../src/context/FLContext'
+import {ClientDataContext} from '../src/context/ClientContext'
 import { useNavigate } from 'react-router-dom'
 
-const LoginFLPage = () => {
+const LoginClientPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const {freelancer, setfreelancer} = useContext(FLDataContext)
+  const {client, setclient} = useContext(ClientDataContext)
   const navigate = useNavigate()
 
   const handleSubmit = async(e) =>
   {
     e.preventDefault()
-    const freelancer = {
+    const client = {
       email : email,
       password : password
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/login`, freelancer)
-    if(response.status === 200)
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/clients/login`, client)
+    console.log(response)
+    if(response.status === 201)
     {
       const data = response.data
       localStorage.setItem('token', data.token)
-      setfreelancer(data.freelancer)
-      console.log(data.freelancer)
-      navigate('/fl/dashboard')
+      setclient(data.client)
+      console.log(data.client)
+      navigate('/client/dashboard')
     }
 
     setEmail('')
@@ -85,7 +86,7 @@ const LoginFLPage = () => {
 
           <div
           className='mt-20 flex justify-center'>
-            <p className=' text-lg'>Don't have an Account? <Link className='hover:underline font-bold' to="/register " >Register</Link> 
+            <p className=' text-lg'>Don't have an Account? <Link className='hover:underline font-bold' to="/client/register " >Register</Link> 
           </p>
           </div>
 
@@ -94,4 +95,4 @@ const LoginFLPage = () => {
   )
 }
 
-export default LoginFLPage
+export default LoginClientPage
