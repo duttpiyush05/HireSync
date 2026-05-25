@@ -7,7 +7,7 @@ const LandingPage = () => {
 
       <div className=' h-[100%] w-[75%] border-white'>
       
-      <nav className='w-full border-b-2 border-[#0c1324] h-[6rem] flex border-b-1 border-white justifyy-between'>
+      <nav className='w-full border-b-2 border-[#0c1324] h-[6rem] flex border-b-1 border-white justifyy-between sticky top-0 z-50 bg-[#15152a] rounded-b'>
 
         <div className=' h-full flex items-center gap-4 w-[60rem]'>
           <Link to='/' className='text-3xl font-bold mr-5'>HireSync</Link>

@@ -29,7 +29,7 @@ const FreelancerDashboard = () => {
       <div className='h-full w-full max-w-[1400px] px-4 sm:px-6 lg:px-10'>
 
         {/* NAVBAR */}
-        <nav className='w-full border-[#0013be] min-h-[5rem] flex border-b-4 justify-between items-center py-3 relative'>
+        <nav className='w-full border-[#0013be] min-h-[5rem] flex border-b-4 justify-between items-center py-3 relative sticky top-0 z-50 bg-[#15152a] rounded-b'>
 
           {/* Left: Logo + Nav Links */}
           <div className='flex items-center gap-4 flex-1'>
