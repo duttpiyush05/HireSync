@@ -17,7 +17,7 @@ const RegisterPage = () => {
   
   // const [client, setclient] = useState({})
 
-  const [client, setclient] = useContext(ClientDataContext)
+  const {client, setclient} = useContext(ClientDataContext)
 
   const navigate = useNavigate()
 
@@ -40,7 +40,7 @@ const RegisterPage = () => {
       if(response.status === 201)
       {
         const data = response.data
-        setclient(data.freelancer)
+        setclient(data.client)
         localStorage.setItem('token', data.token)
         navigate('/client/dashboard')
       }
@@ -203,7 +203,7 @@ const RegisterPage = () => {
 
                 <button className='block w-[80%] mt-4 h-12 rounded-md bg-[#6366F1]' type='submit'>Create Account</button>
 
-                <p className='mt-5 pl-55 text-lg'>Already have an account? <Link to="/fl/login" className='hover:underline font-bold'>Log In</Link> </p>
+                <p className='mt-5 pl-55 text-lg'>Already have an account? <Link to="/client/login" className='hover:underline font-bold'>Log In</Link> </p>
 
 
             </form>

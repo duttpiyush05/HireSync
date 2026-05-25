@@ -17,7 +17,7 @@ const RegisterPage = () => {
   
   const [freelancerData, setfreelancerData] = useState({})
 
-  const [freelancer, setfreelancer] = useContext(FLDataContext)
+  const {freelancer, setfreelancer} = useContext(FLDataContext)
 
   const navigate = useNavigate()
 
@@ -42,7 +42,7 @@ const RegisterPage = () => {
         const data = response.data
         setfreelancer(data.freelancer)
         localStorage.setItem('token', data.token)
-        console.log(data.user)
+        console.log(data.freelancer)
         navigate('/fl/dashboard')
       }
     }catch(err)
@@ -183,7 +183,7 @@ const RegisterPage = () => {
                 
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="Female">Female</option>
                   <option value="Other">Other</option>
 
                 </select>
@@ -192,8 +192,8 @@ const RegisterPage = () => {
                 <div className='flex items-center gap-2 mt-10'>
                   <input 
                   required
-                  value={check}
-                  onChange={()=> setcheck(true)}
+                  checked={check}
+                  onChange={(e)=> setcheck(e.target.value)}
                   type="checkbox" 
                   className='h-5 w-5 accent-green-500 border-none rounded-1'  
                   /> 

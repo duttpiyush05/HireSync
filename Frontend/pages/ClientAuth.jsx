@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const ClientAuth = ({children}) => {
   const token = localStorage.getItem('token')
-  const [client, setclient] = useContext(ClientDataContext)
+  const {client, setclient} = useContext(ClientDataContext)
   const [isloading, setisloading] = useState(true)
 
   const navigate = useNavigate()

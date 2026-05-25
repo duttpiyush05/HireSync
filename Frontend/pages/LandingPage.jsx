@@ -10,7 +10,7 @@ const LandingPage = () => {
       <nav className='w-full border-b-2 border-[#0c1324] h-[6rem] flex border-b-1 border-white justifyy-between'>
 
         <div className=' h-full flex items-center gap-4 w-[60rem]'>
-          <h2 className='text-3xl font-bold mr-5'>HireSync</h2>
+          <Link to='/' className='text-3xl font-bold mr-5'>HireSync</Link>
         <ol className='flex gap-[4rem] h-full items-center font-semibold text-md text-gray-300'>
           <Link to="/">Find Work</Link>
           <Link to="/">My Jobs</Link>
@@ -22,7 +22,7 @@ const LandingPage = () => {
         </div>
 
         <div className='text-white w-[50%] flex items-center justify-end'>
-          <i className="ri-notification-2-fill ri-2x"></i>
+         <Link to='fl/login' className='p-[1rem] rounded-lg font-semibold bg-[#212139]'> Sign in</Link>
           <div className='bg-white w-10 h-10 rounded-3xl ml-10 mr-15'>
 
           </div>
