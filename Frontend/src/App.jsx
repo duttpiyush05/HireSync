@@ -12,6 +12,7 @@ import ClientRegisterPage from '../pages/ClientRegisterPage'
 import ClientDashboard from '../pages/ClientDashboard'
 import ClientLogout from '../pages/ClientLogout'
 import ClinetLoginPage from '../pages/LoginClient'
+import JobPost from '../pages/PostJob/JobPost'
 
 
 function App() {
@@ -42,6 +43,10 @@ function App() {
                                               } />                                       
       <Route path='/client/logout' element={<ClientAuth>
                                               <ClientLogout/>
+                                            </ClientAuth >
+                                              } />
+      <Route path='/post-job' element={<ClientAuth>
+                                              <JobPost/>
                                             </ClientAuth >
                                               } />
                                                            
