@@ -43,7 +43,8 @@ const LoginClientPage = () => {
                   <Link to='/' className='text-4xl font-bold '>HireSync</Link>
               </div>
 
-        <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg'>
+        <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg p-auto flex flex-col justify-center items-center'>
+          <h2 className='text-2xl font-bold'>Login as Client</h2>
           <div className='text-white flex flex-col justify-center items-center'>
             <h1 className='text-3xl font-bold text-[#6366F1] mt-12 mb-8'>HireSync</h1>
 
@@ -85,8 +86,10 @@ const LoginClientPage = () => {
           </form>
 
           <div
-          className='mt-20 flex justify-center'>
+          className='mt-20 flex flex-col gap-2 justify-center'>
             <p className=' text-lg'>Don't have an Account? <Link className='hover:underline font-bold' to="/client/register " >Register</Link> 
+          </p>
+            <p className=' text-lg'>Want to login as Freelancer? <Link className='hover:underline font-bold' to="/fl/login " >Click here</Link> 
           </p>
           </div>
 

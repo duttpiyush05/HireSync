@@ -2,7 +2,7 @@ const clientModel = require('../models/client_model')
 const clientServices = require('../services/client_services')
 const blacklistTokenModel = require('../models/blackListTokenModel')
 const {validationResult} = require('express-validator')
-const clienServices = require('../services/client_services')
+// const clientServices = require('../services/client_services')
 
 module.exports.register = async (req, res, next) =>
 {
