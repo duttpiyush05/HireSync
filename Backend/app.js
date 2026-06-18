@@ -7,6 +7,7 @@ const connectToDB = require('./db/db');
 const freelancerRoutes = require('./routes/freelancer_routes')
 const clientRoutes = require('./routes/client_routes')
 const jobRoutes = require('./routes/job_routes')
+const proposalRoutes = require('./routes/proposals_routes')
 const cookieParser = require('cookie-parser')
 
 connectToDB();
@@ -26,5 +27,6 @@ app.get('/', (req,res)=>
 app.use('/freelancers', freelancerRoutes)
 app.use('/clients', clientRoutes)
 app.use('/jobs', jobRoutes)
+app.use('/proposals', proposalRoutes)
 
 module.exports = app;

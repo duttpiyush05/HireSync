@@ -21,32 +21,29 @@ const RegisterPage = () => {
 
   const navigate = useNavigate()
 
-  const submitHandler = async (e) =>
-  {
+  const submitHandler = async (e) => {
     e.preventDefault()
     const freelancerData = {
-      fullname : {
-        firstname : firstname,
-        lastname : lastname,
+      fullname: {
+        firstname: firstname,
+        lastname: lastname,
       },
-      email : email,
-      password : password,
-      contactno : contactno,
-      gender : gender
+      email: email,
+      password: password,
+      contactno: contactno,
+      gender: gender
     }
    
-    try{
+    try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/register`, freelancerData)
-      if(response.status === 201)
-      {
+      if (response.status === 201) {
         const data = response.data
         setfreelancer(data.freelancer)
         localStorage.setItem('token', data.token)
         console.log(data.freelancer)
         navigate('/fl/dashboard')
       }
-    }catch(err)
-    {
+    } catch(err) {
       console.log(err.response.data)
     }    
 
@@ -60,158 +57,164 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className='h-full w-full flex overflow-hidden '>
+    <div className='min-h-screen w-full flex flex-col lg:flex-row overflow-x-hidden'>
       
-      <div className='h-screen w-1/2 flex text-white '>
-        <img className='h-full w-full object-cover z-50' src={registerImage} alt="" />
+      {/* Left Panel */}
+      <div className='hidden lg:flex lg:w-1/2 relative text-white flex-shrink-0 flex-col justify-between min-h-screen'>
+        <img className='absolute inset-0 h-full w-full object-cover' src={registerImage} alt="" />
 
-        <div className='absolute z-100 w-full h-20 mt-15 pl-25'>
-            <Link to='/' className='relative text-4xl font-bold '>HireSync</Link>
-        </div>
-      
-        <div className='absolute z-100 self-end w-1/2 pb-20 p-25' >
-         <h1 className='text-[6rem] leading-tight font-bold'>Elevate your professional trajectory.</h1>
-        <div className='w-[75%]'>
-           <h3 className='pt-5 text-2xl leading-relaxed text-gray-300' >Access exclusive contracts with top-tier enterprise clients in a 
-          streamlined, developer-first workspace engineered for high-performance talent.</h3>
-        </div>
+        {/* Logo */}
+        <div className='relative z-10 pt-8 pl-10 xl:pl-16'>
+          <Link to='/' className='text-3xl xl:text-4xl font-bold'>HireSync</Link>
         </div>
 
+        {/* Bottom Text */}
+        <div className='relative z-10 pb-10 px-10 xl:px-16'>
+          <h1 className='text-10xl xl:text-5xl 2xl:text-[6rem] leading-tight font-bold'>
+            Elevate your professional trajectory.
+          </h1>
+          <div className='w-[90%] mt-4'>
+            <h3 className='text-sm xl:text-base 2xl:text-2xl leading-relaxed text-gray-300'>
+              Access exclusive contracts with top-tier enterprise clients in a 
+              streamlined, developer-first workspace engineered for high-performance talent.
+            </h3>
+          </div>
+        </div>
       </div>
 
-      <div className='h-screen w-1/2 bg-[#0c1324] text-white p-20'>
+      {/* Mobile Header */}
+      <div className='lg:hidden w-full bg-[#0c1324] text-white px-6 pt-6 pb-4'>
+        <Link to='/' className='text-2xl sm:text-3xl font-bold'>HireSync</Link>
+      </div>
 
-          <h1 className='text-4xl mb-3 font-bold'>Create an Account</h1>
-          <h4 className='text-lg text-gray-400'>Select your primary role to customize your onboarding.</h4>
+      {/* Right Panel */}
+      <div className='w-full lg:w-1/2 bg-[#0c1324] text-white px-6 sm:px-10 md:px-16 lg:px-12 xl:px-20 py-8 lg:py-12 overflow-y-auto'>
 
-          <div className='flex w-[80%] mt-8 gap-4 mb-8'>
+        <h1 className='text-2xl sm:text-3xl xl:text-4xl mb-2 font-bold'>Create an Account</h1>
+        <h4 className='text-sm sm:text-base lg:text-lg text-gray-400'>
+          Select your primary role to customize your onboarding.
+        </h4>
 
-              <div className='p-5 h-40 rounded-xl bg-[#19192f] border-3  border-[#33336e]'>
-                <h2 className='mb-2 text-2xl'><i className="ri-suitcase-line"></i></h2>
-                <h3 className='font-bold mb-2'>Join as Freelancer</h3>
-                <h4 className='text-md text-gray-300'>Find high-end contracts and manage projects.</h4>
-              </div>
+        {/* Role Cards */}
+        <div className='flex w-full sm:w-[90%] lg:w-[85%] xl:w-[80%] mt-6 gap-4 mb-6'>
+          <div className='flex-1 p-4 sm:p-5 rounded-xl bg-[#19192f] border-3 border-[#33336e]'>
+            <h2 className='mb-2 text-xl sm:text-2xl'><i className="ri-suitcase-line"></i></h2>
+            <h3 className='font-bold mb-1 sm:mb-2 text-sm sm:text-base'>Join as Freelancer</h3>
+            <h4 className='text-xs sm:text-sm text-gray-300'>Find high-end contracts and manage projects.</h4>
+          </div>
 
-              <div className='p-5 h-40 rounded-xl bg-[#19192f]'
-              onClick={()=> navigate('/client/register')}
-              >
-                <h2 className='mb-2 text-2xl'><i className="ri-building-line"></i></h2>
-                <h3 className='font-bold mb-2'>Join as Client</h3>
-                <h4 className='text-md text-gray-300'>Hire vetted experts for your enterprise needs.</h4>
-              </div>
-
+          <div className='flex-1 p-4 sm:p-5 rounded-xl bg-[#19192f] cursor-pointer'
+            onClick={() => navigate('/client/register')}
+          >
+            <h2 className='mb-2 text-xl sm:text-2xl'><i className="ri-building-line"></i></h2>
+            <h3 className='font-bold mb-1 sm:mb-2 text-sm sm:text-base'>Join as Client</h3>
+            <h4 className='text-xs sm:text-sm text-gray-300'>Hire vetted experts for your enterprise needs.</h4>
+          </div>
+        </div>
+          
+        <form onSubmit={(e) => { submitHandler(e) }}>
+          
+          {/* Name Row */}
+          <div className='w-full sm:w-[90%] lg:w-[85%] xl:w-[80%] flex gap-4'>
+            <div className='w-1/2'>
+              <h2 className='py-2 sm:py-3 pl-0 text-sm sm:text-base'>First Name</h2>
+              <input 
+                required
+                value={firstname}
+                onChange={(e) => setfirstname(e.target.value)}
+                className='px-4 w-full h-10 sm:h-12 rounded-md bg-[#19192f] capitalize text-sm sm:text-base' 
+                type="text" 
+                placeholder='John'
+              />
             </div>
-              
-            <form onSubmit={(e)=> {submitHandler(e)}}>
-              
-                <div className='w-[80%] flex gap-4'>
-                  <div className='w-1/2 '>
-                    <h2 className='p-3 pl-0'>First Name</h2>
+            <div className='w-1/2'>
+              <h2 className='py-2 sm:py-3 pl-0 text-sm sm:text-base'>Last Name</h2>
+              <input 
+                value={lastname}
+                onChange={(e) => setlastname(e.target.value)}
+                className='px-4 w-full h-10 sm:h-12 rounded-md bg-[#19192f] capitalize text-sm sm:text-base' 
+                type="text" 
+                placeholder='Doe'
+              />
+            </div>
+          </div>
 
-                    <input 
-                    required
-                    value={firstname}
-                      onChange={(e)=>
-                      {
-                        setfirstname(e.target.value)
-                      }}
-                    className=' w-1/2 px-4 w-full h-12 rounded-md bg-[#19192f] capitalize' 
-                    type="text" 
-                    placeholder='John'
-                    />
+          {/* Email */}
+          <h3 className='mt-4 sm:mt-5 mb-2 sm:mb-3 text-sm sm:text-base'>Work Email</h3>
+          <input 
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className='px-4 w-full sm:w-[90%] lg:w-[85%] xl:w-[80%] h-10 sm:h-12 rounded-md bg-[#19192f] text-sm sm:text-base' 
+            type="email" 
+            placeholder='John@gmail.com'
+          />
 
-                  </div>
-                  <div className='w-1/2 '>
-                    <h2 className='p-3 pl-0'>Last Name</h2>
+          {/* Password */}
+          <h3 className='mt-4 sm:mt-5 mb-2 sm:mb-3 text-sm sm:text-base'>Password</h3>
+          <input 
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='bg-[#19192f] px-4 w-full sm:w-[90%] lg:w-[85%] xl:w-[80%] h-10 sm:h-12 rounded-md text-sm sm:text-base' 
+            type="password" 
+            placeholder='*******'
+          />
+          <span className='block text-xs sm:text-sm mt-1 mb-4 sm:mb-6 text-gray-400'>
+            *Must be at least 6 characters containing a number and a symbol.
+          </span>
 
-                    <input 
-                    value={lastname}
-                    onChange={(e)=> setlastname(e.target.value)}
+          {/* Contact + Gender */}
+          <h3 className='mt-4 sm:mt-5 mb-2 sm:mb-3 text-sm sm:text-base'>Contact No.</h3>
+          <div className='flex gap-3 w-full sm:w-[90%] lg:w-[85%] xl:w-[80%]'>
+            <input
+              required
+              value={contactno}
+              onChange={(e) => setContactno(e.target.value)}
+              className='bg-[#19192f] px-4 h-10 sm:h-12 rounded-md flex-1 min-w-0 text-sm sm:text-base' 
+              type='text' 
+              placeholder='+91'
+            />
+            <select 
+              required
+              onChange={(e) => setGender(e.target.value)}
+              className='h-10 sm:h-12 rounded-md px-2 sm:px-3 bg-[#19192f] cursor-pointer text-xs sm:text-sm flex-shrink-0'
+            >
+              <option value="">Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-                    className='w-1/2 px-4 w-full h-12 rounded-md bg-[#19192f] capitalize' 
-                    type="text" 
-                    placeholder='John'/>
+          {/* Checkbox */}
+          <div className='flex items-start sm:items-center gap-2 mt-6 sm:mt-8 w-full sm:w-[90%] lg:w-[85%] xl:w-[80%]'>
+            <input 
+              required
+              checked={check}
+              onChange={(e) => setcheck(e.target.value)}
+              type="checkbox" 
+              className='h-4 w-4 sm:h-5 sm:w-5 mt-0.5 sm:mt-5 accent-green-500 border-none rounded flex-shrink-0'  
+            /> 
+            <p className='text-xs sm:text-lg mt-5 font-semibold'>
+              I agree to the HireSync Terms of Service and acknowledge the Privacy Policy.
+            </p>
+          </div>
 
-                  </div>
+          <button 
+            className='block w-full sm:w-[90%] lg:w-[85%] xl:w-[80%] mt-4 h-10 sm:h-12 rounded-md bg-[#6366F1] text-sm sm:text-base font-medium hover:bg-[#4f52d9] transition-colors' 
+            type='submit'
+          >
+            Create Account
+          </button>
 
-                  
-                </div>
+          <p className='mt-4 sm:mt-5 text-center text-sm sm:text-lg w-[80%] border-t border-gray-700 pt-4'>
+            Already have an account?{' '}
+            <Link to="/fl/login" className='hover:underline font-bold'>Log In</Link>
+          </p>
 
-                <h3 className='mt-5 mb-3'>Work Email</h3>
-
-                <input 
-                required
-                value={email}
-                onChange={(e)=> setEmail(e.target.value)}
-
-                className=' w-1/2 px-4 w-[80%] h-12 rounded-md bg-[#19192f]' 
-                type="email" 
-                placeholder='John@gmail.com'/>
-
-
-                <h3 className='mt-5 mb-3'>Password</h3>
-
-                <input 
-                required
-                value={password}
-                onChange={(e)=> setPassword(e.target.value)}
-
-                className='bg-[#19192f] w-1/2 px-4 w-[80%] h-12 rounded-md' 
-                type="password" 
-                placeholder='*******'/>
-
-
-                 <span className='block text-sm mt-1 mb-6'>*Must be at least 6 characters containing a number and a symbol.</span>
-
-
-                <h3 className='mt-5 mb-3'>Contact No.</h3>
-
-                <input
-                required
-                value={contactno}
-                onChange={(e)=> setContactno(e.target.value)}
-                className='bg-[#19192f] w-1/2 px-4 w-[60%] m h-12 rounded-md' 
-                type='text' 
-                placeholder='+91'/>
-
-
-                <select 
-                required
-                onChange={(e)=> setGender(e.target.value)}
-
-                className='h-12 rounded-md ml-5 p-3 bg-[#19192f] pointer w-1/6'>
-                
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-
-                </select>
-
-
-                <div className='flex items-center gap-2 mt-10'>
-                  <input 
-                  required
-                  checked={check}
-                  onChange={(e)=> setcheck(e.target.value)}
-                  type="checkbox" 
-                  className='h-5 w-5 accent-green-500 border-none rounded-1'  
-                  /> 
-
-                <p className='font-semibold'> I agree to the HireSync Terms of Service and acknowledge the Privacy Policy.</p>
-                </div>
-
-                <button className='block w-[80%] mt-4 h-12 rounded-md bg-[#6366F1]' type='submit'>Create Account</button>
-
-                <p className='mt-5 pl-55 text-lg'>Already have an account? <Link to="/fl/login" className='hover:underline font-bold'>Log In</Link> </p>
-
-
-            </form>
-
-        
-
+        </form>
       </div>
-
     </div>
   )
 }

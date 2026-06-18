@@ -15,6 +15,12 @@ router.post('/create',[
   body('budget.maxbudget').notEmpty().withMessage("Enter a maximum budget"),
   body('budget.duration').isIn(['1-3 Months','3-6 Months','8-12 Months','1 Year+']).withMessage(""),
   body('budget.xplevel').isIn(['Entry','Intermediate','Expert']).withMessage("")
-], jobController.createJob)
+],authentication.authClient, jobController.createJob)
+
+router.get('/my-jobs', authentication.authClient, jobController.getMyJobs)
+
+router.get('/all-jobs', authentication.authFreelancer, jobController.getAllJobs)
+
+router.get('/:jobId', authentication.authFreelancer, jobController.getJobById)
 
 module.exports = router

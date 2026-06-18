@@ -9,7 +9,7 @@ module.exports.createJob = async (req, res, next) =>
   {    return res.status(401).json({message : error.array()})
   } 
   const {title, category, description, skills, budget} = req.body
-  const client = req.client
+  const client = req.user
   const job = await jobServices.createJob({
     title,
     category,
@@ -21,4 +21,41 @@ module.exports.createJob = async (req, res, next) =>
   res.status(201).json({message : "Job Created Successfully", job})
 }
 
+module.exports.getMyJobs = async (req, res, next) => {
+  try
+  {
+    const jobs = await jobServices.getMyJobs(req.user._id);
+    console.log(req.user._id)
+    res.status(200).json({ jobs });
+  }
+  catch (error) {
+    next(error);
+  }
+}
+
+module.exports.getAllJobs = async (req, res, next) => {
+  try
+  {  
+    const jobs = await jobServices.getAllJobs();
+    res.status(200).json({ jobs });
+  }
+  catch (error) {
+    next(error);
+  }
+}
+
+module.exports.getJobById = async (req, res, next) => {
+  const jobId = req.params.jobId
+  try
+  {    const job = await jobServices.getJobsbyId(jobId)
+    if(!job)
+    {
+      return res.status(404).json({message : "Job Not Found"})
+    }
+    res.status(200).json({ job });
+  }
+  catch (error) {
+    next(error);
+  }
+}
 
