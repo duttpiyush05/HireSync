@@ -49,8 +49,12 @@ const jobSchema = new mongoose.Schema({
   },
   client : {
     type : mongoose.Schema.Types.ObjectId,
-    ref : 'Client',
-  }  
+    ref : 'clients',
+    required : true
+  },
+
+  }, {
+  timestamps : true,
 })
 
 const jobModel = mongoose.model('jobModel', jobSchema)

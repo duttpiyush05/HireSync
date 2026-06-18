@@ -37,7 +37,7 @@ const FreelancerDashboard = () => {
 
             {/* Desktop Nav */}
             <ol className='hidden md:flex gap-6 lg:gap-[4rem] items-center font-semibold text-base lg:text-lg text-gray-300'>
-              <Link to="/">Find Work</Link>
+              <Link to="/find-work">Find Work</Link>
               <Link to="/">My Jobs</Link>
               <Link to="/">Messages</Link>
               <Link to="/">Invoices</Link>

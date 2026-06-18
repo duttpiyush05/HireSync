@@ -13,7 +13,12 @@ import ClientDashboard from '../pages/ClientDashboard'
 import ClientLogout from '../pages/ClientLogout'
 import ClinetLoginPage from '../pages/LoginClient'
 import JobPost from '../pages/PostJob/JobPost'
-
+import ClientMyJobs from '../pages/ClientMyJobs'
+import FindWork from '../pages/FindWork'
+import JobDetails from '../pages/ApplyJobs/JobDetails'
+import CreateProposal from '../pages/ApplyJobs/CreateProposal'
+import ProposalSubmitted from '../pages/ApplyJobs/ProposalSubmitted'
+import Layout from '../components/Layout'
 
 function App() {
   
@@ -21,6 +26,28 @@ function App() {
     <div>
       
       <Routes>
+
+        <Route element={<Layout/>}>
+        
+        <Route path='/find-work' element={<FreelancerAuth>
+                                              <FindWork/>
+                                            </FreelancerAuth >
+                                              } />
+
+        <Route path='/jobs/:jobId' element={<FreelancerAuth>
+                                              <JobDetails/>
+                                            </FreelancerAuth >
+                                              } />
+        
+        <Route path='jobs/:jobId/apply' element={<FreelancerAuth>
+                                              <CreateProposal/>
+                                            </FreelancerAuth >
+                                              } />
+        <Route path='/proposals/:proposalId/submission' element={< FreelancerAuth>
+                                              <ProposalSubmitted/>
+                                            </FreelancerAuth >  } />       
+        
+        </Route>
 
       <Route path='/' element={<LandingPage />} />
       <Route path='/register' element={<RegisterPage />} />
@@ -49,7 +76,14 @@ function App() {
                                               <JobPost/>
                                             </ClientAuth >
                                               } />
-                                                           
+      <Route path='/my-jobs' element={<ClientAuth>
+                                              <ClientMyJobs/>
+                                            </ClientAuth >
+                                              } />
+      
+         
+                                        
+      
 
       </Routes>
 
