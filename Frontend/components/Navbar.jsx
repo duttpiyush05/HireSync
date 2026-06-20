@@ -1,13 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const gotoprofile=()=>
+  {
+    navigate('/fl/dashboard')
+  }
+
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
     <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
-      <nav className='w-full border-[#0013be] min-h-[7rem] flex border-b-4 justify-between items-center py-3 relative sticky top-0 z-50 bg-[#15152a] rounded-b p-6 sticky'>
+      <nav className='w-full border-[#0013be] min-h-[7rem] flex border-b-4 justify-between items-center py-3 relative sticky top-0 z-50 bg-[#15152a] rounded-b p-6'>
 
           {/* Left: Logo + Nav Links */}
           <div className='flex items-center gap-4 flex-1'>
@@ -35,7 +42,9 @@ const Navbar = () => {
             </div>
 
             <i className="ri-notification-2-fill ri-xl cursor-pointer"></i>
-            <div className='bg-white w-15 h-15 rounded-full flex-shrink-0'></div>
+            <div 
+            onClick={gotoprofile}
+            className='bg-white w-10 h-10 rounded-full flex-shrink-0 cursor-pointer'></div>
 
             {/* Hamburger — mobile only */}
             <button
@@ -59,7 +68,7 @@ const Navbar = () => {
                   placeholder='Search....'
                 />
               </div>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Find Work</Link>
+              <Link to="/find-work" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Find Work</Link>
               <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>My Jobs</Link>
               <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Messages</Link>
               <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Invoices</Link>

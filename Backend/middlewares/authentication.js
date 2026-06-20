@@ -58,7 +58,7 @@ module.exports.authClient = async (req, res, next) =>
     const client = await clientModel.findById(decoded._id)
 
     if(!client)
-    {
+    {      
       return res.status(401).json({message : "Unauthorized User"})
     }
 

@@ -76,3 +76,36 @@ module.exports.getprofile = (req, res, next) =>
   res.status(200).json({client : req.user})
 }
 
+module.exports.getClientbyId = async (req, res, next) =>
+{
+  const id = req.params.clientId
+  
+      const client = await clientModel.findById(id)
+      res.status(201).json({client})
+}
+
+module.exports.updateProfile = async(req, res, next) =>{
+  try {
+      const client = await clientModel.findByIdAndUpdate(
+        req.user._id,
+        {
+          $set: req.body
+        },
+        {
+          returnDocument: 'after',
+          runValidators: true
+        }
+      );
+  
+      res.status(200).json({
+        message: "Profile updated successfully",
+        client
+      });
+  
+    } catch (error) {
+      res.status(500).json({
+        message: error.message
+      });
+    }
+}
+

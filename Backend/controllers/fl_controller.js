@@ -79,3 +79,36 @@ module.exports.getprofile = (req, res, next)=>
 {
   res.status(200).json({freelancer : req.user})
 }
+module.exports.getfreelancerbyId = async (req, res, next)=>
+{
+    const id = req.params.freelancerId
+
+    const freelancer = await freelancerModel.findById(id)
+    res.status(201).json({freelancer})
+}
+
+module.exports.updateProfile = async(req, res, next)=>
+{
+  try {
+    const freelancer = await freelancerModel.findByIdAndUpdate(
+      req.user._id,
+      {
+        $set: req.body
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      freelancer
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+}

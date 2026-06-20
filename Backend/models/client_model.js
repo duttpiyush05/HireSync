@@ -40,6 +40,42 @@ const clientSchema = new mongoose.Schema({
     enum : ['Male', 'Female', 'Other'],
     required : true
   },
+  profilePicture: {
+      type: String
+    },
+    github: {
+      type: String,
+      default :''
+    },
+    linkedin: {
+      type: String,
+      default :''
+    },
+    location : {
+      type: String,
+      default :'Delhi'
+    },
+    bio : {
+      type: String,
+      default :''
+    },
+  companyProfile: {
+    companyName: 
+    {
+      type:String,
+      default : 'X'
+    },
+    description: 
+    {
+      type:String,
+      default : 'Y'
+    },
+    website: 
+    {
+      type:String,
+      default : 'Z'
+    }
+  }
 })
 
 clientSchema.methods.generatetoken = function ()

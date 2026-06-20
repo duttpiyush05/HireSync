@@ -1,11 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { redirect } from 'react-router-dom'
 
-const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
+const FixedRate = ({budgettype, setbudgettype, jobData, setjobData,}) => {
 
   const [minbudget, setminbudget] = useState('')
   const [maxbudget, setmaxbudget] = useState('')
   const [duration, setduration] = useState('')
   const [xplevel, setxplevel] = useState('')
+
+  const [isloading, setisLoading] = useState(true)
+
+   useEffect(()=>
+   {
+      const settingisLoading = ()=>
+      {
+         setTimeout(()=>
+         {
+            setisLoading(false)
+         }, 1000)
+      }
+      settingisLoading()
+   },[])
+
+   if(isloading)
+    {
+      return (
+        <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+  
+        <div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          style={{ animationDuration: "2s" }}
+        ></div>
+  
+        <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
+        </div>
+      )
+    }
 
   return (
 
@@ -68,7 +98,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, duration:'1-3 Months'}})
             }
           } 
-          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='1-3 Months' ? 'border-blue-400':'border-gray-600'}`}>
+          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='1-3 Months' ? 'border-3 border-blue-400':'border-gray-600'}`}>
             1 - 3 Months
           </div>
 
@@ -79,7 +109,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, duration:'3-6 Months'}})
             }
           } 
-          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='3-6 Months' ? 'border-blue-400':'border-gray-600'}`}>
+          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='3-6 Months' ? 'border-3 border-blue-400':'border-gray-600'}`}>
             3 - 6 Months
           </div>
 
@@ -91,7 +121,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, duration:'8-12 Months'}})
             }
           } 
-          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='8-12 Months' ? 'border-blue-400':'border-gray-600'}`}>
+          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='8-12 Months' ? 'border-3 border-blue-400':'border-gray-600'}`}>
             8 - 12 Months
           </div>
 
@@ -103,7 +133,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, duration:'1 Year+'}})
             }
           } 
-          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='1 Year+' ? 'border-blue-400':'border-gray-600'}`}>
+          className={`border h-[4rem] rounded-lg flex justify-center items-center font-semibold text-xl cursor-pointer ${duration==='1 Year+' ? ' border-3 border-blue-400':'border-gray-600'}`}>
             1 Years+
           </div>
 
@@ -124,7 +154,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, xplevel:'Entry'}
             })
           }}
-          className={`border p-[1rem] flex gap-4  justify-start items-center rounded-lg ${xplevel==='entry' ? 'border-blue-400':'border-gray-600'} cursor-pointer`}>
+          className={`border p-[1rem] flex gap-4  justify-start items-center rounded-lg ${xplevel==='entry' ? 'border-3 border-blue-400':'border-gray-600'} cursor-pointer`}>
 
             <div className='h-[2rem] w-[2rem] border rounded-full'></div>
 
@@ -148,7 +178,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, xplevel:'Intermediate'}
             })
           }}
-          className={`border p-[1rem] flex gap-4  justify-start items-center rounded-lg ${xplevel==='intermediate' ? 'border-blue-400':'border-gray-600'} cursor-pointer`}>
+          className={`border p-[1rem] flex gap-4  justify-start items-center rounded-lg ${xplevel==='intermediate' ? 'border-3  border-blue-400':'border-gray-600'} cursor-pointer`}>
 
             <div className='h-[2rem] w-[2rem] border rounded-full'></div>
             <div>
@@ -168,7 +198,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
               ...jobData, budget : {...jobData.budget, xplevel:'Expert'}
             })
           }}
-         className={`border p-[1rem] flex gap-4  justify-start items-center rounded-lg ${xplevel==='expert' ? 'border-blue-400':'border-gray-600'} cursor-pointer`}>
+         className={`border p-[1rem] flex gap-4  justify-start items-center rounded-lg ${xplevel==='expert' ? 'border-3 border-blue-400':'border-gray-600'} cursor-pointer`}>
 
             <div className='h-[2rem] w-[2rem] border rounded-full'>
 

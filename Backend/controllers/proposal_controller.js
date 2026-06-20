@@ -12,6 +12,17 @@ module.exports.createProposal = async (req, res, next) => {
       receivingAmt,
     } = req.body
 
+    const existingProposal = await proposalModel.findOne({
+      job: req.params.jobId,
+      freelancer: req.user._id
+    });
+
+    if (existingProposal) {
+      return res.status(400).json({
+        message: "You have already applied to this job"
+      });
+    }
+
     const job = await jobModel.findById(req.params.jobId)
 
     const proposal = await proposalModel.create({
@@ -56,4 +67,50 @@ module.exports.getProposalInfo = async (req, res, next)=>
     next(error)
   }
 }
+module.exports.getProposalsforClient = async (req, res, next)=>
+{
+  try {
+    const proposals = await proposalModel
+      .find({ client: req.user._id })
+      .populate('freelancer')
+      .populate('job');
 
+    res.status(200).json({
+      proposals
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports.updateProposalStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (!["accepted", "rejected"].includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status"
+      });
+    }
+
+    const proposal = await proposalModel.findByIdAndUpdate(
+      req.params.proposalId,
+      {
+        $set: { status }
+      },
+      {
+        returnDocument: 'after'
+      }
+    );
+    
+    res.status(200).json({
+      message : `Proposal Sucessfully ${status}`,
+      proposal
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};

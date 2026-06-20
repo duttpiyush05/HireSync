@@ -22,5 +22,8 @@ router.get('/logout',authentication.authClient, clientController.logout)
 
 router.get('/profile', authentication.authClient, clientController.getprofile)
 
+router.get('/getclient/:clientId', authentication.authFreelancer, clientController.getClientbyId)
+
+router.patch('/updateprofile', authentication.authClient, clientController.updateProfile)
 module.exports = router
 

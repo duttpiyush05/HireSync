@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const HourlyRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
 
@@ -6,6 +6,35 @@ const HourlyRate = ({budgettype, setbudgettype, jobData, setjobData}) => {
   const [maxbudget, setmaxbudget] = useState('')
   const [duration, setduration] = useState('')
   const [xplevel, setxplevel] = useState('')
+
+  const [isloading, setisLoading] = useState(true)
+
+   useEffect(()=>
+   {
+      const settingisLoading = ()=>
+      {
+         setTimeout(()=>
+         {
+            setisLoading(false)
+         }, 1000)
+      }
+      settingisLoading()
+   },[])
+
+   if(isloading)
+    {
+      return (
+        <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+  
+        <div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          style={{ animationDuration: "2s" }}
+        ></div>
+  
+        <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
+        </div>
+      )
+    }
 
   return (
 

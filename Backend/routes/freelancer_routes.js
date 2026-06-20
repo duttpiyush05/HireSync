@@ -4,6 +4,9 @@ const {body} = require('express-validator')
 const freelancerController = require('../controllers/fl_controller')
 const authentication = require('../middlewares/authentication')
 const freelancerModel = require('../models/fl_model')
+const {authFreelancer} = require('../middlewares/authentication')
+const {authClient} = require('../middlewares/authentication')
+
 
 router.post('/register', [
   body('fullname.firstname').isLength({min :3}).withMessage("Firstname must be atleast of 3 character"),
@@ -18,8 +21,11 @@ router.post('/login', [
   body('password').isLength({min:6}).withMessage("Invalid Password")
 ], freelancerController.login)
 
-router.get('/logout', authentication.authFreelancer, freelancerController.logout)
+router.get('/logout',authFreelancer, freelancerController.logout)
 
-router.get('/profile', authentication.authFreelancer, freelancerController.getprofile)
+router.get('/profile', authFreelancer, freelancerController.getprofile)
 
+router.get('/getfreelancer/:freelancerId', authClient, freelancerController.getfreelancerbyId)
+
+router.patch('/updateprofile', authFreelancer, freelancerController.updateProfile)
 module.exports = router

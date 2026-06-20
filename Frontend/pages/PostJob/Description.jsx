@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 
 const Description = ({jobData, setjobData}) => {
 
@@ -24,6 +24,35 @@ const Description = ({jobData, setjobData}) => {
     })
   }
 
+  const [isloading, setisLoading] = useState(true)
+  
+     useEffect(()=>
+     {
+        const settingisLoading = ()=>
+        {
+           setTimeout(()=>
+           {
+              setisLoading(false)
+           }, 1000)
+        }
+        settingisLoading()
+     },[])
+  
+     if(isloading)
+      {
+        return (
+          <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+    
+          <div
+            className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+            style={{ animationDuration: "2s" }}
+          ></div>
+    
+          <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
+          </div>
+        )
+      }
+
   return (
    <div className='mt-10 h-full rounded-xl '>
 
@@ -33,15 +62,15 @@ const Description = ({jobData, setjobData}) => {
       
       <div className='grid  lg:grid-cols-3 gap-[1.5rem] '>
         
-        <div className='rounded-lg bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] col-span-[2] row-span-2'>
-        <div className=' flex justify-between items-center'>
+        <div className='rounded-lg bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] col-span-[2] row-span-2 shadow-2xl'>
+        <div className=' flex justify-between items-center '>
 
               <h3 className='font-bold text-[2rem]'>Job Descriptions</h3>
               <h4 className='font-semibold text-[1.2rem] text-gray-300'>Recommended : 200+ words</h4>
 
         </div>
 
-        <textarea name="" id="" rows={20} 
+          <textarea name="" id="" rows={20} 
         required
         value={jobData.decription}
         onChange={(e)=>
@@ -57,7 +86,7 @@ const Description = ({jobData, setjobData}) => {
 
       </div>
 
-      <div className='border h-auto min-h-[25rem] p-[2rem] rounded-lg bg-[#151b2d]'>
+      <div className='border-3 border-[#00679b] shadow-2xl h-auto min-h-[25rem] p-[2rem] rounded-lg bg-[#151b2d] shadow-2xl'>
         <h3 className='font-semibold text-[2rem]'>Pro-Tips</h3>
 
         <div className='flex gap-[2rem] pt-[2rem]'>
@@ -75,7 +104,7 @@ const Description = ({jobData, setjobData}) => {
       </div>
 
 
-      <div className='border h-auto min-h-[25rem] p-[2rem] rounded-lg row-span-1 bg-[#151b2d]'>
+      <div className='border-3 border-[#00679b] shadow-2xl h-auto min-h-[25rem] p-[2rem] rounded-lg row-span-1 bg-[#151b2d]'>
         <h3 className='font-semibold text-[1.5rem]'>Platform Benefits</h3>
 
         <div className='flex gap-[2rem] pt-[2rem]'>
@@ -98,7 +127,7 @@ const Description = ({jobData, setjobData}) => {
         </div>
       </div>
 
-      <div className='rounded-lg  bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] col-span-[2] row-span-10'>
+      <div className='rounded-lg  bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] col-span-[2] row-span-10 shadow-2xl'>
         <div className=' flex flex-col justify-between '>
 
               <h3 className='font-bold text-[2rem]'>Required Skills</h3>
@@ -136,16 +165,9 @@ const Description = ({jobData, setjobData}) => {
 
         </div>
 
-
-
-
-
-
-
-
       </div>
 
-      <div className='border h-auto min-h-[25rem] p-[2rem] rounded-lg row-span-10 lg:col-span-1 bg-[#151b2d]'>
+      <div className='border-3 border-[#00679b] h-auto min-h-[25rem] p-[2rem] rounded-lg row-span-10 lg:col-span-1 bg-[#151b2d] shadow-2xl'>
         <h3 className='font-semibold text-[1.5rem]'>Compliance & Safety</h3>
 
         <div className='flex gap-[2rem] pt-[2rem]'>
