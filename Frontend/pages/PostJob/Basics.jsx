@@ -6,7 +6,7 @@ const Basics = ({jobData, setjobData}) => {
 
     <div className=' mt-10 h-full rounded-xl '>
       
-      <div className='rounded-lg  bg-[#151b2d] p-[2rem]'>
+      <div className='rounded-lg  bg-[#151b2d] p-[2rem] shadow-2xl'>
         <h2 className='font-bold text-[3rem]'>Job Basics</h2>
         <p className='font-semibold text-xl'>Let's start with the fundamental information about your opening.</p>
 
@@ -65,14 +65,14 @@ const Basics = ({jobData, setjobData}) => {
 
       <div className=' grid xl:grid-cols-2 gap-2 mt-10 pb-[1rem]'>
 
-        <div className='p-[1.8rem] rounded-lg  bg-[#151b2d] h-[15rem]' >
+        <div className='p-[1.8rem] rounded-lg  bg-[#151b2d] h-[15rem] shadow-2xl' >
           <div className='border w-[3rem] h-[3rem] mb-2'></div>
 
           <h4 className='font-semibold text-lg'>Quick Tip</h4>
           <p className='font-semibold text-gray-400 w-[85%]'>Specific job titles receive up to 3x more relevant applications. Avoid generic titles like "Developer".</p>
         </div>
 
-      <div className='p-[1.8rem] rounded-lg  bg-[#151b2d]' >
+      <div className='p-[1.8rem] rounded-lg  bg-[#151b2d] shadow-2xl' >
           <div className='border w-[3rem] h-[3rem] mb-2'></div>
 
           <h4 className='font-semibold text-lg'>Confidentiality</h4>

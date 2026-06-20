@@ -7,7 +7,7 @@ const FreelancerAuth = ({children}) => {
 
   const token = localStorage.getItem('token')
   const {freelancer, setfreelancer} = useContext(FLDataContext)
-  console.log(freelancer)
+
   const [isloading, setisloading] = useState(true)
   const navigate = useNavigate()
 

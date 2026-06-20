@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Basics from './Basics'
@@ -9,6 +9,7 @@ import Review from './Review'
 import toast,{Toaster} from 'react-hot-toast'
 
 const JobPost = () => {
+
   const steps = ['Basics', 'Details', 'Budget', 'Review']
   //for page render
   const [step, setstep] = useState(1)
@@ -30,46 +31,112 @@ const JobPost = () => {
    // client : ''
    })
 
-   console.log(jobData)
+   const [isloading, setisLoading] = useState(true)
+
+   useEffect(()=>
+   {
+      const settingisLoading = ()=>
+      {
+         setTimeout(()=>
+         {
+            setisLoading(false)
+         }, 5000)
+      }
+      settingisLoading()
+   },[])
+
+   if(isloading)
+    {
+      return (
+        <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+  
+        <div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          style={{ animationDuration: "2s" }}
+        ></div>
+  
+        <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
+        </div>
+      )
+    }
 
    const nextStep = ()=>
    {
-      if(step==1 && (!jobData.title || !jobData.category))
+      switch(step)
       {
-         // <Toaster />
-         alert('Please field all fields')
-         return
+         case 1 :
+               if(!jobData.title.trim())
+               {
+                  alert('Please Fill Job Title')
+                  return
+               }
+               else if(!jobData.category)
+               {
+                  alert('Please Select Job Category')
+                  return
+               }
+
+               setstep(step+1)
+               setCurrentStep(currentStep+1)
+
+               break
+         case 3 :
+               if(jobData.budget.minbudget.length ===0 || jobData.budget.maxbudget.length ===0)
+               {
+                  alert('Please Enter Budget price')
+                  return
+               }
+               else if((Number)(jobData.budget.minbudget) > (Number)(jobData.budget.maxbudget))
+               {
+                  
+                  alert('Please Enter Correct Budget Price')
+                  return
+               }
+               if(jobData.budget.duration.length===0)
+               {
+                  alert('Please Select Duration')
+                  return
+               }
+               if(jobData.budget.xplevel===0)
+               {
+                  alert('Please Select Experience Level')
+                  return
+               }
+
+               setstep(step+1)
+               setCurrentStep(currentStep+1)
+               break
+         case 2: 
+                if(!jobData.description.trim())
+               {
+                  alert('Please Fill Job Description')
+                  return
+               }
+               else if(jobData.description.trim().length<10)
+               {
+                  console.log(jobData.description);
+                  
+                  alert('Please Enter atleast 10 words')
+                  return
+               }
+               if(jobData.skills.length===0)
+               {
+                  alert('Please Select 1 skill')
+                  return
+               }
+               setstep(step+1)
+               setCurrentStep(currentStep+1)
+               break
+               
       }
-      setstep(step+1)
-      setCurrentStep(currentStep+1)
 
    }
-
 
   return (
     
      <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
 
        <div className='h-full w-full max-w-[1400px] px-4 sm:px-6 lg:px-10'>
-
-
-        <nav className='w-full border-b-2 border-[#0c1324] h-[6rem] flex border-b-1 border-white justify-between sticky top-0 z-50 bg-[#15152a] rounded-b'>
-
-        <div className=' h-full flex items-center gap-4 w-[60rem]'>
-          <Link to='/' className='text-3xl font-bold mr-5'>HireSync</Link>
-
-        </div>
-
-        <div className='text-white w-[50%] flex items-center justify-end'>
-            <i className="ri-notification-2-fill ri-xl cursor-pointer"></i>
-             
-         
-          <div className='bg-white w-10 h-10 rounded-3xl ml-10 mr-15'>
-
-          </div>
-        </div>
-        
-      </nav>
 
         <div className='flex items-center justify-center w-full mt-[4rem]  font-semibold text-xl pl-[1rem]'>
 
@@ -163,7 +230,7 @@ const JobPost = () => {
                   (step===1) ? setCurrentStep(1):setCurrentStep(currentStep-1)
             }
           }
-          className='font-semibold text-lg h-15 bg-gray-700 text-center w-50 rounded-md' >
+          className='font-semibold text-lg h-15 bg-gray-700 text-center w-50 rounded-md cursor-pointer' >
             {
                step>=2 ? 'Previous' : 'Cancel'
             }
@@ -173,7 +240,7 @@ const JobPost = () => {
 
           <button 
           onClick={()=> nextStep()}
-          className={`p-5 w-50 rounded-md bg-[#2e8fff] font-semibold
+          className={`p-5 w-50 rounded-md bg-[#2e8fff] font-semibold cursor-pointer
           ${
             step==4 && 'hidden'
           }

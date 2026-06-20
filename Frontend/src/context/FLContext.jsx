@@ -5,7 +5,6 @@ const FLContext = ({children}) => {
 
    const [freelancer, setfreelancer] = useState(null)
 
-   console.log(freelancer)
   return (
 
     <div>

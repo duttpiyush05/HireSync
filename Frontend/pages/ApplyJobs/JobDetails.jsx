@@ -74,7 +74,7 @@ const JobDetails = () => {
               <span className='text-lg px-3 py-1 rounded-full bg-[#19192f] border border-[#33336e] text-gray-300'>Posted {jobDetails?.createdAt ? new Date(jobDetails?.createdAt).toLocaleDateString() : 'Unknown'}</span>
               <span className='text-lg px-3 py-1 rounded-full bg-[#19192f] border border-[#33336e] text-gray-300'>By {jobDetails?.client?.fullname?.firstname}</span>
             </div>
-            <h1 className='text-2xl sm:text-5xl font-bold leading-tight mb-4'>
+            <h1 className='text-2xl sm:text-5xl font-bold leading-tight mb-4 capitalize'>
               {jobDetails?.title}
             </h1>
             <div className='flex flex-wrap items-center gap-4 text-lg text-gray-400'>
@@ -100,24 +100,7 @@ const JobDetails = () => {
             <p className='text-gray-400 text-xl leading-relaxed mb-4'>
               {jobDetails?.description || 'No description provided.'}
             </p>
-            {/* <p className='text-gray-400 text-sm leading-relaxed mb-6'>
-              The ideal candidate has a deep understanding of complex data visualization, developer-focused workflows, and modern high-end aesthetics. You'll work closely with our engineering team to ensure pixel-perfect implementation of your designs.
-            </p> */}
 
-            {/* <h3 className='text-base font-semibold mb-3 text-white'>Key Responsibilities:</h3> */}
-            {/* <ul className='flex flex-col gap-2'>
-              {[
-                'Design complex data dashboards and analytical tools.',
-                'Develop and maintain a robust Figma design system.',
-                'Conduct user research and usability testing for new features.',
-                'Collaborate with Frontend engineers on Framer Motion animations.',
-              ].map((item, i) => (
-                <li key={i} className='flex items-start gap-2 text-sm text-gray-400'>
-                  <span className='mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-500 flex-shrink-0'></span>
-                  {item}
-                </li>
-              ))}
-            </ul> */}
           </div>
 
           {/* Required Skills Card */}
@@ -149,11 +132,11 @@ const JobDetails = () => {
             <p className='text-md text-gray-400 mb-5'>X freelancers have already applied for this position.</p>
             <Link 
             to={`/jobs/${jobId}/apply`}
-            className='w-full h-11 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors font-semibold text-lg cursor-pointer mb-3 flex items-center justify-center gap-2'>
+            className='w-full h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors font-semibold text-lg cursor-pointer mb-3 flex items-center justify-center gap-2'>
               Apply Now
               <i className="ri-send-plane-fill"></i>
             </Link>
-            <button className='w-full h-11 rounded-lg border border-[#33336e] bg-transparent hover:bg-[#111827] transition-colors text-lg text-gray-300 flex items-center justify-center gap-2 cursor-pointer'>
+            <button className='w-full h-15 rounded-lg border border-[#33336e] bg-transparent hover:bg-[#111827] transition-colors text-lg text-gray-300 flex items-center justify-center gap-2 cursor-pointer'>
               <i className="ri-bookmark-line"></i>
               Save for Later
             </button>
@@ -161,7 +144,11 @@ const JobDetails = () => {
 
           {/* About Client Card */}
           <div className='bg-[#111827] border border-[#1e2230] rounded-xl p-6'>
-            <h2 className='text-2xl font-bold mb-5'>About the Client</h2>
+            <h2 className='text-2xl font-bold mb-5 '>About the Client 
+
+              <Link 
+              to={`/profiles/${jobDetails?.client?._id}`}
+              className='text-blue-500 hover:underline ml-2'>{jobDetails?.client?.fullname?.firstname}</Link></h2>
             <div className='flex flex-col gap-4 text-sm'>
 
               <div className='flex items-center justify-between text-lg'>
@@ -179,7 +166,7 @@ const JobDetails = () => {
                 <span className='text-gray-400'>Location</span>
                 <span className='flex items-center gap-1 text-white'>
                   <i className="ri-map-pin-line text-gray-400"></i>
-                  San Francisco, CA
+                  {jobDetails?.client?.location}
                 </span>
               </div>
 

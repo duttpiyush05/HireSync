@@ -89,14 +89,14 @@ const FindWork = () => {
                 </div>
                 { 
                   jobs.map((job) => (
-                    <div key={job._id} className='group h-full bg-[#1c1f2a] p-4 rounded-lg shadow-md border flex items-center justify-between px-5 '>
+                    <div key={job._id} className='group h-full bg-[#161c33] p-4 rounded-lg shadow-2xl flex items-center justify-between px-5 '>
                       
                       {/* Left - Status + Title + Meta */}
                       <div className='flex flex-col gap-2'>
                         <div className='flex items-center gap-3'>
                           
                         </div>
-                        <h2 className='text-white font-bold text-4xl leading-tight '>{job.title}</h2>
+                        <h2 className='text-white font-bold text-4xl leading-tight capitalize'>{job.title}</h2>
                         <span className='text-lg font-semibold px-2 py-0.5 rounded text-green-400  '>ACTIVE <span className='text-xl text-gray-300'>• Posted on {new Date(job.createdAt).toLocaleDateString()} by 
                           <span className='text-blue-400 font-semibold ml-1 hover:underline cursor-pointer'>
                           {job.client.fullname.firstname} {job.client.fullname.lastname}</span>

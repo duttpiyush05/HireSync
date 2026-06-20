@@ -40,6 +40,38 @@ const freelancerSchema = new mongoose.Schema({
     enum : ['Male', 'Female', 'Other'],
     required : true
   },
+  profile: {
+    title: {
+      type: String,
+      default: ''
+    },
+    bio: {
+      type: String,
+      default: ''
+    },
+    skills: [{
+      type: String
+    }],
+    hourlyRate: {
+      type: Number,
+      default : 0
+    },
+    experienceLevel: {
+      type: String,
+      default : 'Entry'
+    },
+    profilePicture: {
+      type: String
+    },
+    github: {
+      type: String,
+      default :''
+    },
+    linkedin: {
+      type: String,
+      default :''
+    }
+  }
 
 })
 

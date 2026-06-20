@@ -21,77 +21,16 @@ const FreelancerDashboard = () => {
     getProfile()
   }, [])
 
-  console.log(freelancer)
 
   return (
     <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
 
-      <div className='h-full w-full max-w-[1400px] px-4 sm:px-6 lg:px-10'>
+      <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
 
-        {/* NAVBAR */}
-        <nav className='w-full border-[#0013be] min-h-[5rem] flex border-b-4 justify-between items-center py-3 relative sticky top-0 z-50 bg-[#15152a] rounded-b'>
-
-          {/* Left: Logo + Nav Links */}
-          <div className='flex items-center gap-4 flex-1'>
-            <Link to='/' className='text-2xl sm:text-3xl font-bold mr-2 sm:mr-5 whitespace-nowrap'>HireSync</Link>
-
-            {/* Desktop Nav */}
-            <ol className='hidden md:flex gap-6 lg:gap-[4rem] items-center font-semibold text-base lg:text-lg text-gray-300'>
-              <Link to="/find-work">Find Work</Link>
-              <Link to="/">My Jobs</Link>
-              <Link to="/">Messages</Link>
-              <Link to="/">Invoices</Link>
-            </ol>
-          </div>
-
-          {/* Right: Search + Icons */}
-          <div className='flex items-center gap-3 sm:gap-4'>
-            {/* Search — hidden on mobile */}
-            <div className='relative hidden sm:block'>
-              <i className="ri-search-line ri-xl absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-              <input
-                className='h-[3rem] w-[12rem] lg:w-[20rem] pl-10 rounded-full bg-[#37374b] text-base font-semibold'
-                type="text"
-                placeholder='Search....'
-              />
-            </div>
-
-            <i className="ri-notification-2-fill ri-xl cursor-pointer"></i>
-            <div className='bg-white w-9 h-9 rounded-full flex-shrink-0'></div>
-
-            {/* Hamburger — mobile only */}
-            <button
-              className='md:hidden ml-1 text-white'
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-            >
-              <i className={`ri-xl ${menuOpen ? 'ri-close-line' : 'ri-menu-line'}`}></i>
-            </button>
-          </div>
-
-          {/* Mobile Dropdown Menu */}
-          {menuOpen && (
-            <div className='absolute top-full left-0 w-full bg-[#151b2d] z-50 flex flex-col gap-4 p-5 border-t border-[#0013be] md:hidden'>
-              {/* Mobile Search */}
-              <div className='relative sm:hidden'>
-                <i className="ri-search-line ri-xl absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input
-                  className='h-[3rem] w-full pl-10 rounded-full bg-[#37374b] text-base font-semibold'
-                  type="text"
-                  placeholder='Search....'
-                />
-              </div>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Find Work</Link>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>My Jobs</Link>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Messages</Link>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Invoices</Link>
-            </div>
-          )}
-        </nav>
 
         {/* HEADER */}
         <div className='pt-6 sm:pt-[2rem]'>
-          <h1 className='text-3xl sm:text-4xl lg:text-[4rem] font-bold leading-tight'>
+          <h1 className='text-3xl sm:text-4xl lg:text-[4rem] font-bold leading-tight capitalize'>
             Welcome Back, {freelancer?.fullname?.firstname}!
           </h1>
 
@@ -103,26 +42,26 @@ const FreelancerDashboard = () => {
 
             <div className='flex gap-3 sm:gap-[2rem] flex-wrap'>
               <Link
-                to='/fl/dashboard'
-                className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold'
-              >
-                <i className="ri-arrow-down-line mr-1"></i> Reports
-              </Link>
-              <Link
-                to='/'
+                to='/find-work'
                 className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[12rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#3d3ba2]'
               >
                 Find new Works
+              </Link>
+               <Link
+                to='/freelancer/profile'
+                className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#00bc00]'
+              >
+                <i className="ri-pencil-line mr-1"></i> Edit Profile
               </Link>
             </div>
           </div>
         </div>
 
         {/* MAIN GRID */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-8 sm:pt-[3rem]'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-8 sm:pt-[3rem] mb-10'>
 
           {/* Stat Cards */}
-          <div className='h-auto min-h-[12rem] p-6 rounded-2xl bg-[#151b2d] shadow-xl'>
+          <div className='h-auto min-h-[13rem] p-6 rounded-2xl bg-[#151b2d] shadow-xl'>
             <div className='border border-white w-[3rem] h-[3rem] rounded-full flex justify-center items-center'>
               <i className="ri-wallet-line ri-xl"></i>
             </div>
@@ -130,7 +69,7 @@ const FreelancerDashboard = () => {
             <h1 className='text-3xl sm:text-4xl font-bold mt-2'>$25,000</h1>
           </div>
 
-          <div className='h-auto min-h-[12rem] p-6 rounded-2xl bg-[#151b2d] shadow-xl'>
+          <div className='h-auto min-h-[13rem] p-6 rounded-2xl bg-[#151b2d] shadow-xl'>
             <div className='border border-white w-[3rem] h-[3rem] rounded-full flex justify-center items-center'>
               <i className="ri-building-fill ri-xl"></i>
             </div>
@@ -138,7 +77,7 @@ const FreelancerDashboard = () => {
             <h1 className='text-3xl sm:text-4xl font-bold mt-2'>20</h1>
           </div>
 
-          <div className='h-auto min-h-[12rem] p-6 rounded-2xl bg-[#151b2d] shadow-xl sm:col-span-2 lg:col-span-1'>
+          <div className='h-auto min-h-[13rem] p-6 rounded-2xl bg-[#151b2d] shadow-xl sm:col-span-2 lg:col-span-1'>
             <div className='border border-white w-[3rem] h-[3rem] rounded-full flex justify-center items-center'>
               <i className="ri-send-plane-fill ri-xl"></i>
             </div>
@@ -147,7 +86,7 @@ const FreelancerDashboard = () => {
           </div>
 
           {/* Current Projects — spans 2 cols on lg */}
-          <div className='rounded-2xl bg-[#151b2d] shadow-xl p-6 sm:col-span-2 lg:col-span-2'>
+          <div className='rounded-2xl bg-[#151b2d] shadow-2xl p-6 sm:col-span-2 lg:col-span-2'>
             <div className='flex justify-between items-center mb-8'>
               <h2 className='text-2xl sm:text-3xl font-semibold'>Current Projects</h2>
               <Link to='/fl/dashboard'>View All</Link>
@@ -261,23 +200,6 @@ const FreelancerDashboard = () => {
 
         </div>
 
-        {/* FOOTER */}
-        <footer className='mt-10 w-full bg-[#15152a] rounded-t-2xl'>
-          <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 sm:p-10'>
-            <div>
-              <h2 className='text-2xl sm:text-3xl font-bold mb-2'>HireSync</h2>
-              <p className='text-base text-gray-300'>© 2026 HireSync. All rights reserved.</p>
-            </div>
-
-            <ol className='flex flex-wrap gap-4 sm:gap-8 font-semibold text-base text-gray-300'>
-              <li className='cursor-pointer hover:text-white transition-colors'>Company</li>
-              <li className='cursor-pointer hover:text-white transition-colors'>Resources</li>
-              <li className='cursor-pointer hover:text-white transition-colors'>Support</li>
-              <li className='cursor-pointer hover:text-white transition-colors'>Privacy</li>
-              <li className='cursor-pointer hover:text-white transition-colors'>Terms</li>
-            </ol>
-          </div>
-        </footer>
 
       </div>
     </div>

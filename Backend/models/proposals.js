@@ -31,7 +31,7 @@ const proposalSchema = new mongoose.Schema({
   },
   freelancer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'freelancers',
+    ref: 'freelancer',
     required: true
   },
   platformFee: {

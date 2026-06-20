@@ -1,8 +1,39 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 
 const Review = ({jobData, setjobData}) => {
+
+  const navigate = useNavigate()
+  const [isloading, setisLoading] = useState(true)
+
+   useEffect(()=>
+   {
+      const settingisLoading = ()=>
+      {
+         setTimeout(()=>
+         {
+            setisLoading(false)
+         }, 5000)
+      }
+      settingisLoading()
+   },[])
+
+   if(isloading)
+    {
+      return (
+        <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+  
+        <div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          style={{ animationDuration: "2s" }}
+        ></div>
+  
+        <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
+        </div>
+      )
+    }
 
   const handlePostJob = async () =>
   {
@@ -17,7 +48,7 @@ const Review = ({jobData, setjobData}) => {
       const data = await response.data
       if(response.status === 201)
       {
-        alert(data.message)
+        navigate('/my-jobs')
         setjobData({
           title : '',
           category : '',
@@ -30,7 +61,7 @@ const Review = ({jobData, setjobData}) => {
               duration : '',
               xplevel : ''
              },
-          // client : ''
+          
         })
       } else {
         alert('Failed to post job. Please try again.')
@@ -51,14 +82,14 @@ const Review = ({jobData, setjobData}) => {
         <div><h2 className='font-bold text-[3rem] '>Review & Post</h2>
         <p className='text-gray-400 font-semibold text-xl pb-[4rem]'>Check everything one last time before making your job live to the HireSync community.</p></div>
 
-        <div className=' grid  lg:grid-cols-3 gap-[1.5rem] pb-[2rem]'>
+        <div className=' grid  lg:grid-cols-3 gap-[1.5rem] pb-[2rem] '>
 
-        <div className='rounded-lg border bg-[#151b2d] p-[2rem] h-auto min-h-[15rem] lg:col-span-2 sm:row-span-1 lg:row-span-2'> 
+        <div className='rounded-lg bg-[#151b2d] p-[2rem] h-auto min-h-[15rem] lg:col-span-2 sm:row-span-1 lg:row-span-2 shadow-2xl'> 
           <h3 className='font-semibold text-2xl text-blue-400'>Basics</h3>
           <h3 className='font-bold text-4xl'>{jobData.title}</h3>
         </div>
 
-        <div className='rounded-lg border bg-[#151b2d] p-[2rem] h-auto min-h-[15rem] lg:row-span-4'>
+        <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[15rem] lg:row-span-4'>
 
           <h3 className='font-semibold text-2xl text-blue-400'>Budget & Timeline</h3>
           
@@ -99,14 +130,14 @@ const Review = ({jobData, setjobData}) => {
 
         </div>
 
-        <div className='rounded-lg border bg-[#151b2d] p-[2rem] h-auto min-h-[20rem] col-span-[2] row-span-2'>
+        <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[20rem] col-span-[2] row-span-2'>
         <h3 className='font-semibold text-2xl text-blue-400 pb-[1rem]'>Job Description</h3>
           <h3 className=' text-xl'>{jobData.description}</h3>
 
         </div>
 
         
-      <div className='rounded-lg border bg-[#151b2d] p-[2rem] h-auto min-h-[25rem] lg:col-span-[2] sm:row-span-2'><h3 className='font-semibold text-2xl text-blue-400 pb-[1rem]'>Required Expertise</h3>
+      <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[25rem] lg:col-span-[2] sm:row-span-2'><h3 className='font-semibold text-2xl text-blue-400 pb-[1rem]'>Required Expertise</h3>
 
       <div className='grid lg:grid-cols-3 lg:gap-10 pt-6'>
         {
@@ -115,7 +146,7 @@ const Review = ({jobData, setjobData}) => {
                 return (
                   <button 
                   key={index}
-                  className='border p-[1rem] w-[12rem] rounded-lg text-xl bg-gray-700'>
+                  className='p-[1rem] w-[12rem] rounded-lg text-xl bg-[#003979] font-semibold'>
                     {skill}
                     </button>
                 )
@@ -124,7 +155,7 @@ const Review = ({jobData, setjobData}) => {
       </div>
           </div>
 
-      <div className='rounded-lg border bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] row-span-2'>
+      <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] row-span-2'>
         <h3 className='text-xl text-gray-300 gap'>Ready to find your expert? Your job post will be visible to over 200,000 certified freelancers.</h3>
 
         <button 

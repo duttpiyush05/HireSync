@@ -103,7 +103,7 @@ const CreateProposal = () => {
       setTimeout(()=>
       {
         setisLoading(false)
-      }, 0)
+      }, 2000)
     }
   }
 
