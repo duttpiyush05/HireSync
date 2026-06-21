@@ -8,6 +8,8 @@ const freelancerRoutes = require('./routes/freelancer_routes')
 const clientRoutes = require('./routes/client_routes')
 const jobRoutes = require('./routes/job_routes')
 const proposalRoutes = require('./routes/proposals_routes')
+const contractRoutes = require('./routes/contract_routes')
+const notificationRoutes = require('./routes/notification_route')
 const cookieParser = require('cookie-parser')
 
 connectToDB();
@@ -28,5 +30,6 @@ app.use('/freelancers', freelancerRoutes)
 app.use('/clients', clientRoutes)
 app.use('/jobs', jobRoutes)
 app.use('/proposals', proposalRoutes)
-
+app.use('/contracts', contractRoutes)
+app.use('/notifications', notificationRoutes)
 module.exports = app;

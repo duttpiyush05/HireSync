@@ -92,5 +92,5 @@ freelancerSchema.methods.comparePassword = async function (password)
   return await bcrypt.compare(password, this.password)
 }
 
-const freelancerModel = mongoose.model('freelancer', freelancerSchema)
+const freelancerModel = mongoose.model('freelancers', freelancerSchema)
 module.exports = freelancerModel

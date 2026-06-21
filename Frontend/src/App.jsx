@@ -25,6 +25,11 @@ import FreelancerPrivateProfile from '../pages/Profiles/Private/FreelancerProfil
 import ClientPublicProfile from '../pages/Profiles/Public/ClientProfile'
 import ClientPrivateProfile from '../pages/Profiles/Private/ClientProfile'
 import ClientLayout from '../components/ClientLayout'
+import Details from '../pages/Contracts/Details'
+import Notification from '../pages/Notifications/Notification'
+
+import Dashboard from '../pages/Contracts/Dashboard'
+
 
 function App() {
   
@@ -66,7 +71,12 @@ function App() {
         <Route path='client//profiles/:clientId' element={<FreelancerAuth>
                                               <ClientPublicProfile/>
                                             </FreelancerAuth >
-                                              } />   
+                                              } />  
+
+        <Route path='/notifications' element={<FreelancerAuth>
+                                              <Notification/>
+                                            </FreelancerAuth >
+                                              } />  
         
         </Route>
 
@@ -97,6 +107,17 @@ function App() {
         <Route path='/client/profile' element={
                                             <ClientAuth>
                                               <ClientPrivateProfile/>
+                                            </ClientAuth>  
+                                                } />
+
+        <Route path='/contracts' element={
+                                            <ClientAuth>
+                                              <Dashboard/>
+                                            </ClientAuth>  
+                                                } />
+        <Route path='/contracts/:contractId' element={
+                                            <ClientAuth>
+                                              <Details/>
                                             </ClientAuth>  
                                                 } />
 

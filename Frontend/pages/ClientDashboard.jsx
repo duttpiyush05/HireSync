@@ -55,8 +55,7 @@ const ClientDashboard = () => {
           setProposals(data.proposals)
       }catch(err)
       {
-        console.log(err.response.data);
-        
+        console.log(err.response.data);        
       }
     }
     getProposals()
@@ -189,7 +188,7 @@ const ClientDashboard = () => {
           {proposals.map((id) => (
             <div key={id} 
             className={
-              `${id.status === 'rejected' ? 'hidden' : 'h-auto min-h-[15rem] max-w-[40rem] sm:min-h-[15rem] p-5 sm:p-6 border rounded-xl bg-[#151b2d] shadow-xl hover:border-blue-500 transition duration-0'}`
+              `${id.status ===  'accepted' || 'rejected' ? ' hidden' : 'h-auto min-h-[15rem] max-w-[40rem] sm:min-h-[15rem] p-5 sm:p-6 border rounded-xl bg-[#151b2d] shadow-xl hover:border-blue-500 transition duration-0 '}`
             }>
 
               <div className='font-bold p-1 sm:p-2 flex flex-col sm:flex-row gap-4 sm:gap-6'>

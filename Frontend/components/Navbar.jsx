@@ -10,6 +10,10 @@ const Navbar = () => {
   {
     navigate('/fl/dashboard')
   }
+  const gotonotifications=()=>
+  {
+    navigate('/notifications')
+  }
 
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
@@ -23,9 +27,8 @@ const Navbar = () => {
             {/* Desktop Nav */}
             <ol className='hidden md:flex gap-6 lg:gap-[4rem] items-center font-semibold text-base lg:text-xl text-gray-300'>
               <Link to="/find-work">Find Work</Link>
-              <Link to="/">My Jobs</Link>
+              <Link to="/my-jobs">My Jobs</Link>
               <Link to="/">Messages</Link>
-              <Link to="/">Invoices</Link>
             </ol>
           </div>
 
@@ -41,7 +44,9 @@ const Navbar = () => {
               />
             </div>
 
-            <i className="ri-notification-2-fill ri-xl cursor-pointer"></i>
+            <i
+            onClick={gotonotifications} 
+            className="ri-mail-unread-line text-3xl cursor-pointer"></i>
             <div 
             onClick={gotoprofile}
             className='bg-white w-10 h-10 rounded-full flex-shrink-0 cursor-pointer'></div>

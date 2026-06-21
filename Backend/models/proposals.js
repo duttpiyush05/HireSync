@@ -21,7 +21,7 @@ const proposalSchema = new mongoose.Schema({
   },
   job: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'jobModel',
+    ref: 'jobmodel',
     required: true
   },
   client: {
@@ -31,7 +31,7 @@ const proposalSchema = new mongoose.Schema({
   },
   freelancer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'freelancer',
+    ref: 'freelancers',
     required: true
   },
   platformFee: {
@@ -44,7 +44,7 @@ const proposalSchema = new mongoose.Schema({
   },
   status : {
     type : String,
-    enum : ['pending', 'accepted', 'rejected'],
+    enum : ['pending', 'accepted', 'rejected','in_progress'],
     default: 'pending'
   }
 }, {timestamps : true}
