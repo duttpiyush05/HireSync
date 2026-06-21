@@ -25,6 +25,7 @@ const ClientNavbar = () => {
                     <Link to="/my-jobs">My Jobs</Link>
                     <Link to="/messages">Messages</Link>
                     <Link to="/post-job">Post Job</Link>
+                    <Link to="/contracts">Contracts</Link>
                     <Link to="/invoices">Invoices</Link>
                   </ol>
                 </div>

@@ -29,7 +29,6 @@ const Applicants = () => {
             Authorization: `Bearer ${token}`
           }
         })
-        console.log(response);
         setclient(response.data.client)
         setClientId(response.data.client._id)
       }catch(err)
@@ -69,23 +68,25 @@ const Applicants = () => {
   },[clientId])
 
   const updateProposalStatus = async (proposalId, status) => {
-  const response = await axios.patch(
+  try
+  {
+    const response = await axios.patch(
     `${import.meta.env.VITE_BASE_URL}/proposals/proposals/${proposalId}/status`,
     { status },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  );
-
-  if(status==='accepted') setisAccepted(true)
-  if(status==='rejected') setisRejected(true)
-
-  alert(response.data.message)
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+  console.log(response);
+  alert(response?.data?.message)
+  }catch(err)
+  {
+    console.log(err.response.data);
+  }
 };
   
-console.log(proposals);
 
   if(isloading)
     {
@@ -106,42 +107,38 @@ console.log(proposals);
     
     <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
     
-          <div className='h-full w-full max-w-[1400px] px-4 sm:px-6 lg:px-10'>
+          <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
 
             <div>
               {
-                proposals.length === 0 || 
-                proposals.every(proposal=>
-                
-                 proposal.status  === 'rejected'                  
-                )? (
+                proposals.length === 0 || (proposals.every(proposal=>proposal.status === 'rejected')) ? (
                   <div className='flex flex-col items-center justify-center h-[calc(100vh-5rem)]'>
-                    <h1 className='text-4xl font-bold mb-4'>No Jobs Found</h1>
+                    <h1 className='text-4xl font-bold mb-4'>No Appications Found</h1>
                     <p className='text-lg text-gray-400'>There are currently no Applications for you.</p>
                   </div>
                 ) : (
                   <div className='grid grid-cols-1 gap-6 py-10 bo h-full'>
                     <div>
-                      <h1 className='text-3xl font-bold p-1'>Applications</h1>
+                      <h1 className='text-3xl font-bold p-1 uppercase'>Proposals</h1>
                     </div>
                     { 
                       proposals.map((job) => (
                         <div key={job._id} 
                         className={
-                          job.status==='rejected' ? 'hidden' : 'group h-full bg-[#151b2d] p-5 rounded-lg shadow-md flex items-center justify-between px-5 shadow-3xl'
+                          !job.status===('rejected' || 'accepted') ? 'hidden' : 'group h-full bg-[#151b2d] p-5 rounded-lg shadow-md flex items-center justify-between px-5 shadow-3xl'
                         } >
                           
                           {/* Left - Status + Title + Meta */}
                           <div className='flex flex-col gap-2  w-full'>
-                            <div className='flex items-center gap-3'>
+                            <div className='flex items-center gap-3 bord'>
                               
                             </div>
-                            <h2 className='text-white font-bold text-3xl leading-tight capitalize'>{job.freelancer.fullname.firstname} {job.freelancer.fullname.lastname} </h2>
-                            <h2 className='text-white font-semibold text-2xl leading-tight capitalize'>Applied for <span className='text-blue-500 hover:underline cursor-pointer font-semibold'>{job.job.title}</span><span className='text-lg font-semibold px-2 py-0.5 rounded text-green-400  '><span className='text-xl text-gray-300'>on {new Date(job.job.createdAt).toLocaleDateString()} 
+                            <h2 className='text-white font-bold text-3xl leading-tight capitalize mb-3'>{job.freelancer.fullname.firstname} {job.freelancer.fullname.lastname} </h2>
+                            <h2 className='text-white font-semibold text-2xl leading-tight capitalize'>Applied for <span className='text-blue-500 hover:underline cursor-pointer font-semibold'>{job.job.title}</span><span className='text-lg font-semibold px-2 py-0.5 rounded text-green-400  bord'><span className='text-xl text-gray-300'>on {new Date(job.job.createdAt).toLocaleDateString()} 
                               </span> </span></h2>
-                            
-                            
-                            <span className='text-xl mt-5 mb-4'>
+                        
+                            <h3 className='font-bold text-2xl mt-2'>CoverLetter</h3>
+                            <span className='text-xl mt- mb-4'>
                               {job.coverLetter.length > 100 ? job.job.description.substring(0, 100) + '...' : job.coverLetter}
                             </span>
                 

@@ -57,5 +57,5 @@ const jobSchema = new mongoose.Schema({
   timestamps : true,
 })
 
-const jobModel = mongoose.model('jobModel', jobSchema)
+const jobModel = mongoose.model('jobmodel', jobSchema)
 module.exports = jobModel

@@ -1,5 +1,7 @@
 const proposalModel = require('../models/proposals');
 const jobModel = require('../models/job_model')
+const contractModel = require("../models/contracts_model")
+const notificationModel = require("../models/notification_model")
 
 module.exports.createProposal = async (req, res, next) => {
   try
@@ -41,7 +43,20 @@ module.exports.createProposal = async (req, res, next) => {
       receivingAmt,
     })
 
-    res.status(201).json({alert : "Proposal submitted successfully", proposal})
+    //forClient
+    const notificationForClient = await notificationModel.create({
+      user : job.client,
+      title : "New Proposal",
+      message : "You Received a new Proposal"
+    })
+
+    const notificationForFreelancer = await notificationModel.create({
+      user : req.user._id,
+      title : "Proposal Submitted",
+      message : "Proposal submitted Successfully"
+    })
+
+    res.status(201).json({proposal, notificationForClient, notificationForFreelancer})
   } catch(error)
   {
     res.status(401).json("There is some error")
@@ -93,19 +108,96 @@ module.exports.updateProposalStatus = async (req, res) => {
       });
     }
 
-    const proposal = await proposalModel.findByIdAndUpdate(
-      req.params.proposalId,
-      {
-        $set: { status }
-      },
-      {
-        returnDocument: 'after'
-      }
+    const proposal = await proposalModel.findById(
+      req.params.proposalId
     );
-    
+
+    if (!proposal) {
+      return res.status(404).json({
+        message: "Proposal not found"
+      });
+    }
+
+    if (proposal.status === "accepted") {
+      return res.status(400).json({
+        message: "Proposal already accepted"
+      });
+    }
+
+    proposal.status = status;
+    await proposal.save();
+
+    if (status === "accepted") {
+
+      const notificationForFreelancer = await notificationModel.create({
+      user : proposal.freelancer,
+      title : "Proposal Accepted",
+      message : "Your Proposal Successfully Accepted"
+    })
+
+      const existingContract = await contractModel.findOne({
+        proposal: proposal._id
+      });
+
+      if (existingContract) {
+        return res.status(400).json({
+          message: "Contract already exists"
+        });
+      }
+
+      await proposalModel.updateMany(
+        {
+          job: proposal.job,
+          _id: { $ne: proposal._id }
+        },
+        {
+          status: "rejected"
+        }
+      );
+
+      await jobModel.findByIdAndUpdate(
+        proposal.job,
+        {
+          status: "in_progress"
+        }
+      );
+
+      const contract = await contractModel.create({
+        proposal: proposal._id,
+        job: proposal.job,
+        client: proposal.client,
+        freelancer: proposal.freelancer,
+        budget: proposal.askingAmt,
+        startDate: Date.now(),
+        expectedCompletion: proposal.estCompletion,
+        status: "active"
+      });
+
+      const notificationContract = await notificationModel.create({
+      user : proposal.freelancer,
+      title : "Contracted Created",
+      message : "A new Contract has been Created"
+    })
+
+      return res.status(200).json({
+        message: "Proposal successfully accepted",
+        proposal,
+        contract,
+        notificationContract,
+        notificationForFreelancer
+      });
+    }
+
+    const notificationForFreelancer = await notificationModel.create({
+      user : proposal.freelancer,
+      title : "Proposal Rejected",
+      message : "Your Proposal was Rejected"
+    })
+
     res.status(200).json({
-      message : `Proposal Sucessfully ${status}`,
-      proposal
+      message: `Proposal successfully ${status}`,
+      proposal,
+      notificationForFreelancer
     });
 
   } catch (error) {
