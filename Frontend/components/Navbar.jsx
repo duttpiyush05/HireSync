@@ -1,10 +1,14 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { NotificationCountContext } from '../src/context/NotificationContext'
+import { useEffect } from 'react'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+
+  const {unreadCount, setUnreadCount} = useContext(NotificationCountContext)
 
   const gotoprofile=()=>
   {
@@ -14,6 +18,7 @@ const Navbar = () => {
   {
     navigate('/notifications')
   }
+
 
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
@@ -29,6 +34,7 @@ const Navbar = () => {
               <Link to="/find-work">Find Work</Link>
               <Link to="/my-jobs">My Jobs</Link>
               <Link to="/">Messages</Link>
+              <Link to="/contracts">Messages</Link>
             </ol>
           </div>
 
@@ -46,7 +52,12 @@ const Navbar = () => {
 
             <i
             onClick={gotonotifications} 
-            className="ri-mail-unread-line text-3xl cursor-pointer"></i>
+            className="ri-mail-unread-line text-3xl cursor-pointer  flex items-center gap-1">
+              <span 
+              className={unreadCount>0?'text-2xl font-bold':'hidden'} >
+                {unreadCount}
+                </span>
+            </i>
             <div 
             onClick={gotoprofile}
             className='bg-white w-10 h-10 rounded-full flex-shrink-0 cursor-pointer'></div>

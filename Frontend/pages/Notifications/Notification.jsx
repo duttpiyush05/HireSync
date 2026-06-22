@@ -3,6 +3,8 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { NotificationCountContext } from '../../src/context/NotificationContext'
+import { useContext } from 'react'
 
 const notification = () => {
   const [isloading, setIsloading] = useState(true)
@@ -23,9 +25,7 @@ const notification = () => {
           }
         )
         const data = response.data
-        setAllNotifications(data?.notifications)
-        console.log(data?.notifications);
-        
+        setAllNotifications(data?.notifications)        
       }
       catch(err)
       {
@@ -40,56 +40,25 @@ const notification = () => {
 
   const tabs = ['All', 'Projects', 'Payments', 'Messages']
 
-  const notifications = [
-    {
-      icon: 'ri-money-dollar-circle-line',
-      iconBg: 'bg-green-500/20 text-green-400',
-      title: 'Payment Received',
-      desc: '$1,200 for "MERN Dashboard" has been released and added to your balance.',
-      time: '2 hours ago',
-      unread: true,
-    },
-    {
-      icon: 'ri-folder-line',
-      iconBg: 'bg-[#19192f] text-[#6366F1]',
-      title: 'New Proposal',
-      desc: 'TechFlow Inc. has invited you to bid on "E-commerce API Refactor".',
-      time: '5 hours ago',
-      unread: true,
-    },
-    {
-      icon: 'ri-message-3-line',
-      iconBg: 'bg-amber-500/20 text-amber-400',
-      title: 'New Message',
-      desc: 'Sarah Jenkins: "The assets look great! Can we discuss the mobile layout?"',
-      time: 'Yesterday',
-      unread: false,
-    },
-    {
-      icon: 'ri-shield-check-line',
-      iconBg: 'bg-[#19192f] text-gray-300',
-      title: 'Profile Verified',
-      desc: 'Your professional credentials have been successfully verified by our team.',
-      time: '2 days ago',
-      unread: false,
-    },
-    {
-      icon: 'ri-checkbox-circle-line',
-      iconBg: 'bg-green-500/20 text-green-400',
-      title: 'Milestone Approved',
-      desc: 'Phase 1 (Database Architecture) for Project "Zephyr" has been approved.',
-      time: '3 days ago',
-      unread: false,
-    },
-  ]
+  const {unreadCount,setUnreadCount}= useContext(NotificationCountContext)
 
-  const markAllAsRead = ()=>
+  const markAllAsRead = async()=>
   {
-    console.log(allnotifications);
-    
-    allnotifications.forEach((n)=>{
-      n.isRead = true
-    })
+    try{
+      const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/notifications/markAllasRead`,{},
+        {
+          headers : {
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      )
+      const data = response.data
+      setAllNotifications(data?.notifications)
+      setUnreadCount(0)
+    }catch(err)
+    {
+      console.log(err.response.data);      
+    }
   }
 
   return (
@@ -97,14 +66,14 @@ const notification = () => {
       <div className='max-w-7xl mx-auto'>
 
         {/* PAGE HEADER */}
-        <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6'>
+        <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6 mt-5'>
           <div>
             <h1 className='text-2xl md:text-4xl font-bold'>Notifications</h1>
             <p className='text-md text-gray-400 mt-1'>Stay updated with your latest project activity and earnings.</p>
           </div>
           <button 
           onClick={markAllAsRead}
-          className='flex items-center gap-2 text-lg text-[#6366F1] font-semibold flex-shrink-0 whitespace-nowrap border-[#1e2230] hover:border-[#33336e] p-2 rounded-lg'>
+          className='flex items-center gap-2 text-lg text-[#6366F1] font-semibold flex-shrink-0 whitespace-nowrap border border-[#141c3b] hover:border-[#33336e] p-2 rounded-lg cursor-pointer'>
             <i className="ri-check-double-line"></i>
             Mark all as read
           </button>
@@ -154,23 +123,18 @@ const notification = () => {
                   </div>
                   
                 </div>
-                <div className=' flex justify-between mt-2'>
-                  <p className='text-md text-gray-400 mt-1 leading-relaxed'>{n.message}</p>
-                <button className='p-5 py-2 font-bold bg-green-500 flex justify-center rounded-sm'>
-                    Mark as Read
-                  </button>
-                </div>
+                <p className='text-md text-gray-400 mt-1 leading-relaxed'>{n.message}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* LOAD MORE */}
-        <div className='flex justify-center mt-6'>
+        {/* <div className='flex justify-center mt-6'>
           <button className='px-6 h-20 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-lg font-medium text-gray-300'>
             Load earlier notifications
           </button>
-        </div>
+        </div> */}
 
       </div>
     </div>

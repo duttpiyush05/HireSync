@@ -93,10 +93,10 @@ const CreateProposal = () => {
       const data = response.data
       const proposalId = data?.proposal?._id
 
-      // if(response.status === 201)
-      // {
-      //   navigate(`/proposals/${proposalId}/submission`)
-      // }
+      if(response.status === 201)
+      {
+        navigate(`/proposals/${proposalId}/submission`)
+      }
       console.log(response);
       
     }catch(err)
@@ -110,8 +110,6 @@ const CreateProposal = () => {
       }, 2000)
     }
   }
-
-  
 
   return (
     

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState,useContext, useEffect } from 'react'
+import axios from 'axios'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import RegisterPage from '../pages/RegisterPage'
@@ -30,8 +31,35 @@ import Notification from '../pages/Notifications/Notification'
 
 import Dashboard from '../pages/Contracts/Dashboard'
 
+//context api
+import {NotificationCountContext} from './context/NotificationContext'
+
 
 function App() {
+
+  const {unreadCount, setUnreadCount}= useContext(NotificationCountContext)
+        
+  useEffect(()=>
+  {
+    const fetchUnreadCount = async()=>
+    {
+      try{
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/notifications/getunreadcount`,{
+          headers : {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        setUnreadCount(response?.data?.count)
+        console.log(response);
+      }
+      catch(err)
+      {
+        console.log(err.response.data);        
+      }
+    }
+    fetchUnreadCount()
+  },[])
+  
   
   return (
     <div>
@@ -73,9 +101,9 @@ function App() {
                                             </FreelancerAuth >
                                               } />  
 
-        <Route path='/notifications' element={<FreelancerAuth>
+        <Route path='/notifications' element={
                                               <Notification/>
-                                            </FreelancerAuth >
+                                           
                                               } />  
         
         </Route>
