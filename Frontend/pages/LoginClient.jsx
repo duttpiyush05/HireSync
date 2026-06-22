@@ -44,9 +44,9 @@ const LoginClientPage = () => {
               </div>
 
         <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg p-auto flex flex-col justify-center items-center'>
-          <h2 className='text-2xl font-bold'>Login as Client</h2>
+          <h2 className='text-2xl font-bold mb-10'>Login as Client</h2>
           <div className='text-white flex flex-col justify-center items-center'>
-            <h1 className='text-3xl font-bold text-[#6366F1] mt-12 mb-8'>HireSync</h1>
+
 
             <h2 className='text-3xl font-bold mb-4'>Welcome back</h2>
 
@@ -81,7 +81,7 @@ const LoginClientPage = () => {
             className='w-1/2 px-4 w-[95%] m h-16 rounded-md bg-[#37374b] pl-15 text-lg' 
             placeholder='********' /> 
 
-            <button className=' text-lg text-black mt-8 h-15 w-[95%] bg-[#A0A3FF] rounded-md'>Sign In</button>
+            <button className=' text-lg text-black mt-8 h-15 w-[95%] bg-[#A0A3FF] rounded-md cursor-pointer'>Sign In</button>
 
           </form>
 

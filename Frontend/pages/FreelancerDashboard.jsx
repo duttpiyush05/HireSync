@@ -43,15 +43,21 @@ const FreelancerDashboard = () => {
             <div className='flex gap-3 sm:gap-[2rem] flex-wrap'>
               <Link
                 to='/find-work'
-                className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[12rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#3d3ba2]'
-              >
+                className=' border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[12rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#3d3ba2]'
+              > <i className="ri-phone-find-line mr-1"></i>
                 Find new Works
               </Link>
                <Link
                 to='/freelancer/profile'
-                className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#00bc00]'
+                className=' border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#008500]'
               >
                 <i className="ri-pencil-line mr-1"></i> Edit Profile
+              </Link>
+               <Link
+                to='/fl/logout'
+                className=' border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#b42222]'
+              >
+                <i className="ri-logout-box-line mr-1"></i> Logout
               </Link>
             </div>
           </div>

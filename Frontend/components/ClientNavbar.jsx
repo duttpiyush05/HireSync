@@ -1,14 +1,22 @@
 import React from 'react'
 import { Link , useNavigate} from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { NotificationCountContext } from '../src/context/NotificationContext'
 
 const ClientNavbar = () => {
   const navigate = useNavigate()
+
+    const {unreadCount, setUnreadCount} = useContext(NotificationCountContext)
 
   const gotoprofile=()=>
   {
     navigate('/client/dashboard')
   }
+
+    const gotonotifications=()=>
+    {
+      navigate('/notifications')
+    }
 
   const [menuOpen, setMenuOpen] = useState(false)
   return (
@@ -42,7 +50,14 @@ const ClientNavbar = () => {
                     />
                   </div>
       
-                  <i className="ri-notification-2-fill ri-xl cursor-pointer hidden sm:block"></i>
+                  <i
+                  onClick={gotonotifications} 
+                  className="ri-mail-unread-line text-3xl cursor-pointer  flex items-center gap-1">
+                    <span 
+                    className={unreadCount>0?'text-2xl font-bold':'hidden'} >
+                      {unreadCount}
+                      </span>
+                  </i>
                   <div 
                   onClick={gotoprofile}
                   className='bg-white w-10 h-10 sm:w-9 sm:h-9 rounded-full flex-shrink-0'></div>
