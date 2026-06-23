@@ -9,6 +9,7 @@ const Details = () => {
   const [client, setClient] = useState()
   const [freelancer, setFreelancer] = useState()
   const [job, setJob] = useState()
+  const [role, setRole] = useState("")
 
   useEffect(() => {
     const fetchContract = async()=>
@@ -26,16 +27,67 @@ const Details = () => {
         setClient(contract?.client)        
         setFreelancer(contract?.freelancer)        
         setJob(contract?.job) 
+        setRole(response?.data?.role)
         console.log(response);
-
                
-      }catch(error)
+      }catch(err)
       {
-        console.log(error.reponse?.data);
+        console.log(err.response?.data);
       }
     }
     fetchContract()
   },[])
+
+  const [buttonValue, setbuttonValue] = useState("Request Completion")
+
+  const handleCompletionRequest = async ()=>
+  {
+    try{
+      const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/contracts/completionRequest/${contractId}`,{},{
+        headers: {
+          Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      // console.log(response);
+      
+    }catch(err)
+    {
+      console.log(err?.response?.data);
+    }
+  }
+
+  const handleMarkCompleted = async()=>{
+    try
+    {
+      const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/contracts/markCompleted/${contractId}`,{},{
+        headers :{
+          Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      // console.log(response);
+      
+    }catch(err)
+    {
+      console.log(err?.response?.data);      
+    }
+  }
+
+  const handleCancelCompletion = async()=>
+  {
+    try
+    {
+      const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/contracts/markCancel/${contractId}`,{},{
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      console.log(response);
+      
+    }catch(err)
+    {
+      console.log(err?.response?.data);
+    }
+  }
 
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
@@ -45,12 +97,24 @@ const Details = () => {
         <div className='flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8'>
           <div>
             <h1 className='text-2xl md:text-5xl font-bold'>Contract Details</h1>
-            <p className='text-sm text-[#6366F1] font-medium mt-1'>Contract ID: #HS-8829-QX</p>
+            <p className='text-sm text-[#6366F1] font-medium mt-1'>Contract ID: {contractId}</p>
           </div>
-          <span className='inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 font-medium flex-shrink-0 capitalize'>
+          {
+            (contract?.status==="completed" ||  contract?.status==="completed") && (
+              <span className='inline-flex items-center gap-1.5 text-lg px-10 py-3 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 font-medium flex-shrink-0 capitalize'>
             <span className='w-1.5 h-1.5 rounded-full bg-current'></span>
             {contract?.status}
           </span>
+            )
+          }
+          {
+            (contract?.status==="cancelled") && (
+              <span className='inline-flex items-center gap-1.5 text-lg px-10 py-3 rounded-full bg-red-600 text-white border border-red-700 font-medium flex-shrink-0 capitalize'>
+            
+            {contract?.status}
+          </span>
+            )
+          }
         </div>
 
         {/* MAIN GRID */}
@@ -66,7 +130,7 @@ const Details = () => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                 <div>
                   <p className='text-lg text-gray-500 uppercase tracking-widest mb-2'>Job Title</p>
-                  <p className='text-[#6366F1] font-semibold text-md md:text-md'>{job?.title}</p>
+                  <p className='capitalize text-[#6366F1] font-semibold text-md md:text-lg'>{job?.title}</p>
                 </div>
                 <div>
                   <p className='text-lg text-gray-500 uppercase tracking-widest mb-2'>Total Budget</p>
@@ -101,14 +165,9 @@ const Details = () => {
                 </div>
                 <div>
                   <p className='text-lg text-gray-500 uppercase tracking-widest mb-2'>Estimated Completion</p>
-                  <p className='text-white font-semibold text-sm md:text-lg'>{new Date(contract?.startDate).toLocaleDateString(
-                  "en-US",
-                  {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric"
-                  }
-                )}</p>
+                  <p className='text-white font-semibold text-sm md:text-lg'>Next {contract?.job?.budget?.duration}
+                  
+                </p>
                 </div>
               </div>
             </div>
@@ -148,22 +207,98 @@ const Details = () => {
 
             {/* Contract Management */}
             <div className='bg-[#111827] border border-[#1e2230] rounded-xl p-6'>
+
+              
               <h2 className='text-2xl font-bold mb-5'>Contract Management</h2>
 
-              {/* <p className='text-lg font-bold text-[#6366F1] uppercase tracking-widest pl-3 border-l-2 border-[#6366F1] mb-3'>Client Controls</p> */}
-              <div className='flex flex-col gap-3 mb-6'>
-                <button className='w-full h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-lg py-2 font-semibold text-white'>
-                  Mark Completed
+              {role==="client" ? 
+              
+              <div>
+                
+                  
+                  {
+                    (contract?.status==="active" || contract?.status==="requested_completion") && (
+                      <div className='flex flex-col gap-3 mb-6'>
+                    <button 
+                    onClick={handleMarkCompleted}
+                    className='w-full h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-lg py-2 font-semibold text-white cursor-pointer'>
+                      Mark Completed
+                    </button>
+                    <button 
+                    onClick={handleCancelCompletion}
+                    className='w-full h-15 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-colors text-lg font-semibold cursor-pointer'>
+                      Cancel Contract
+                    </button>
+                  </div>
+                    )
+                  }
+                  {
+                    contract?.status==="completed" && (
+                      <div>
+                    < i className="absolute ri-check-fill text-4xl ml-23 mt-2.5"></i>
+                    <button 
+                    // onClick={handleMarkCompleted}
+                    
+                    className='w-full h-15 rounded-lg bg-[#007111] transition-colors text-lg py-2 font-semibold text-white disable'>
+                      Completed
+                    </button>
+                  </div>
+                    )
+                  }
+                  {
+                    contract?.status==="cancelled" && (
+                      <div>
+                  <button 
+                  className='disable w-full h-15 rounded-lg bg-red-600 transition-colors text-lg font-semibold text-white mb-5 font-semibold '>
+                    Contract Cancelled
+                  </button>
+                </div>
+                    )
+                  }
+              </div>
+              
+              : 
+              
+              <div>                
+              {contract?.status=="completed" && (
+                <div>
+                  < i className="absolute ri-check-fill text-4xl ml-23 mt-2.5"></i>
+                <button                 
+                className='w-full h-15 rounded-lg bg-[#007111] transition-colors text-lg py-2 font-semibold text-white disable'>
+                  Completed
                 </button>
-                <button className='w-full h-15 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-colors text-lg font-semibold'>
-                  Cancel Contract
-                </button>
+                </div>
+              )}
+              {contract?.status=="requested_completion" && (
+                <div>
+                  <button 
+                  className='w-full h-15 rounded-lg text-white border border-green-500 disable transition-colors text-lg font-semibold text-[#04342C] mb-5 font-semibold cursor-pointer'>
+                    Requested Completion
+                  </button>
+                  
+                </div>
+              )}
+              {contract?.status=="active" && (
+                <div>
+                  <button 
+                  onClick={handleCompletionRequest}
+                  className='w-full h-15 rounded-lg bg-green-400 hover:bg-green-500 transition-colors text-lg font-semibold text-[#04342C] mb-5 font-semibold cursor-pointer'>
+                    Request Completion
+                  </button>
+                </div>
+              )}
+              {contract?.status=="cancelled" && (
+                <div>
+                  <button 
+                  className='disable w-full h-15 rounded-lg bg-red-600 transition-colors text-lg font-semibold text-white mb-5 font-semibold '>
+                    Contract Cancelled
+                  </button>
+                </div>
+              )}
+
               </div>
 
-              {/* <p className='text-xs font-bold text-green-400 uppercase tracking-widest pl-3 border-l-2 border-green-400 mb-3'>Freelancer Controls</p>
-              <button className='w-full h-10 rounded-lg bg-green-400 hover:bg-green-500 transition-colors text-sm font-semibold text-[#04342C] mb-5'>
-                Request Completion
-              </button> */}
+              }
 
               <div className='text-center pt-4 border-t border-[#1e2230]'>
                 <p className='text-md text-gray-400 mb-1'>Need help with this contract?</p>

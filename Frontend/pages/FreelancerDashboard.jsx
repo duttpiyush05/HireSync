@@ -1,23 +1,41 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 import { FLDataContext } from '../src/context/FLContext'
 
 const FreelancerDashboard = () => {
   const [progress, setProgress] = useState(70)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isloading, setisLoading] = useState(true)
   const { freelancer, setfreelancer } = useContext(FLDataContext)
   const token = localStorage.getItem('token')
 
   useEffect(() => {
     const getProfile = async () => {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/freelancers/profile`, {
+     try
+     {
+       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/freelancers/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
+      console.log(response);
+        toast.success("Login Sucessfully",{
+        position: "top-center",
+        autoClose: 5000,
+        theme: "colored"
+    })
+          
       setfreelancer(response.data.freelancer)
+      setisLoading(false)
+     }
+     catch(err)
+     {
+      console.log(err?.response?.data);
+     }
     }
+    
     getProfile()
   }, [])
 
@@ -25,12 +43,12 @@ const FreelancerDashboard = () => {
   return (
     <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
 
-      <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
+      <div className='h-full w-full max-w-[1600px] px-4 sm:px-6 lg:px-10'>
 
 
         {/* HEADER */}
         <div className='pt-6 sm:pt-[2rem]'>
-          <h1 className='text-3xl sm:text-4xl lg:text-[4rem] font-bold leading-tight capitalize'>
+          <h1 className='text-3xl sm:text-4xl lg:text-[3.25rem] font-bold leading-tight capitalize'>
             Welcome Back, {freelancer?.fullname?.firstname}!
           </h1>
 

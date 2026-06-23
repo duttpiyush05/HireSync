@@ -15,7 +15,7 @@ const ClientNavbar = () => {
 
     const gotonotifications=()=>
     {
-      navigate('/notifications')
+      navigate('/client/notifications')
     }
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -33,7 +33,7 @@ const ClientNavbar = () => {
                     <Link to="/my-jobs">My Jobs</Link>
                     <Link to="/messages">Messages</Link>
                     <Link to="/post-job">Post Job</Link>
-                    <Link to="/contracts">Contracts</Link>
+                    <Link to="/client/contracts">Contracts</Link>
                     <Link to="/invoices">Invoices</Link>
                   </ol>
                 </div>

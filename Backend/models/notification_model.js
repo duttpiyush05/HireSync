@@ -5,6 +5,10 @@ const notificationSchema = new mongoose.Schema({
     type : mongoose.Types.ObjectId,
     required : true,
   },
+  contract_id : {
+    type : mongoose.Types.ObjectId,
+    ref : 'contracts'
+  },
   title : {
     type :String,
     required : true,

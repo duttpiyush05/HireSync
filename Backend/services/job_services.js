@@ -1,4 +1,5 @@
 const jobModel = require('../models/job_model');
+const proposalModel = require('../models/proposals')
 
 exports.createJob = async (jobData) => {
   console.log("inside services : ", jobData)
@@ -15,9 +16,18 @@ module.exports.getMyJobs = async (clientId) => {
   }
 };
 
-module.exports.getAllJobs = async () => {
+module.exports.getAllJobs = async (id) => {
   try {
-    const jobs = await jobModel.find().populate('client', 'fullname').sort({ createdAt: -1 });
+    const proposals = await proposalModel.find({
+      freelancer : id
+    })
+    const appliedJobIds = proposals.map(proposal=> proposal.job)
+    const jobs = await jobModel.
+    find({
+      _id : {$nin : appliedJobIds}
+    }).
+    populate('client', 'fullname').
+    sort({ createdAt: -1 });
     return jobs;
   } catch (error) {  
   throw error;

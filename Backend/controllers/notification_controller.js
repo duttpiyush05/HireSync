@@ -10,7 +10,8 @@ module.exports.getNotifications = async(req,res,next)=>
         user : req.user._id
       }
     ).sort({createdAt : -1})
-    res.status(201).json({notifications})
+    const role = req.role
+    res.status(201).json({notifications, role})
   }catch(error)
   {
     res.status(501).json({message: error.message})

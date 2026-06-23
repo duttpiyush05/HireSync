@@ -2,6 +2,10 @@ import { useState,useContext, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
+
 import RegisterPage from '../pages/RegisterPage'
 import LandingPage from '../pages/LandingPage'
 import LoginFLPage from '../pages/LoginFLPage'
@@ -50,7 +54,6 @@ function App() {
           }
         })
         setUnreadCount(response?.data?.count)
-        console.log(response);
       }
       catch(err)
       {
@@ -96,14 +99,25 @@ function App() {
                                               <FreelancerPrivateProfile/>
                                             </FreelancerAuth>                                          
                                           } />   
-        <Route path='client//profiles/:clientId' element={<FreelancerAuth>
+        <Route path='/client/profiles/:clientId' element={<FreelancerAuth>
                                               <ClientPublicProfile/>
                                             </FreelancerAuth >
                                               } />  
+        <Route path='/freelancer/contracts' element={
+                                            <FreelancerAuth>
+                                              <Dashboard/>
+                                               </FreelancerAuth >
+                                                } />
+        <Route path='/freelancer/contracts/:contractId' element={
+                                            <FreelancerAuth>
+                                              <Details/>
+                                             </FreelancerAuth > 
+                                                } />
 
-        <Route path='/notifications' element={
+        <Route path='/freelancer/notifications' element={
+                                               <FreelancerAuth>
                                               <Notification/>
-                                           
+                                         </FreelancerAuth>
                                               } />  
         
         </Route>
@@ -138,16 +152,22 @@ function App() {
                                             </ClientAuth>  
                                                 } />
 
-        <Route path='/contracts' element={
+        <Route path='/client/contracts' element={
                                             <ClientAuth>
                                               <Dashboard/>
-                                            </ClientAuth>  
+                                              </ClientAuth>
                                                 } />
-        <Route path='/contracts/:contractId' element={
+        <Route path='/client/contracts/:contractId' element={
                                             <ClientAuth>
                                               <Details/>
-                                            </ClientAuth>  
+                                             </ClientAuth>  
                                                 } />
+        <Route path='/client/notifications' element={
+                                                 <ClientAuth>
+                                              <Notification/>
+                                        </ClientAuth>  
+                                              } />  
+        
 
         </Route>
 

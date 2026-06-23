@@ -86,10 +86,11 @@ module.exports.authUser = async(req,res,next)=>
   let user = null
 
   user = await freelancerModel.findById(decoded._id)
-
+  req.role = "freelancer"
   if(!user)
   {
     user = await clientModel.findById(decoded._id)
+    req.role = "client"
   }
 
   if(!user){

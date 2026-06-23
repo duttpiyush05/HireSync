@@ -5,9 +5,12 @@ import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { NotificationCountContext } from '../../src/context/NotificationContext'
 import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const notification = () => {
   const [isloading, setIsloading] = useState(true)
+  const navigate = useNavigate()
+  const [contractId, setContractId] = useState("")
 
   const [allnotifications, setAllNotifications] = useState([])
    
@@ -24,8 +27,11 @@ const notification = () => {
             }
           }
         )
+        console.log(response);
+        
         const data = response.data
-        setAllNotifications(data?.notifications)        
+        setAllNotifications(data?.notifications)   
+        setContractId(data?.notifications?.contract_id)     
       }
       catch(err)
       {
@@ -59,6 +65,11 @@ const notification = () => {
     {
       console.log(err.response.data);      
     }
+  }
+
+  const handleReviewContract = (contractId)=>
+  {
+    navigate(`/client/contracts/${contractId}`)
   }
 
   return (
@@ -98,35 +109,49 @@ const notification = () => {
         </div>
 
         {/* NOTIFICATION LIST */}
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-3 h-full'>
+          {
+            allnotifications.length===0 && (
+              <div className='mt-5 min-h-full flex justify-center items-center font-bold text-3xl text-gray-500'>
+                No Recent Notifications
+              </div>
+            )
+          }
           {allnotifications.map((n, i) => (
             <div
               key={i}
-              className='flex items-start gap-4 bg-[#111827] border border-[#1e2230] rounded-xl p-6 cursor-pointer hover:border-[#33336e] transition-colors'
+              className='flex items-start gap-4 bg-[#111827] border border-[#1e2230] rounded-xl p-4 sm:p-6 cursor-pointer hover:border-[#33336e] transition-colors'
             >
-              <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${n.iconBg}`}>
-                <i className='ri-message-3-line text-3xl'></i>
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${n.iconBg}`}>
+                <i className='ri-message-3-line text-xl sm:text-3xl'></i>
               </div>
 
-              <div className='flex-1 min-w-0'>
-                <div className='flex items-start justify-between gap-3 '>
-                  <p className='text-lg font-bold text-white'>{n.title}</p>
-                  <div className=' flex flex-col gap-4 justify-center items-center'>
-                    <div className='flex justify-center items-center gap-2 flex-shrink-0 '>
-                    <span className='text-lg text-gray-500 whitespace-nowrap'>{formatDistanceToNow(
-                      new Date(n?.createdAt), {addSuffix : true}
-                    )}</span>
-                    {!n.isRead && <span className='w-2 h-2 rounded-full bg-[#6366F1]'></span>}
+              <div className='flex-1 min-w-0 flex items-start justify-between gap-3'>
+                <div className='flex flex-col gap-1'>
+                  <p className='text-base sm:text-xl font-bold text-white leading-tight'>{n.title}</p>
+                  <p className='text-md sm:text-md text-gray-400 leading-relaxed'>{n.message}</p>
+                </div>
+                <div className='flex flex-col items-end gap-2 flex-shrink-0'>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-xs sm:text-lg text-gray-500 whitespace-nowrap'>
+                      {formatDistanceToNow(new Date(n?.createdAt), { addSuffix: true })}
+                    </span>
+                    {!n.isRead && <span className='w-2 h-2 rounded-full bg-[#6366F1] flex-shrink-0'></span>}
                   </div>
 
-                  
-                  </div>
-                  
+                  {n?.contract_id?.length > 0 && (
+                    <button
+                      onClick={() => handleReviewContract(n?.contract_id)}
+                      className='px-8 py-1.5 text-xs sm:text-lg font-medium text-blue-400 border border-blue-500/40 rounded-lg hover:bg-blue-500/10 transition-colors whitespace-nowrap'
+                    >
+                      Review
+                    </button>
+                  )}
                 </div>
-                <p className='text-md text-gray-400 mt-1 leading-relaxed'>{n.message}</p>
+
               </div>
             </div>
-          ))}
+))}
         </div>
 
         {/* LOAD MORE */}

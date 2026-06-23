@@ -7,59 +7,6 @@ const Dashboard = () => {
 
   const [currentPage, setCurrentPage] = useState(1)
 
-  const contracts = [
-    {
-      icon: 'ri-code-s-slash-line',
-      title: 'Build MERN Dashboard',
-      stakeholder: 'Client: ABC Pvt Ltd',
-      sub: 'Global Logistics',
-      budget: '$1,200',
-      start: 'Oct 12, 2023',
-      end: 'Dec 15, 2023',
-      status: 'Active',
-    },
-    {
-      icon: 'ri-brush-line',
-      title: 'Brand Identity Redesign',
-      stakeholder: 'Freelancer: Alex Rivera',
-      sub: 'UI/UX Designer',
-      budget: '$3,500',
-      start: 'Aug 05, 2023',
-      end: 'Sep 20, 2023',
-      status: 'Completed',
-    },
-    {
-      icon: 'ri-cloud-line',
-      title: 'Cloud Migration AWS',
-      stakeholder: 'Client: SkyHigh Corp',
-      sub: 'Infrastructure',
-      budget: '$8,900',
-      start: 'Nov 01, 2023',
-      end: 'Feb 15, 2024',
-      status: 'Active',
-    },
-    {
-      icon: 'ri-close-line',
-      title: 'React Native App Fixes',
-      stakeholder: 'Client: StartupX',
-      sub: 'Mobile Dev',
-      budget: '$450',
-      start: 'Oct 20, 2023',
-      end: 'Oct 22, 2023',
-      status: 'Cancelled',
-    },
-    {
-      icon: 'ri-file-text-line',
-      title: 'Technical Content Strategy',
-      stakeholder: 'Freelancer: Sarah Jenkins',
-      sub: 'Tech Writer',
-      budget: '$2,200',
-      start: 'Nov 15, 2023',
-      end: 'Jan 10, 2024',
-      status: 'Active',
-    },
-  ]
-
   const statusStyles = {
     Active: 'bg-green-500/20 text-green-400 border border-green-500/30',
     Completed: 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
@@ -69,6 +16,7 @@ const Dashboard = () => {
   const totalPages = 3
   const [allcontracts, setallContracts] = useState([])
   const [contractId, setcontractId] = useState('')
+  const [role, setRole] = useState("")
 
   useEffect(()=>
   {
@@ -82,10 +30,13 @@ const Dashboard = () => {
             Authorization : `Bearer ${localStorage.getItem('token')}`
           }
         })
-
+        
         const data = response.data
         const allContracts = data.contracts
         setallContracts(allContracts)
+        setRole(data?.role)
+        console.log(response);
+        
         
       }catch(err)
       {
@@ -96,8 +47,6 @@ const Dashboard = () => {
     fetchContracts()
   },[])
   
-  
-
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
       <div className='max-w-7xl mx-auto'>
@@ -167,134 +116,149 @@ const Dashboard = () => {
         {/* RECENT CONTRACTS */}
         <div className='bg-[#111827] border border-[#1e2230] rounded-xl p-5 md:p-6 shadow-2xl'>
 
-          <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5'>
-            <h2 className='text-3xl font-bold'>Recent Contracts</h2>
-            <div className='relative w-full md:w-64'>
-              <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl font-bold"></i>
-              <input
-                type='text'
-                placeholder='Search contracts...'
-                className='w-full bg-[#0c1324] border border-[#1e2230] rounded-lg h-15 pl-9 pr-3 text-md text-white placeholder-gray-500 focus:outline-none focus:border-[#6366F1] transition-colors'
-              />
-            </div>
+  <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5'>
+    <h2 className='text-3xl font-bold'>Recent Contracts</h2>
+    <div className='relative w-full md:w-64'>
+      <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl font-bold"></i>
+      <input
+        type='text'
+        placeholder='Search contracts...'
+        className='w-full bg-[#0c1324] border border-[#1e2230] rounded-lg h-15 pl-9 pr-3 text-md text-white placeholder-gray-500 focus:outline-none focus:border-[#6366F1] transition-colors'
+      />
+    </div>
+  </div>
+
+  {/* Table header — desktop only */}
+  <div className='hidden md:grid grid-cols-[2.5fr_1fr_1.5fr_1fr_1fr] gap-5 px-3 pb-3 border-b border-[#1e2230] text-md text-gray-500 uppercase tracking-widest font-semibold'>
+    <span>Contract title</span>
+    <span>Budget</span>
+    <span>Timeline</span>
+    <span>Status</span>
+    <span className='text-right'>Action</span>
+  </div>
+
+  {/* Rows */}
+  <div className='flex flex-col'>
+    {allcontracts.map((c, i) => (
+      <div
+        key={i}
+        className='flex flex-col md:grid md:grid-cols-[2.5fr_1fr_1.5fr_1fr_1fr] md:items-center gap-3 md:gap-5 px-3 py-4 border-b border-[#1e2230] last:border-b-0'
+      >
+
+        {/* Title */}
+        <div className='flex items-center gap-3 min-w-0'>
+          <div className='w-12 h-12 rounded-lg bg-[#19192f] border border-[#1e2230] flex items-center justify-center flex-shrink-0'>
+            <i className={`${c.icon} text-gray-400 text-xl`}></i>
           </div>
-
-          {/* Table header — desktop only */}
-          <div 
-          className='hidden md:grid grid-cols-[2fr_1.5fr_0.8fr_1.2fr_0.9fr_1fr] gap-3 px-3 pb-3 border-b border-[#1e2230] text-md text-gray-500 uppercase tracking-widest font-semibold'>
-            <span>Contract title</span>
-            <span>Stakeholder</span>
-            <span>Budget</span>
-            <span>Timeline</span>
-            <span>Status</span>
-            <span className='text-right'>Action</span>
-          </div>
-
-          {/* Rows */}
-          <div className='flex flex-col'>
-            {allcontracts.map((c, i) => (
-              <div
-                key={i}
-                className='flex flex-col md:grid md:grid-cols-[2fr_1.5fr_0.8fr_1.2fr_0.9fr_1fr] md:items-center gap-3 md:gap-3 px-3 py-4 border-b border-[#1e2230] last:border-b-0'
-              >
-
-                {/* Title */}
-                <div className='flex items-center gap-3'>
-                  <div className='w-12 h-12 rounded-lg bg-[#19192f] border border-[#1e2230] flex items-center justify-center flex-shrink-0'>
-                    <i className={`${c.icon} text-gray-400 text-xl`}></i>
-                  </div>
-                  <span className='text-lg font-bold text-white'>{c?.job?.title}</span>
-                </div>
-
-                {/* Stakeholder */}
-                <div className='flex flex-col md:pl-0'>
-                  <span className='text-md font-medium text-[#6366F1]'>{c.stakeholder}</span>
-                  <span className='text-xs text-gray-500'>{c.sub}</span>
-                </div>
-
-                {/* Budget */}
-                <div className='flex items-center justify-between md:block'>
-                  <span className='text-lg text-gray-500 md:hidden'>Budget</span>
-                  <span className='text-lg font-semibold text-white'>{c?.budget}</span>
-                </div>
-
-                {/* Timeline */}
-                <div className='flex items-center justify-between md:block'>
-                  <span className='text-xs text-gray-500 md:hidden'>Timeline</span>
-                  <div className='text-right md:text-left'>
-                    <p className='text-md text-gray-300'>{new Date(c?.startDate)?.toDateString()}</p>
-                    <p className='text-md text-gray-500'>Ends: in {c?.job?.budget?.duration}</p>
-                  </div>
-                </div>
-
-                {/* Status */}
-                <div className='flex items-center justify-between md:block'>
-                  <span className='text-xs text-gray-500 md:hidden'>Status</span>
-                  <span 
-                  className={`inline-flex items-center gap-1.5 text-md px-5 py-2 rounded-full font-medium ${statusStyles[c.status]} border border-green-500 bg-green-900 capitalize`}>
-                    <span 
-                    className='w-1.5 h-1.5 rounded-full bg-current'></span>
-                    {c.status}
-                  </span>
-                </div>
-
-                {/* Action */}
-                <div className='md:text-right'>
-                  {c.status === 'Cancelled' ? (
-                    <Link
-                    to={`/contracts/${c?._id}`}
-                     className='w-full md:w-auto px-4 h-9 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-md font-semibold text-white'>
-                      View Details
-                    </Link>
-                  ) : (
-                    <Link 
-                    to={`/contracts/${c?._id}`}
-                    className='w-full md:w-auto px-4 h-9 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'>
-                      View Contract
-                    </Link>
-                  )}
-                </div>
-
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-5 pt-4 border-t border-[#1e2230]'>
-            <p className='text-xs text-gray-500'>Showing 1 to 5 of 24 contracts</p>
-
-            <div className='flex items-center gap-2'>
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
-              >
-                <i className="ri-arrow-left-s-line"></i>
-              </button>
-
-              {[1, 2, 3].map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setCurrentPage(p)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                    currentPage === p
-                      ? 'bg-[#6366F1] text-white'
-                      : 'border border-[#1e2230] text-gray-400 hover:bg-[#19192f]'
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-
-              <button
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
-              >
-                <i className="ri-arrow-right-s-line"></i>
-              </button>
-            </div>
-          </div>
-
+          <span className='text-lg font-bold text-white truncate capitalize'>{c?.job?.title}</span>
         </div>
+
+        {/* Budget */}
+        <div className='flex items-center justify-between md:block'>
+          <span className='text-sm text-gray-500 md:hidden'>Budget</span>
+          <span className='text-lg font-semibold text-white'>{c?.budget}</span>
+        </div>
+
+        {/* Timeline */}
+        <div className='flex items-center justify-between md:block'>
+          <span className='text-sm text-gray-500 md:hidden'>Timeline</span>
+          <div className='text-right md:text-left'>
+            <p className='text-md text-gray-300'>{new Date(c?.startDate)?.toDateString()}</p>
+            <p className='text-md text-gray-500'>Ends: in {c?.job?.budget?.duration}</p>
+          </div>
+        </div>
+
+        {/* Status */}
+        <div className='flex items-center justify-between md:block'>
+          <span className='text-sm text-gray-500 md:hidden'>Status</span>
+          {
+            (c?.status==="active" || c?.status==="completed") && (
+              <span className={`inline-flex items-center gap-1.5 text-md px-5 py-2 rounded-full font-medium ${statusStyles[c.status]} border border-green-500 bg-green-900 capitalize `}>
+              <span 
+              className='w-1.5 h-1.5 rounded-full bg-current'></span>
+              {c?.status}
+            </span>
+            )
+          }
+          {
+            (c?.status==="cancelled") && (
+              <span className={`inline-flex items-center gap-1.5 text-md px-5 py-2 rounded-full font-medium ${statusStyles[c.status]} border border-red-500 bg-red-900 capitalize `}>
+              <span 
+              className='w-1.5 h-1.5 rounded-full bg-current'></span>
+              {c?.status}
+            </span>
+            )
+          }
+          {
+            (c?.status==="requested_completion") && (
+              <span className={`inline-flex items-center gap-1.5 text-md px-5 py-2 rounded-full font-medium ${statusStyles[c.status]} border border-yellow-600 bg-yellow-500 capitalize `}>
+              <span 
+              className='w-1.5 h-1.5 rounded-full bg-current'></span>
+              Requested
+            </span>
+            )
+          }
+        </div>
+
+        {/* Action */}
+        <div className='md:text-right'>
+          {c.status === 'Cancelled' ? (
+            <Link
+              to={role==="freelancer" ?`/freelancer/contracts/${c?._id}` :`/client/contracts/${c?._id}`}
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-md font-semibold text-white'
+            >
+              View Details
+            </Link>
+          ) : (
+            <Link
+              to={role==="freelancer" ?`/freelancer/contracts/${c?._id}` :`/client/contracts/${c?._id}`}
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'
+            >
+              View Contract
+            </Link>
+          )}
+        </div>
+
+      </div>
+    ))}
+  </div>
+
+  {/* Pagination */}
+  <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-5 pt-4 border-t border-[#1e2230]'>
+    <p className='text-xs text-gray-500'>Showing 1 to 5 of 24 contracts</p>
+
+    <div className='flex items-center gap-2'>
+      <button
+        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+        className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
+      >
+        <i className="ri-arrow-left-s-line"></i>
+      </button>
+
+      {[1, 2, 3].map((p) => (
+        <button
+          key={p}
+          onClick={() => setCurrentPage(p)}
+          className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+            currentPage === p
+              ? 'bg-[#6366F1] text-white'
+              : 'border border-[#1e2230] text-gray-400 hover:bg-[#19192f]'
+          }`}
+        >
+          {p}
+        </button>
+      ))}
+
+      <button
+        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+        className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
+      >
+        <i className="ri-arrow-right-s-line"></i>
+      </button>
+    </div>
+  </div>
+
+</div>
 
       </div>
     </div>

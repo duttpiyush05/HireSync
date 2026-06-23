@@ -147,7 +147,7 @@ const JobDetails = () => {
             <h2 className='text-2xl font-bold mb-5 '>About the Client 
 
               <Link 
-              to={`/profiles/${jobDetails?.client?._id}`}
+              to={`/client/profiles/${jobDetails?.client?._id}`}
               className='text-blue-500 hover:underline ml-2'>{jobDetails?.client?.fullname?.firstname}</Link></h2>
             <div className='flex flex-col gap-4 text-sm'>
 

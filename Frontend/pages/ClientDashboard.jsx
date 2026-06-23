@@ -107,6 +107,12 @@ const ClientDashboard = () => {
                               className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#00bc00] hover:bg-[#1d6800]'
                             >
                               <i className="ri-pencil-line mr-1"></i> Edit Profile
+              </Link>
+              <Link
+                              to='/client/logout'
+                              className=' border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#b42222]'
+                            >
+                              <i className="ri-logout-box-line mr-1"></i> Logout
                             </Link>
             </div>
           </div>

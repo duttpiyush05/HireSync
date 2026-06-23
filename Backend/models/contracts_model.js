@@ -30,6 +30,7 @@ const contractSchema = mongoose.Schema({
     type:String,
     enum:[
       'active',
+      'requested_completion',
       'completed',
       'cancelled'
     ],

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const FindWork = () => {
   const [jobs, setJobs] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
-  const [isloading, setisLoading] = useState(true)
+  const [isloading, setisLoading] = useState(false)
 
   useEffect(() => { 
     const fetchJobs = async () => {
@@ -17,10 +17,12 @@ const FindWork = () => {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
-        const data = await response.data;
+        console.log(response);
+        
+        const data = await response?.data
         setJobs(data.jobs);
       } catch (error) {
-        console.error('Error fetching jobs:', error);
+        console.log(error?.response?.data);
       }
       finally
       {
@@ -29,7 +31,7 @@ const FindWork = () => {
         }, 1000);
       }
     }
-    fetchJobs();
+    fetchJobs()
   }, []);
 
    if(isloading)
@@ -51,7 +53,7 @@ const FindWork = () => {
   return (
     <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
 
-      <div className='h-full w-full max-w-[1400px] px-4 sm:px-6 lg:px-10'>
+      <div className='h-full w-full max-w-[1600px] px-4 sm:px-6 lg:px-10'>
 
         
         <div>
@@ -64,22 +66,24 @@ const FindWork = () => {
             ) : (
               
               <div>
-                  <h1 className='text-5xl font-bold p-1 mt-10'>Job Feeds</h1>
-                  <div className='grid grid-cols-2 gap-4 py-10 bo h-full'>        
+                  <h1 className='text-4xl font-bold p-1 mt-10'>Job Feeds</h1>
+                  <div className='grid grid-cols-2 gap-5 py-5 bo h-full'>        
                 { 
                   jobs.map((job) => (
                   <div key={job._id} className='group h-full bg-[#161c33] p-4 rounded-lg shadow-5xl flex flex-col items-center px-5'>
 
                     {/* Left - Status + Title + Meta */}
-                    <div className='flex flex-col gap-2 w-full p-5 h-full'>
+                    <div className='flex flex-col gap-2 w-full p-3 h-full'>
 
                       <h2 className='text-white font-bold text-4xl leading-tight capitalize'>{job.title}</h2>
 
                       <span className='text-lg font-semibold px-2 py-0.5 rounded text-green-400'>
                         ACTIVE <span className='text-xl text-gray-300'>• Posted on {new Date(job.createdAt).toLocaleDateString()} by
-                          <span className='text-blue-400 font-semibold ml-1 hover:underline cursor-pointer'>
+                          <Link
+                           to={`/client/profiles/${job?.client?._id}`}
+                          className='text-blue-400 font-semibold ml-1 hover:underline cursor-pointer'>
                             {job.client.fullname.firstname} {job.client.fullname.lastname}
-                          </span>
+                          </Link>
                         </span>
                       </span>
 

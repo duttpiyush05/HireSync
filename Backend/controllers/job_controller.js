@@ -25,7 +25,7 @@ module.exports.getMyJobs = async (req, res, next) => {
   try
   {
     const jobs = await jobServices.getMyJobs(req.user._id);
-    console.log(req.user._id)
+    
     res.status(200).json({ jobs });
   }
   catch (error) {
@@ -36,11 +36,11 @@ module.exports.getMyJobs = async (req, res, next) => {
 module.exports.getAllJobs = async (req, res, next) => {
   try
   {  
-    const jobs = await jobServices.getAllJobs();
+    const jobs = await jobServices.getAllJobs(req.user._id);
     res.status(200).json({ jobs });
   }
   catch (error) {
-    next(error);
+    res.status(401).json({message : error.message});
   }
 }
 

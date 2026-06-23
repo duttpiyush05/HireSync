@@ -16,7 +16,7 @@ const Navbar = () => {
   }
   const gotonotifications=()=>
   {
-    navigate('/notifications')
+    navigate('/freelancer/notifications')
   }
 
 
@@ -32,9 +32,9 @@ const Navbar = () => {
             {/* Desktop Nav */}
             <ol className='hidden md:flex gap-6 lg:gap-[4rem] items-center font-semibold text-base lg:text-xl text-gray-300'>
               <Link to="/find-work">Find Work</Link>
-              <Link to="/my-jobs">My Jobs</Link>
+              <Link to="/my">My Jobs</Link>
               <Link to="/">Messages</Link>
-              <Link to="/contracts">Messages</Link>
+              <Link to="/freelancer/contracts">Contracts</Link>
             </ol>
           </div>
 

@@ -55,13 +55,12 @@ const Applicants = () => {
               Authorization: `Bearer ${token}`
             }
           })
-          // console.log(response);
+          console.log(response);
           const data = response.data
           setProposals(data.proposals)
       }catch(err)
       {
         console.log(err.response.data);
-        
       }
     }
     getProposals()
@@ -107,25 +106,28 @@ const Applicants = () => {
     
     <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
     
-          <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
+          <div className='h-full w-full max-w-[1600px] px-4 sm:px-6 lg:px-10'>
 
             <div>
               {
-                proposals.length === 0 || (proposals.every(proposal=>proposal.status === 'rejected')) ? (
+                proposals.length === 0 || (proposals.every(proposal=>proposal.status === 'rejected')) || (proposals.every(proposal=>proposal.status === 'accepted')) ? (
                   <div className='flex flex-col items-center justify-center h-[calc(100vh-5rem)]'>
-                    <h1 className='text-4xl font-bold mb-4'>No Appications Found</h1>
+                    <h1 className='text-4xl font-bold mb-4'>No Pending Appications Found</h1>
                     <p className='text-lg text-gray-400'>There are currently no Applications for you.</p>
                   </div>
                 ) : (
-                  <div className='grid grid-cols-1 gap-6 py-10 bo h-full'>
-                    <div>
-                      <h1 className='text-3xl font-bold p-1 uppercase'>Proposals</h1>
+                   
+                 <div>
+                  <div className='mt-10'>
+                      <h1 className='text-3xl font-bold p-1 '>Pending Proposals</h1>
                     </div>
+                   <div className='grid grid-cols-2 gap-3 py-10  h-full'>
+                   
                     { 
                       proposals.map((job) => (
                         <div key={job._id} 
                         className={
-                          !job.status===('rejected' || 'accepted') ? 'hidden' : 'group h-full bg-[#151b2d] p-5 rounded-lg shadow-md flex items-center justify-between px-5 shadow-3xl'
+                          (job.status==='rejected' || job.status==='accepted') ? 'hidden' : 'group h-full bg-[#151b2d] p-5 rounded-lg shadow-md flex items-center justify-between px-5 shadow-3xl'
                         } >
                           
                           {/* Left - Status + Title + Meta */}
@@ -181,7 +183,8 @@ const Applicants = () => {
 
         ))
           }
-        </div>
+                 </div>
+                 </div>
         )
       }
      </div>

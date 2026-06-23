@@ -27,7 +27,6 @@ const LoginFLPage = () => {
       const data = response.data
       localStorage.setItem('token', data.token)
       setfreelancer(data.freelancer)
-      console.log(data.freelancer)
       navigate('/fl/dashboard')
     }
 
@@ -81,7 +80,7 @@ const LoginFLPage = () => {
             className='w-1/2 px-4 w-[95%] m h-16 rounded-md bg-[#37374b] pl-15 text-lg' 
             placeholder='********' /> 
 
-            <button className=' text-lg text-black mt-8 h-15 w-[95%] bg-[#A0A3FF] rounded-md'>Sign In</button>
+            <button className=' text-lg text-black mt-8 h-15 w-[95%] bg-[#A0A3FF] rounded-md cursor-pointer'>Sign In</button>
 
           </form>
 
