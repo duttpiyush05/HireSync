@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import {FLDataContext} from '../src/context/FLContext'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const LoginFLPage = () => {
 
@@ -27,6 +28,9 @@ const LoginFLPage = () => {
       const data = response.data
       localStorage.setItem('token', data.token)
       setfreelancer(data.freelancer)
+      toast.success("Login Sucessfully",{
+        hideProgressBar :true
+      })
       navigate('/fl/dashboard')
     }
 

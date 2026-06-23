@@ -2,7 +2,6 @@ const jobModel = require('../models/job_model');
 const proposalModel = require('../models/proposals')
 
 exports.createJob = async (jobData) => {
-  console.log("inside services : ", jobData)
   const job = new jobModel(jobData);
   return await job.save();
 };

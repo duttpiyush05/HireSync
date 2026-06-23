@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import {ClientDataContext} from '../src/context/ClientContext'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const LoginClientPage = () => {
 
@@ -29,6 +30,9 @@ const LoginClientPage = () => {
       localStorage.setItem('token', data.token)
       setclient(data.client)
       console.log(data.client)
+      toast.success("Login Sucessfully" ,{
+        hideProgressBar : (true)
+      })
       navigate('/client/dashboard')
     }
 

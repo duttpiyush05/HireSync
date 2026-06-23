@@ -2,9 +2,6 @@ import { useState,useContext, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-
 
 import RegisterPage from '../pages/RegisterPage'
 import LandingPage from '../pages/LandingPage'
@@ -65,8 +62,8 @@ function App() {
   
   
   return (
-    <div>
-      
+    <>
+
       <Routes>
 
         <Route element={<Layout/>}>
@@ -190,7 +187,8 @@ function App() {
       
       </Routes>
 
-    </div>
+    </>
+    
   )
 }
 

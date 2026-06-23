@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const FreelancerLogout = () => {
   const token = localStorage.getItem('token')
@@ -16,12 +17,15 @@ const FreelancerLogout = () => {
     {
       const data = response.data
       localStorage.removeItem('token')
+      toast.success("Logout Sucessfully",{
+        hideProgressBar : true
+      })
       navigate('/')
     }
   }
   ).catch(error =>
   {
-    console.log(error)
+    toast.error(`${err?.response?.data}`)
   }
   )
 

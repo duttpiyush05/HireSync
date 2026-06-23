@@ -20,12 +20,6 @@ const FreelancerDashboard = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log(response);
-        toast.success("Login Sucessfully",{
-        position: "top-center",
-        autoClose: 5000,
-        theme: "colored"
-    })
           
       setfreelancer(response.data.freelancer)
       setisLoading(false)
