@@ -19,20 +19,37 @@ const FreelancerDashboard = () => {
         headers: {
           Authorization: `Bearer ${token}`
         }
-      })
-          
+      })       
       setfreelancer(response.data.freelancer)
-      setisLoading(false)
      }
      catch(err)
      {
       console.log(err?.response?.data);
+     }
+     finally{
+      setTimeout(() => {
+        setisLoading(false)
+      }, 2000);
      }
     }
     
     getProfile()
   }, [])
 
+  if(isloading)
+    {
+      return (
+        <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+  
+        <div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          style={{ animationDuration: "2s" }}
+        ></div>
+  
+        <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
+        </div>
+      )
+    }
 
   return (
     <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>

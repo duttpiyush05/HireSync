@@ -10,6 +10,7 @@ const LoginFLPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isloading, setisLoading] = useState(true)
 
   const {freelancer, setfreelancer} = useContext(FLDataContext)
   const navigate = useNavigate()
@@ -41,13 +42,13 @@ const LoginFLPage = () => {
   return (
     <div className='bg-[#0c1324] h-screen flex justify-center items-center w-screen text-white'>
 
-      <div className='absolute w-full h-20 pl-25 self-start mt-[4rem]'>
-                  <Link to='/' className='text-4xl font-bold '>HireSync</Link>
-              </div>
+   <div className='w-full sm:absolute sm:top-0 sm:left-0 sm:h-20 sm:pl-10 lg:pl-16 sm:mt-8 mb-6 sm:mb-0 text-center sm:text-left'>
+           <Link to='/' className='text-2xl sm:text-3xl lg:text-4xl font-bold'>HireSync</Link>
+         </div>
 
         
         <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg p-auto flex flex-col justify-center items-center'>
-          <h2 className='text-2xl font-bold mb-10'>Login as Freelancer</h2>
+          <h2 className='text-2xl font-bold mb-10'>Freelancer Login</h2>
           <div className='text-white flex flex-col justify-center items-center'>
            
 
