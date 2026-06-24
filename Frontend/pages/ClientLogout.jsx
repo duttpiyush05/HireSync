@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const ClientLogout = () => {
 
@@ -16,6 +17,7 @@ const ClientLogout = () => {
     {
       const data = response.data;
       localStorage.removeItem('token')
+      toast.success("Logout Sucessfully")
       navigate('/')
     }
   }).catch(error =>

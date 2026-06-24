@@ -18,7 +18,7 @@ router.post('/register', [
 
 router.post('/login', [
   body('email').isEmail().withMessage("Invalid Email"),
-  body('password').isLength({min:6}).withMessage("Invalid Password")
+  body('password').isLength({min:6}).withMessage("Invalid Credentials")
 ], freelancerController.login)
 
 router.get('/logout',authFreelancer, freelancerController.logout)

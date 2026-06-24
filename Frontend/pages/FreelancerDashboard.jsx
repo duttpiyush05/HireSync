@@ -19,8 +19,7 @@ const FreelancerDashboard = () => {
         headers: {
           Authorization: `Bearer ${token}`
         }
-      })
-          
+      })       
       setfreelancer(response.data.freelancer)
       setisLoading(false)
      }

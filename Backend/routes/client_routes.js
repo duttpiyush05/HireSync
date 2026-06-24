@@ -15,7 +15,7 @@ router.post('/register',[
 
 router.post('/login',[
   body('email').isEmail().withMessage("Invalid Email"),
-  body('password').isLength({min:6}).withMessage("Invalid Password")
+  body('password').isLength({min:6}).withMessage("Invalid Credentials")
 ], clientController.login)
 
 router.get('/logout',authentication.authClient, clientController.logout)
