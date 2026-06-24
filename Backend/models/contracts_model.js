@@ -35,6 +35,14 @@ const contractSchema = mongoose.Schema({
       'cancelled'
     ],
     default:'active'
+  },
+  cReview : {
+    type : Boolean,
+    default : false,
+  },
+  fReview : {
+    type : Boolean,
+    default : false,
   }
 },{timestamps : true})
 

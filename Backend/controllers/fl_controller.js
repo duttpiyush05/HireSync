@@ -41,10 +41,15 @@ module.exports.register = async (req, res, next) =>
 module.exports.login = async (req, res, next) =>
 {
   const error = validationResult(req)
+  // console.log("J");
+  
   if(!error.isEmpty())
   {
-    return res.status(401).json({"error" : error})
+    console.log(error.array());
+    return res.status(401).json({errors:error.array()})
   }
+    // console.log("J");
+
 
   const {email, password} = req.body
   

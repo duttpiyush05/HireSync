@@ -8,9 +8,17 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const notification = () => {
-  const [isloading, setIsloading] = useState(true)
+  const [isloading, setisLoading] = useState(true)
   const navigate = useNavigate()
   const [contractId, setContractId] = useState("")
+  const [role, setRole] = useState('')
+
+  const [activeTab, setActiveTab] = useState('All')
+
+  const tabs = ['All', 'Projects', 'Payments', 'Messages']
+
+  const {unreadCount,setUnreadCount}= useContext(NotificationCountContext)
+
 
   const [allnotifications, setAllNotifications] = useState([])
    
@@ -26,27 +34,43 @@ const notification = () => {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
           }
-        )
-        console.log(response);
-        
+        )        
         const data = response.data
         setAllNotifications(data?.notifications)   
-        setContractId(data?.notifications?.contract_id)     
+        setContractId(data?.notifications?.contract_id)   
+        setRole(data?.role)  
       }
       catch(err)
       {
         console.log(err.response.data);        
       }
+      finally{
+        setTimeout(()=>
+         {
+            setisLoading(false)
+         }, 1000)
+      }
     }
     fetchNotifications()
   },[])
-    
 
-   const [activeTab, setActiveTab] = useState('All')
 
-  const tabs = ['All', 'Projects', 'Payments', 'Messages']
+   if(isloading)
+    {
+      return (
+        <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+  
+        <div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          style={{ animationDuration: "2s" }}
+        ></div>
+  
+        <h3 className='text-white block mt-5 font-bold text-xl'>Loading Notifications Please Wait...</h3>
+        </div>
+      )
+    }
 
-  const {unreadCount,setUnreadCount}= useContext(NotificationCountContext)
+
 
   const markAllAsRead = async()=>
   {
@@ -69,7 +93,7 @@ const notification = () => {
 
   const handleReviewContract = (contractId)=>
   {
-    navigate(`/client/contracts/${contractId}`)
+    navigate(`/${role}/contracts/${contractId}`)
   }
 
   return (

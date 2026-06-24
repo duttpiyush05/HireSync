@@ -21,6 +21,7 @@ const LoginClientPage = () => {
       password: password
     }
 
+<<<<<<< HEAD
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/clients/login`, client)
       console.log(response)
@@ -39,6 +40,31 @@ const LoginClientPage = () => {
 
       const errors = err?.response?.data?.errors
       if (errors) {
+=======
+    try
+    {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/clients/login`, client)
+        console.log(response)
+        if(response.status === 201)
+        {
+          const data = response.data
+          localStorage.setItem('token', data.token)
+          setclient(data.client)
+          console.log(data.client)
+          toast.success("Login Sucessfully" ,{
+            hideProgressBar : (true)
+          })
+          navigate('/client/dashboard')
+        }
+    }catch(err)
+    {
+      toast.error(err?.response?.data?.message)
+
+      const errors = err?.response?.data?.errors     
+
+      if(errors)
+      {
+>>>>>>> 235802ac9a78ebdf8b50f033ea0f090be060c6d2
         toast.error(errors[0].msg)
       }
     }
