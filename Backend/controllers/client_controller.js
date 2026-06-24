@@ -40,7 +40,9 @@ module.exports.login = async (req, res, next) =>
   const error = validationResult(req)
   if(!error.isEmpty())
   {
-    return res.status(401).json({error : error.array()})
+    console.log(error.array());
+    
+    return res.status(401).json({errors : error.array()})
   }
 
   const {email, password} = req.body

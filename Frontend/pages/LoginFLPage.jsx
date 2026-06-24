@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import { useState} from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import {FLDataContext} from '../src/context/FLContext'
+import { FLDataContext } from '../src/context/FLContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -11,92 +11,108 @@ const LoginFLPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const {freelancer, setfreelancer} = useContext(FLDataContext)
+  const { freelancer, setfreelancer } = useContext(FLDataContext)
   const navigate = useNavigate()
 
-  const handleSubmit = async(e) =>
-  {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const freelancer = {
-      email : email,
-      password : password
+      email: email,
+      password: password
     }
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/login`, freelancer)
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/freelancers/login`, freelancer)
-    if(response.status === 200)
-    {
-      const data = response.data
-      localStorage.setItem('token', data.token)
-      setfreelancer(data.freelancer)
-      toast.success("Login Sucessfully",{
-        hideProgressBar :true
-      })
-      navigate('/fl/dashboard')
+      toast.error(response?.msg)
+
+      if (response.status === 200) {
+        const data = response.data
+        localStorage.setItem('token', data.token)
+        setfreelancer(data.freelancer)
+        navigate('/fl/dashboard')
+        toast.success("Login Sucessfully")
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message)
+
+      const errors = err?.response?.data?.errors
+
+      if (errors) {
+        toast.error(errors[0].msg)
+      }
     }
-
     setEmail('')
     setPassword('')
   }
 
   return (
-    <div className='bg-[#0c1324] h-screen flex justify-center items-center w-screen text-white'>
+    <div className='bg-[#0c1324] min-h-screen flex flex-col items-center justify-center w-full text-white px-4 py-10'>
 
-      <div className='absolute w-full h-20 pl-25 self-start mt-[4rem]'>
-                  <Link to='/' className='text-4xl font-bold '>HireSync</Link>
-              </div>
+      <div className='w-full sm:absolute sm:top-0 sm:left-0 sm:h-20 sm:pl-10 lg:pl-16 sm:mt-8 mb-6 sm:mb-0 text-center sm:text-left'>
+        <Link to='/' className='text-2xl sm:text-3xl lg:text-4xl font-bold'>HireSync</Link>
+      </div>
 
-        
-        <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg p-auto flex flex-col justify-center items-center'>
-          <h2 className='text-2xl font-bold mb-10'>Login as Freelancer</h2>
-          <div className='text-white flex flex-col justify-center items-center'>
-           
+      <div className='rounded-xl w-full max-w-[40em] min-h-fit sm:h-[75vh] bg-[#19192f] shadow-lg p-6 sm:p-8 flex flex-col justify-center items-center'>
 
-            <h2 className='text-3xl font-bold mb-4'>Welcome back</h2>
+        <h2 className='text-xl sm:text-2xl font-bold mb-6 sm:mb-10'>Freelancer Login</h2>
 
-            <h3 className='text-lg text-gray-300'>Log in to your account to continue</h3>
-          </div>
-
-          <form 
-          
-          onSubmit={(e) => handleSubmit(e)}
-          
-          className='mt-15 w-[90%] m-10 mb-0'>
-            
-            <h3 className='mb-2 font-bold'>Email</h3>
-            <i className="ri-mail-line absolute ri-2x p-2 pl-4"></i>
-
-            <input 
-            required
-            value={email}
-            onChange={(e)=> setEmail(e.target.value)} 
-            type="text" 
-            className='w-1/2 px-4 w-[95%] h-16 rounded-md bg-[#37374b] pl-15 text-lg ' 
-            placeholder='john@gmail.com'/>
-
-            <h3 className='mt-8 mb-2 bold-base font-bold'>Password</h3>
-            
-            <i className="ri-rotate-lock-line absolute ri-2x p-2 pl-4"></i>
-            <input 
-            required
-            value={password}
-            onChange={(e)=> setPassword(e.target.value)}
-            type="password" 
-            className='w-1/2 px-4 w-[95%] m h-16 rounded-md bg-[#37374b] pl-15 text-lg' 
-            placeholder='********' /> 
-
-            <button className=' text-lg text-black mt-8 h-15 w-[95%] bg-[#A0A3FF] rounded-md cursor-pointer'>Sign In</button>
-
-          </form>
-
-          <div
-          className='mt-20 flex flex-col gap-2 justify-center'>
-            <p className=' text-lg'>Don't have an Account? <Link className='hover:underline font-bold' to="/register " >Register</Link> 
-          </p>
-            <p className=' text-lg'>Want to login as Client? <Link className='hover:underline font-bold' to="/client/login " >Click here</Link> 
-          </p>
-          </div>
-
+        <div className='text-white flex flex-col justify-center items-center text-center'>
+          <h2 className='text-2xl sm:text-3xl font-bold mb-3 sm:mb-4'>Welcome back</h2>
+          <h3 className='text-sm sm:text-lg text-gray-300'>Log in to your account to continue</h3>
         </div>
+
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          className='mt-8 sm:mt-12 w-full sm:w-[90%]'
+        >
+
+          <h3 className='mb-2 font-bold text-sm sm:text-base'>Email</h3>
+          <div className='relative'>
+            <i className="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-lg sm:text-xl"></i>
+            <input
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              className='w-full h-12 sm:h-16 rounded-md bg-[#37374b] pl-12 sm:pl-14 pr-4 text-xl sm:text-lg'
+              placeholder='john@gmail.com'
+            />
+          </div>
+
+          <h3 className='mt-6 sm:mt-8 mb-2 font-bold text-sm sm:text-base'>Password</h3>
+          <div className='relative'>
+            <i className="ri-lock-line absolute left-4 top-1/2 -translate-y-1/2 text-lg sm:text-xl"></i>
+            <input
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              className='w-full h-12 sm:h-16 rounded-md bg-[#37374b] pl-12 sm:pl-14 pr-4 text-lg sm:text-lg'
+              placeholder='********'
+            />
+          </div>
+
+          <button
+            type='submit'
+            className='text-sm sm:text-lg text-black mt-6 sm:mt-8 h-12 sm:h-15 w-full bg-[#A0A3FF] rounded-md cursor-pointer font-semibold hover:bg-[#8b8ff5] transition-colors'
+          >
+            Sign In
+          </button>
+
+        </form>
+
+        <div className='mt-8 sm:mt-12 flex flex-col gap-2 justify-center text-center'>
+          <p className='text-sm sm:text-lg'>
+            Don't have an Account?{' '}
+            <Link className='hover:underline font-bold' to="/register">Register</Link>
+          </p>
+          <p className='text-sm sm:text-lg'>
+            Want to login as Client?{' '}
+            <Link className='hover:underline font-bold' to="/client/login">Click here</Link>
+          </p>
+        </div>
+
+      </div>
     </div>
   )
 }

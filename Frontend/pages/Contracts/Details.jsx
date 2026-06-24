@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Details = () => {
 
@@ -10,6 +11,9 @@ const Details = () => {
   const [freelancer, setFreelancer] = useState()
   const [job, setJob] = useState()
   const [role, setRole] = useState("")
+  
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchContract = async()=>
@@ -88,6 +92,11 @@ const Details = () => {
       console.log(err?.response?.data);
     }
   }
+
+  const handleReview = async()=>
+  {
+    navigate(`/${role}/reviews/${contractId}`)
+  } 
 
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
@@ -235,13 +244,21 @@ const Details = () => {
                   {
                     contract?.status==="completed" && (
                       <div>
-                    < i className="absolute ri-check-fill text-4xl ml-23 mt-2.5"></i>
+                    {/* < i className="absolute ri-check-fill text-4xl ml-23 mt-2.5"></i> */}
                     <button 
                     // onClick={handleMarkCompleted}
                     
                     className='w-full h-15 rounded-lg bg-[#007111] transition-colors text-lg py-2 font-semibold text-white disable'>
                       Completed
                     </button>
+                    <button
+                disabled={contract?.cReview}
+                onClick={handleReview}
+                className={contract?.cReview ? 'mt-5 w-full h-15 rounded-lg bg-[#038416] transition-colors text-lg py-2 font-semibold text-white border border-[#003007] cursor-pointer cursor-not-allowed' : 'mt-5 w-full h-15 rounded-lg bg-[#002d71] transition-colors text-lg py-2 font-semibold text-white border border-[#0037a5] cursor-pointer'}>
+                  {
+                    contract?.cReview ? 'Review Submitted' : 'Leave a review'
+                  }
+                </button>
                   </div>
                     )
                   }
@@ -262,11 +279,21 @@ const Details = () => {
               <div>                
               {contract?.status=="completed" && (
                 <div>
-                  < i className="absolute ri-check-fill text-4xl ml-23 mt-2.5"></i>
+                  {/* < i className="absolute ri-check-fill text-4xl ml-8 mt-2.5"></i> */}
                 <button                 
-                className='w-full h-15 rounded-lg bg-[#007111] transition-colors text-lg py-2 font-semibold text-white disable'>
+                className='w-full h-15 rounded-lg bg-[#038416] transition-colors text-lg py-2 font-semibold text-white disable'>
                   Completed
                 </button>
+                
+                <button
+                disabled={contract?.fReview}
+                onClick={handleReview}
+                className={contract?.fReview ? 'mt-5 w-full h-15 rounded-lg bg-[#038416] transition-colors text-lg py-2 font-semibold text-white border border-[#003007] cursor-pointer cursor-not-allowed' : 'mt-5 w-full h-15 rounded-lg bg-[#002d71] transition-colors text-lg py-2 font-semibold text-white border border-[#0037a5] cursor-pointer'}>
+                  {
+                    contract?.fReview ? 'Review Submitted' : 'Leave a review'
+                  }
+                </button>
+
                 </div>
               )}
               {contract?.status=="requested_completion" && (

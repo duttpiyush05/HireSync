@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const FindWork = () => {
   const [jobs, setJobs] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
-  const [isloading, setisLoading] = useState(false)
+  const [isloading, setisLoading] = useState(true)
 
   useEffect(() => { 
     const fetchJobs = async () => {
@@ -28,7 +28,7 @@ const FindWork = () => {
       {
         setTimeout(() => {
           setisLoading(false)
-        }, 1000);
+        }, 3000);
       }
     }
     fetchJobs()
@@ -44,7 +44,7 @@ const FindWork = () => {
         style={{ animationDuration: "2s" }}
       ></div>
 
-      <h3 className='text-white block mt-5 font-bold text-xl'>Fetching Jobs Please Wait...</h3>
+      <h3 className='text-white block mt-5 font-bold text-xl'>Fetching Available Jobs Please Wait...</h3>
       </div>
   )
   }
