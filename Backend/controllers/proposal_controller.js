@@ -56,7 +56,7 @@ module.exports.createProposal = async (req, res, next) => {
       message : "Proposal submitted Successfully"
     })
 
-    res.status(201).json({proposal, notificationForClient, notificationForFreelancer})
+    res.status(201).json({proposal})
   } catch(error)
   {
     res.status(401).json("There is some error")
@@ -167,7 +167,7 @@ module.exports.updateProposalStatus = async (req, res) => {
         job: proposal.job,
         client: proposal.client,
         freelancer: proposal.freelancer,
-        budget: proposal.askingAmt,
+        budget: proposal.receivingAmt,
         startDate: Date.now(),
         expectedCompletion: proposal.estCompletion,
         status: "active"
@@ -206,3 +206,18 @@ module.exports.updateProposalStatus = async (req, res) => {
     });
   }
 };
+
+module.exports.getFreelancerProposal= async(req, res, next)=>
+{ 
+  try
+  {
+    const jobs = await proposalModel.find({
+      freelancer : req.user._id
+    }).populate('job').populate('client')
+    res.status(201).json({jobs})
+
+  }catch(err)
+  {
+    res.status(401).json({message: err?.message})
+  }
+}

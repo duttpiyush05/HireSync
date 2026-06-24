@@ -29,6 +29,7 @@ import ClientPrivateProfile from '../pages/Profiles/Private/ClientProfile'
 import ClientLayout from '../components/ClientLayout'
 import Details from '../pages/Contracts/Details'
 import Notification from '../pages/Notifications/Notification'
+import FreelancerMyWork from '../pages/FreelancerMyWork'
 import Review from '../pages/Reviews/Review'
 
 import Dashboard from '../pages/Contracts/Dashboard'
@@ -120,6 +121,11 @@ function App() {
         <Route path='/freelancer/reviews/:contractId' element={
                                                <FreelancerAuth>
                                               <Review/>
+                                         </FreelancerAuth>
+                                              } />  
+        <Route path='/my-work' element={
+                                        <FreelancerAuth>
+                                           <FreelancerMyWork/>
                                          </FreelancerAuth>
                                               } />  
         

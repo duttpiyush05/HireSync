@@ -146,7 +146,7 @@ const Applicants = () => {
                 
                             <div className='flex flex-col justify-between  w-full'>
                               <div className='flex items-center gap-5 text-gray-400 text-sm mb-2'>
-                              <div className='text-xl flex flex-col gap-1 border-3 p-3 border-[#237988] rounded-lg'>Asking Amount<span className='font-semibold text-white text-'>${job.askingAmt}</span></div>
+                              <div className='text-xl flex flex-col gap-1 border-3 p-3 border-[#237988] rounded-lg'>Asking Amount<span className='font-semibold text-white text-'>${job?.receivingAmt}</span></div>
                               <div className='text-xl flex flex-col gap-1 p-3 border-3 border-[#237988] rounded-lg'>Estimated Duration<span className='font-semibold text-white text-'>
                                 {job.estCompletion}</span></div>
                              

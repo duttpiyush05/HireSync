@@ -17,8 +17,7 @@ const FindWork = () => {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
-        console.log(response);
-        
+        // console.log(response);        
         const data = await response?.data
         setJobs(data.jobs);
       } catch (error) {

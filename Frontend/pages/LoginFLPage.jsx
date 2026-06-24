@@ -49,7 +49,6 @@ const LoginFLPage = () => {
   return (
     <div className='bg-[#0c1324] min-h-screen flex flex-col items-center justify-center w-full text-white px-4 py-10'>
 
-<<<<<<< HEAD
    <div className='w-full sm:absolute sm:top-0 sm:left-0 sm:h-20 sm:pl-10 lg:pl-16 sm:mt-8 mb-6 sm:mb-0 text-center sm:text-left'>
            <Link to='/' className='text-2xl sm:text-3xl lg:text-4xl font-bold'>HireSync</Link>
          </div>
@@ -59,13 +58,6 @@ const LoginFLPage = () => {
           <h2 className='text-2xl font-bold mb-10'>Freelancer Login</h2>
           <div className='text-white flex flex-col justify-center items-center'>
            
-=======
-      <div className='w-full sm:absolute sm:top-0 sm:left-0 sm:h-20 sm:pl-10 lg:pl-16 sm:mt-8 mb-6 sm:mb-0 text-center sm:text-left'>
-        <Link to='/' className='text-2xl sm:text-3xl lg:text-4xl font-bold'>HireSync</Link>
-      </div>
-
-      <div className='rounded-xl w-full max-w-[40em] min-h-fit sm:h-[75vh] bg-[#19192f] shadow-lg p-6 sm:p-8 flex flex-col justify-center items-center'>
->>>>>>> 235802ac9a78ebdf8b50f033ea0f090be060c6d2
 
         <h2 className='text-xl sm:text-2xl font-bold mb-6 sm:mb-10'>Freelancer Login</h2>
 
@@ -127,7 +119,9 @@ const LoginFLPage = () => {
 
       </div>
     </div>
+    </div>
   )
+  
 }
 
 export default LoginFLPage

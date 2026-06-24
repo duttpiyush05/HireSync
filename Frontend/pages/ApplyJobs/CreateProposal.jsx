@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 
 const CreateProposal = () => {
@@ -96,13 +97,13 @@ const CreateProposal = () => {
       if(response.status === 201)
       {
         navigate(`/proposals/${proposalId}/submission`)
+        toast.success("Proposal Sucessfully Submitted")
       }
       console.log(response);
       
     }catch(err)
     {
-      console.log(err.response.data);
-      
+      toast.error(err?.response?.data?.message)   
     }finally{
       setTimeout(()=>
       {
