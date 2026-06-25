@@ -11,6 +11,9 @@ const Applicants = () => {
   const [freelancerId, setfreelancerId] = useState('')
   const [isAccepted, setisAccepted]  = useState(false)
   const [isRejected, setisRejected]  = useState(false)
+  const [page, setPage] = useState(1)
+  const [totalProposals, setTotalProposals] = useState()
+  const [totalPages, setTotalPages] = useState()
 
 
   const [progress, setProgress] = useState(70)
@@ -49,15 +52,16 @@ const Applicants = () => {
     const getProposals = async()=>
     {
       try{
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/proposals/clients/${clientId}`, 
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/proposals/clients/${clientId}?page=${page}`, 
           {
             headers : {
               Authorization: `Bearer ${token}`
             }
           })
-          console.log(response);
           const data = response.data
           setProposals(data.proposals)
+          setTotalPages(data?.totalPages)
+          setTotalProposals(data?.countProposals)
       }catch(err)
       {
         console.log(err.response.data);
@@ -100,7 +104,7 @@ const Applicants = () => {
         <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
         </div>
       )
-    }
+    }   
 
   return (
     
@@ -188,7 +192,27 @@ const Applicants = () => {
         )
       }
      </div>
+
+      <div 
+        className=
+        {!proposals?.length==0 ?`flex justify-between px-10 py-10`:'hidden'}>
+        <button 
+        disabled={page===1}
+        onClick={()=> setPage(page-1)}
+        className='px-10 py-3 text-lg bg-[#262634] rounded-md cursor-pointer'>
+          Previous
+        </button>
+        <button
+        disabled={page===totalPages}
+        onClick={()=> setPage(page+1)}
+         className='px-10 py-3 text-lg bg-blue-500 rounded-md cursor-pointer'>
+          Next
+        </button>
+        </div>
+
     </div>
+
+    
     </div>
   )
 }

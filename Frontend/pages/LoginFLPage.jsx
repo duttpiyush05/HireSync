@@ -54,9 +54,9 @@ const LoginFLPage = () => {
          </div>
 
         
-        <div className='rounded-xl border-white w-[40em] h-[75vh] bg-[#19192f] shadow-lg p-auto flex flex-col justify-center items-center'>
-          <h2 className='text-2xl font-bold mb-10'>Freelancer Login</h2>
-          <div className='text-white flex flex-col justify-center items-center'>
+        <div className='rounded-xl  w-[40em] h-[75vh] bg-[#19192f] shadow-3xl flex flex-col justify-center items-cente'>
+          <h2 className='text-xl px-50 font-medium py-5 mb-10 flex  justify-center items-center'>Freelancer Login</h2>
+          <div className='text-white flex flex-col justify-center items-center '>
            
 
         <h2 className='text-xl sm:text-2xl font-bold mb-6 sm:mb-10'>Freelancer Login</h2>

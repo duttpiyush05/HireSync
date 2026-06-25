@@ -33,7 +33,7 @@ const Budget = ({jobData, setjobData}) => {
             budgettype=='hourly' ? 'border-5 border-blue-400' : 'border-gray-500 border-5'
           }
       `} >
-          <div className='border w-[3rem] h-[3rem] mb-2'></div>
+          <div className=' w-[3rem] h-[3rem] mb-2 flex justify-center items-center'><i className="ri-time-line text-3xl"></i></div>
 
           <h4 className='font-bold text-2xl mt-[2rem]'>Hourly Rate</h4>
           <p className='font-semibold text-gray-400 w-[85%] mt-[1rem]'>Best for ongoing projects or tasks without a set scope. Flexible billing based on hours worked.</p>
@@ -53,7 +53,7 @@ const Budget = ({jobData, setjobData}) => {
             budgettype=='fixed' ? 'border-5 border-blue-400' : 'border-gray-500 border-5'
           }
       `} >
-          <div className='border w-[3rem] h-[3rem] mb-2'></div>
+          <div className=' w-[3rem] h-[3rem] mb-2 flex justify-center items-center'><i className="ri-hammer-line text-3xl"></i></div>
 
           <h4 className='font-bold text-2xl mt-[2rem]'>Fixed Price</h4>
           <p className='font-semibold text-gray-400 w-[85%] mt-[1rem]'>Set a total budget for the whole project. Great for clear scopes and milestones.</p>

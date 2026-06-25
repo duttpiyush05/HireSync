@@ -12,13 +12,15 @@ const notification = () => {
   const navigate = useNavigate()
   const [contractId, setContractId] = useState("")
   const [role, setRole] = useState('')
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState()
+  const [totalNotifications, setTotalNotifications] = useState()
 
   const [activeTab, setActiveTab] = useState('All')
 
   const tabs = ['All', 'Projects', 'Payments', 'Messages']
 
   const {unreadCount,setUnreadCount}= useContext(NotificationCountContext)
-
 
   const [allnotifications, setAllNotifications] = useState([])
    
@@ -28,32 +30,38 @@ const notification = () => {
     {
       try
       {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/notifications`,
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/notifications?page=${page}`,
           {
             headers : {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
           }
         )        
+        console.log(response);
+        
         const data = response.data
         setAllNotifications(data?.notifications)   
         setContractId(data?.notifications?.contract_id)   
         setRole(data?.role)  
+        setTotalNotifications(data?.countNotifications)
+        setTotalPages(data?.totalPages)
       }
       catch(err)
       {
-        console.log(err.response.data);        
+        console.log(err?.response?.data);        
       }
       finally{
         setTimeout(()=>
          {
             setisLoading(false)
-         }, 1000)
+         }, 0)
       }
     }
     fetchNotifications()
-  },[])
+  },[page])
 
+  console.log(totalPages);
+  
 
    if(isloading)
     {
@@ -69,9 +77,6 @@ const notification = () => {
         </div>
       )
     }
-
-
-
   const markAllAsRead = async()=>
   {
     try{
@@ -95,6 +100,9 @@ const notification = () => {
   {
     navigate(`/${role}/contracts/${contractId}`)
   }
+
+  console.log(totalPages);
+  
 
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
@@ -186,6 +194,23 @@ const notification = () => {
         </div> */}
 
       </div>
+
+      <div 
+        className=
+        {!allnotifications?.length==0 ?`flex justify-between px-100 py-10`:'hidden'}>
+        <button 
+        disabled={page===1}
+        onClick={()=> setPage(page-1)}
+        className='px-10 py-3 text-lg bg-[#262634] rounded-md cursor-pointer'>
+          Previous
+        </button>
+        <button
+        disabled={page===totalPages}
+        onClick={()=> setPage(page+1)}
+         className='px-10 py-3 text-lg bg-blue-500 rounded-md cursor-pointer'>
+          More
+        </button>
+        </div>
     </div>
   )
 }

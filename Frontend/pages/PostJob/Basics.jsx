@@ -66,14 +66,14 @@ const Basics = ({jobData, setjobData}) => {
       <div className=' grid xl:grid-cols-2 gap-2 mt-10 pb-[1rem]'>
 
         <div className='p-[1.8rem] rounded-lg  bg-[#151b2d] h-[15rem] shadow-2xl' >
-          <div className='border w-[3rem] h-[3rem] mb-2'></div>
+          <div className=' w-[3rem] h-[3rem] mb-2 flex justify-center items-center'><i className="ri-lightbulb-fill text-3xl"></i></div>
 
           <h4 className='font-semibold text-lg'>Quick Tip</h4>
           <p className='font-semibold text-gray-400 w-[85%]'>Specific job titles receive up to 3x more relevant applications. Avoid generic titles like "Developer".</p>
         </div>
 
       <div className='p-[1.8rem] rounded-lg  bg-[#151b2d] shadow-2xl' >
-          <div className='border w-[3rem] h-[3rem] mb-2'></div>
+          <div className=' w-[3rem] h-[3rem] mb-2 flex justify-center items-center'><i className="ri-chat-private-line text-3xl"></i></div>
 
           <h4 className='font-semibold text-lg'>Confidentiality</h4>
           <p className='font-semibold text-gray-400 w-[85%]'>Your company details remain private until you decide to reveal them during the interview stage.</p>

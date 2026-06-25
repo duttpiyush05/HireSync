@@ -49,6 +49,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData,}) => {
 
        <div className=''>
         <h4 className='font-semibold text-lg'>Minimum Budget (₹)</h4>
+        <i className="ri-money-rupee-circle-line absolute text-3xl px-4 py-3.5"></i>
         <input 
         required
         value={jobData.budget.minbudget}
@@ -64,6 +65,7 @@ const FixedRate = ({budgettype, setbudgettype, jobData, setjobData,}) => {
 
        <div className=''>
         <h4 className='font-semibold text-lg'>Maximum Budget (₹)</h4>
+        <i className="ri-money-rupee-circle-line absolute text-3xl px-4 py-3.5"></i>
         <input 
         required
         value={jobData.budget.maxbudget}

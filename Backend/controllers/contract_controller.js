@@ -3,6 +3,9 @@ const notificationModel = require('../models/notification_model')
 
 module.exports.getAllContracts = async(req, res) =>
 {
+  const page = Number(req.query.page)||1
+  // console.log(page);
+  const limit = 5
   try
   {
     if(req.role==="freelancer")
@@ -12,12 +15,21 @@ module.exports.getAllContracts = async(req, res) =>
                           find({
                             freelancer : req.user._id
                           }).
+                          skip((page-1)*limit).
+                          limit(limit).
                           populate('client').
                           populate('freelancer').
                           populate('job').
-                          populate('proposal')
+                          populate('proposal') 
+      const totalContracts = await contractModel.
+                          countDocuments({
+                            freelancer : req.user._id
+                          })        
 
-      return res.status(201).json({contracts, role})
+      return res.status(201).json({contracts, 
+        role,
+        totalContracts,
+        totalPages:Math.ceil(totalContracts/limit)})
     }
     if(req.role==="client")
     {
@@ -26,12 +38,20 @@ module.exports.getAllContracts = async(req, res) =>
                           find({
                             client : req.user._id
                           }).
+                          skip((page-1)*limit).
+                          limit(limit).
                           populate('client').
                           populate('freelancer').
                           populate('job').
                           populate('proposal')
+      const totalContracts= await contractModel.countDocuments({
+                                  client : req.user._id
+                                })   
 
-      res.status(201).json({contracts, role})
+      res.status(201).json({contracts, 
+        role,
+      totalContracts,
+    totalPages : Math.ceil(totalContracts/limit)})
     }
   }catch(error)
   {

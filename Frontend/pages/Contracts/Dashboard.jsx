@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom'
 const Dashboard = () => {
 
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalContracts, setTotalContracts] = useState()
+  const [totalPages, setTotalPages] = useState()
+
 
   const statusStyles = {
     Active: 'bg-green-500/20 text-green-400 border border-green-500/30',
@@ -13,7 +16,6 @@ const Dashboard = () => {
     Cancelled: 'bg-red-500/20 text-red-400 border border-red-500/30',
   }
 
-  const totalPages = 3
   const [allcontracts, setallContracts] = useState([])
   const [contractId, setcontractId] = useState('')
   const [role, setRole] = useState("")
@@ -24,28 +26,28 @@ const Dashboard = () => {
     {
       try
       {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/contracts/getAllContracts`, {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/contracts/getAllContracts?page=${currentPage}`, {
           headers  : {
             "Content-Type": "application/json", 
             Authorization : `Bearer ${localStorage.getItem('token')}`
           }
         })
-        
         const data = response.data
+        console.log(data);
+        
         const allContracts = data.contracts
         setallContracts(allContracts)
-        setRole(data?.role)
-        console.log(response);
-        
-        
+        setRole(data?.role)     
+        setTotalContracts(data?.totalContracts)        
+        setTotalPages(data?.totalPages)        
       }catch(err)
       {
-        console.log(err.response.data);
+        console.log(err?.response?.data);
       }
     }
 
     fetchContracts()
-  },[])
+  },[currentPage])
   
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
@@ -225,10 +227,11 @@ const Dashboard = () => {
 
   {/* Pagination */}
   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-5 pt-4 border-t border-[#1e2230]'>
-    <p className='text-xs text-gray-500'>Showing 1 to 5 of 24 contracts</p>
+    <p className='text-sm text-gray-500'>Showing {Math.min(5*currentPage-4)} to {Math.min(totalContracts, currentPage*5)} of {totalContracts} contracts</p>
 
     <div className='flex items-center gap-2'>
       <button
+        disabled={currentPage===1}
         onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
         className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
       >
@@ -250,7 +253,8 @@ const Dashboard = () => {
       ))}
 
       <button
-        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+      disabled={currentPage===totalPages}
+        onClick={() => setCurrentPage(currentPage+1)}
         className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
       >
         <i className="ri-arrow-right-s-line"></i>

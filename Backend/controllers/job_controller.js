@@ -1,6 +1,7 @@
 const jobModel = require('../models/job_model')
 const {validationResult} = require('express-validator')
 const jobServices = require('../services/job_services')
+const NotificationModel = require('../models/notification_model')
 
 module.exports.createJob = async (req, res, next) =>
 {
@@ -18,7 +19,14 @@ module.exports.createJob = async (req, res, next) =>
     budget,
     client : client._id
   })
-  res.status(201).json({message : "Job Created Successfully", job})
+
+  const notificationForClient = await  NotificationModel.create({
+    user : client._id,
+    title : "New Job Created",
+    message : "A new job successfully created and will be shown to freelancers"
+  })
+
+  res.status(201).json({message : "Job Created Successfully", job, notificationForClient})
 }
 
 module.exports.getMyJobs = async (req, res, next) => {
@@ -36,7 +44,8 @@ module.exports.getMyJobs = async (req, res, next) => {
 module.exports.getAllJobs = async (req, res, next) => {
   try
   {  
-    const jobs = await jobServices.getAllJobs(req.user._id);
+     const page = Number(req.query.page) || 1
+    const jobs = await jobServices.getAllJobs(req.user._id, page);
     res.status(200).json({ jobs });
   }
   catch (error) {
