@@ -90,13 +90,13 @@ const Description = ({jobData, setjobData}) => {
         <h3 className='font-semibold text-[2rem]'>Pro-Tips</h3>
 
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div className='flex justify-center items-center'><i className="ri-file-info-line text-3xl"></i></div>
           <div>
             <p className=' text-lg'>Detailed descriptions lead to 40% higher quality applications.</p>
           </div>
         </div>
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div className='flex justify-center items-center'><i className="ri-home-smile-2-line text-3xl"></i></div>
           <div>
             <p className=' text-lg'>Selecting 3-5 specific skills helps our matching algorithm find the perfect developer faster.</p>
           </div>
@@ -108,19 +108,19 @@ const Description = ({jobData, setjobData}) => {
         <h3 className='font-semibold text-[1.5rem]'>Platform Benefits</h3>
 
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div className='flex justify-center items-center'><i className="ri-bar-chart-grouped-line text-3xl"></i></div>
           <div>
             <h2 className=' text-lg'><p className='font-bold inline'>Verified Talent</p>: Access top 1% of pre-vetted freelancers.</h2>
           </div>
         </div>
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div><i className="ri-bar-chart-grouped-line text-3xl"></i></div>
           <div>
             <h2 className=' text-lg'><p className='font-bold inline'>Instant Matching</p>: AI-driven matching finds candidates in minutes.</h2>
           </div>
         </div>
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div><i className="ri-bar-chart-grouped-line text-3xl"></i></div>
           <div>
             <h2 className=' text-lg'><p className='font-bold inline'>Risk-Free</p>: 100% money-back guarantee on your first hire.</h2>
           </div>
@@ -155,7 +155,7 @@ const Description = ({jobData, setjobData}) => {
 
               <span className='ml-4'>
                 {
-                  isSelected ? 'X' : '+'
+                  isSelected ? <i className="ri-close-line"></i> : <i className="ri-add-fill"></i>
                 }
               </span>
             </button>
@@ -171,19 +171,19 @@ const Description = ({jobData, setjobData}) => {
         <h3 className='font-semibold text-[1.5rem]'>Compliance & Safety</h3>
 
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div className='flex justify-center items-center'><i className="ri-shield-cross-line  text-3xl"></i></div>
           <div>
             <h2 className=' text-lg'>Funds are held securely in escrow until milestones are approved.</h2>
           </div>
         </div>
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div className='flex justify-center items-center'><i className="ri-shield-cross-line  text-3xl"></i></div>
           <div>
             <h2 className=' text-lg'>Verified payment methods ensure global tax and labor law compliance.</h2>
           </div>
         </div>
         <div className='flex gap-[2rem] pt-[2rem]'>
-          <div>icon</div>
+          <div className='flex justify-center items-center'><i className="ri-shield-cross-line  text-3xl"></i></div>
           <div>
             <h2 className=' text-lg'>Automated NDAs and intellectual property protection for every contract.</h2>
           </div>

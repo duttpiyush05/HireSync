@@ -16,10 +16,14 @@ const jobSchema = new mongoose.Schema({
     required:true,
     minlength : [10, "Description must be clear"]
   },
-
   skills : {
     type : [String],
     required : true
+  },
+  status :{
+    type : String,
+    enum: ["open", "closed"],
+    default : "open"
   },
 
   budget : {

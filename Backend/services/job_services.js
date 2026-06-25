@@ -15,8 +15,9 @@ module.exports.getMyJobs = async (clientId) => {
   }
 };
 
-module.exports.getAllJobs = async (id) => {
+module.exports.getAllJobs = async (id, page) => {
   try {
+    const limit = 9
     const proposals = await proposalModel.find({
       freelancer : id
     })
@@ -26,8 +27,17 @@ module.exports.getAllJobs = async (id) => {
       _id : {$nin : appliedJobIds}
     }).
     populate('client', 'fullname').
-    sort({ createdAt: -1 });
-    return jobs;
+    sort({ createdAt: -1 }).
+    skip((page-1)*limit).
+    limit(limit)
+    const totalJobs = await jobModel.countDocuments({
+      status:"open"
+    })
+
+    return {jobs,
+      totalJobs,
+      totalPages : Math.ceil(totalJobs/limit)
+    };
   } catch (error) {  
   throw error;
   }

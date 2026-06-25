@@ -84,14 +84,30 @@ module.exports.getProposalInfo = async (req, res, next)=>
 }
 module.exports.getProposalsforClient = async (req, res, next)=>
 {
+  const page = Number(req.query.page)||1
+  const limit = 6
+
   try {
     const proposals = await proposalModel
-      .find({ client: req.user._id })
+      .find({ 
+        client: req.user._id,
+        status:"pending"
+      })
       .populate('freelancer')
-      .populate('job');
+      .populate('job').
+      skip((page-1)*limit).
+      limit(limit)
+
+    const countProposals = await proposalModel
+      .countDocuments({ 
+        client: req.user._id ,
+        status:"pending"
+      })
 
     res.status(200).json({
-      proposals
+      proposals,
+      countProposals, 
+      totalPages: Math.ceil(countProposals/limit)
     });
   } catch (error) {
     next(error);

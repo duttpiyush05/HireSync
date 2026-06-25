@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 
 const Review = ({jobData, setjobData}) => {
@@ -44,11 +45,13 @@ const Review = ({jobData, setjobData}) => {
           'Authorization' : `Bearer ${localStorage.getItem('token')}`
         }
       })  
-      console.log(response)
+      console.log(response);
+      
       const data = await response.data
       if(response.status === 201)
       {
         navigate('/my-jobs')
+        toast.success("New Job Sucessfully Created")
         setjobData({
           title : '',
           category : '',
@@ -139,7 +142,7 @@ const Review = ({jobData, setjobData}) => {
         
       <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[25rem] lg:col-span-[2] sm:row-span-2'><h3 className='font-semibold text-2xl text-blue-400 pb-[1rem]'>Required Expertise</h3>
 
-      <div className='grid lg:grid-cols-3 lg:gap-10 pt-6'>
+      <div className='grid lg:grid-cols-3  pt-3'>
         {
           (jobData.skills.map((skill, index)=>
           {
@@ -156,11 +159,11 @@ const Review = ({jobData, setjobData}) => {
           </div>
 
       <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[12rem] row-span-2'>
-        <h3 className='text-xl text-gray-300 gap'>Ready to find your expert? Your job post will be visible to over 200,000 certified freelancers.</h3>
+        <h3 className='text-xl text-gray-300'>Ready to find your expert? Your job post will be visible to over 200,000 certified freelancers.</h3>
 
         <button 
         onClick={handlePostJob}
-        className='w-full border mt-[2rem] p-[2rem] rounded-lg font-bold text-xl bg-blue-700 cursor-pointer'>
+        className='w-full mt-[2rem] p-[1rem] rounded-lg font-bold text-2xl bg-blue-700 cursor-pointer'>
           Post Job Now
         </button>
       </div>

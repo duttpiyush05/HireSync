@@ -5,8 +5,7 @@ import Basics from './Basics'
 import Description from './Description'
 import Budget from './Budget'
 import Review from './Review'
-// import { Toaster, toast } from 'alert'
-import toast,{Toaster} from 'react-hot-toast'
+import { toast } from 'react-toastify'
 
 const JobPost = () => {
 
@@ -67,12 +66,12 @@ const JobPost = () => {
          case 1 :
                if(!jobData.title.trim())
                {
-                  alert('Please Fill Job Title')
+                  toast.warning('Please Fill Job Title')
                   return
                }
                else if(!jobData.category)
                {
-                  alert('Please Select Job Category')
+                  toast.warning('Please Select Job Category')
                   return
                }
 
@@ -83,23 +82,23 @@ const JobPost = () => {
          case 3 :
                if(jobData.budget.minbudget.length ===0 || jobData.budget.maxbudget.length ===0)
                {
-                  alert('Please Enter Budget price')
+                  toast.warning('Please Enter Budget price')
                   return
                }
                else if((Number)(jobData.budget.minbudget) > (Number)(jobData.budget.maxbudget))
                {
                   
-                  alert('Please Enter Correct Budget Price')
+                  toast.warning('Please Enter Correct Budget Price')
                   return
                }
                if(jobData.budget.duration.length===0)
                {
-                  alert('Please Select Duration')
+                  toast.warning('Please Select Duration')
                   return
                }
                if(jobData.budget.xplevel===0)
                {
-                  alert('Please Select Experience Level')
+                  toast.warning('Please Select Experience Level')
                   return
                }
 
@@ -109,25 +108,24 @@ const JobPost = () => {
          case 2: 
                 if(!jobData.description.trim())
                {
-                  alert('Please Fill Job Description')
+                  toast.warning('Please Fill Job Description')
                   return
                }
                else if(jobData.description.trim().length<10)
                {
                   console.log(jobData.description);
                   
-                  alert('Please Enter atleast 10 words')
+                  toast.warning('Please Enter atleast 10 words')
                   return
                }
                if(jobData.skills.length===0)
                {
-                  alert('Please Select 1 skill')
+                  toast.warning('Please Select 1 skill')
                   return
                }
                setstep(step+1)
                setCurrentStep(currentStep+1)
-               break
-               
+               break  
       }
 
    }
