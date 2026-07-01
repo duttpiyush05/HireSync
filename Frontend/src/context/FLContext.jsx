@@ -10,8 +10,6 @@ const FLContext = ({children}) => {
       <FLDataContext.Provider value={{freelancer, setfreelancer}}>
         {children}
       </FLDataContext.Provider>
-
-
   )
 }
 

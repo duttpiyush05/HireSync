@@ -75,7 +75,7 @@ module.exports.logout = async (req, res, next) =>
 
 module.exports.getprofile = (req, res, next) =>
 {
-  res.status(200).json({client : req.user})
+  res.status(200).json({user : req.user})
 }
 
 module.exports.getClientbyId = async (req, res, next) =>

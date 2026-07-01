@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Dashboard = () => {
 
@@ -33,7 +34,6 @@ const Dashboard = () => {
           }
         })
         const data = response.data
-        console.log(data);
         
         const allContracts = data.contracts
         setallContracts(allContracts)
@@ -42,15 +42,14 @@ const Dashboard = () => {
         setTotalPages(data?.totalPages)        
       }catch(err)
       {
-        console.log(err?.response?.data);
+        toast.error(err?.response?.data?.message);
       }
     }
-
     fetchContracts()
-  },[currentPage])
+  },[currentPage]) 
   
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
+    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-10 lg:px-auto py-8'>
       <div className='max-w-7xl mx-auto'>
 
         {/* PAGE HEADER */}
@@ -131,12 +130,13 @@ const Dashboard = () => {
   </div>
 
   {/* Table header — desktop only */}
-  <div className='hidden md:grid grid-cols-[2.5fr_1fr_1.5fr_1fr_1fr] gap-5 px-3 pb-3 border-b border-[#1e2230] text-md text-gray-500 uppercase tracking-widest font-semibold'>
+  <div className='hidden md:grid grid-cols-[2.5fr_1fr_1.5fr_1.2fr_1fr_0.9fr] gap-5 px-3 pb-3 border-b border-[#1e2230] text-md text-gray-500 uppercase tracking-widest font-semibold'>
     <span>Contract title</span>
     <span>Budget</span>
     <span>Timeline</span>
     <span>Status</span>
-    <span className='text-right'>Action</span>
+    <span>Message</span>
+    <span className='text-right px-10'>Action</span>
   </div>
 
   {/* Rows */}
@@ -144,14 +144,14 @@ const Dashboard = () => {
     {allcontracts.map((c, i) => (
       <div
         key={i}
-        className='flex flex-col md:grid md:grid-cols-[2.5fr_1fr_1.5fr_1fr_1fr] md:items-center gap-3 md:gap-5 px-3 py-4 border-b border-[#1e2230] last:border-b-0'
+        className='flex flex-col md:grid md:grid-cols-[2.5fr_1fr_1.5fr_1fr_1fr_1.4fr] md:items-center gap-3 md:gap-5 px-3 py-4 border-b border-[#1e2230] last:border-b-0'
       >
 
         {/* Title */}
         <div className='flex items-center gap-3 min-w-0'>
-          <div className='w-12 h-12 rounded-lg bg-[#19192f] border border-[#1e2230] flex items-center justify-center flex-shrink-0'>
+          {/* <div className='w-12 h-12 rounded-lg bg-[#19192f] border border-[#1e2230] flex items-center justify-center flex-shrink-0'>
             <i className={`${c.icon} text-gray-400 text-xl`}></i>
-          </div>
+          </div> */}
           <span className='text-lg font-bold text-white truncate capitalize'>{c?.job?.title}</span>
         </div>
 
@@ -202,6 +202,17 @@ const Dashboard = () => {
           }
         </div>
 
+        {/* Message */}
+        <div className='md:text-right'>
+      
+            <Link
+              to={`/${role}/messages/${c?._id}`}
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 py-5 h-9 bg-[#2b5099] rounded-lg border border-[#2e49ab] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'
+            >
+            Message
+            </Link>
+        </div>
+
         {/* Action */}
         <div className='md:text-right'>
           {c.status === 'Cancelled' ? (
@@ -214,7 +225,7 @@ const Dashboard = () => {
           ) : (
             <Link
               to={role==="freelancer" ?`/freelancer/contracts/${c?._id}` :`/client/contracts/${c?._id}`}
-              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-[#005e56] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300 py-6'
             >
               View Contract
             </Link>

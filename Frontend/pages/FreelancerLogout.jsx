@@ -2,6 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import socket from '../src/socket'
 
 const FreelancerLogout = () => {
   const token = localStorage.getItem('token')
@@ -20,6 +21,7 @@ const FreelancerLogout = () => {
       toast.success("Logout Sucessfully",{
         hideProgressBar : true
       })
+      socket.disconnect()
       navigate('/')
     }
   }

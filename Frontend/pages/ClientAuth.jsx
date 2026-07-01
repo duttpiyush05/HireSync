@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {ClientDataContext} from '../src/context/ClientContext'
 import axios from 'axios'
+import socket from '../src/socket'
+import { Outlet } from 'react-router-dom'
 
 const ClientAuth = ({children}) => {
   const token = localStorage.getItem('token')
@@ -18,8 +20,6 @@ const ClientAuth = ({children}) => {
       navigate('/fl/login')
       return
     }
-
-
     const fetchClientData = async ()=>
     {
       try
@@ -41,12 +41,26 @@ const ClientAuth = ({children}) => {
       catch(err)
       {
         console.log(err)
-        navigate('/fl/login')
+        navigate('/client/login')
       }
     }
     fetchClientData()
 
   },[token])
+
+  useEffect(()=>
+  {
+    if(!client) return
+
+    if(!socket.connected)
+    {
+      socket.connect()
+    }
+
+    socket.emit('user-online', {
+      userId : client._id
+    })
+  },[client])
 
   if(isloading)
   {
@@ -56,7 +70,7 @@ const ClientAuth = ({children}) => {
   }
   return (
     <div>
-      {children}
+      <Outlet/>
     </div>
 
   )

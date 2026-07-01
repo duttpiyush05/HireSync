@@ -31,12 +31,14 @@ import Details from '../pages/Contracts/Details'
 import Notification from '../pages/Notifications/Notification'
 import FreelancerMyWork from '../pages/FreelancerMyWork'
 import Review from '../pages/Reviews/Review'
-
+import Messages from '../pages/Messages/Message'
 import Dashboard from '../pages/Contracts/Dashboard'
 
 //context api
 import {NotificationCountContext} from './context/NotificationContext'
 
+//socket
+import socket from './socket'
 
 function App() {
 
@@ -61,150 +63,92 @@ function App() {
     }
     fetchUnreadCount()
   },[])
-  
-  
+
+  useEffect(()=>
+  {   
+    socket.connect()
+  },[])
+   
   return (
-    <>
 
       <Routes>
 
+        {/* Proteted Routes */}
         <Route element={<Layout/>}>
+
+        <Route element={<FreelancerAuth />}>
+
+        <Route path='/fl/logout' element={<FreelancerLogout/>} />
+
+        <Route path='/find-work' element={<FindWork/> } />
+                                              
+        <Route path='/jobs/:jobId' element={<JobDetails/> } />                                           
         
-        <Route path='/find-work' element={<FreelancerAuth>
-                                              <FindWork/>
-                                            </FreelancerAuth >
-                                              } />
+        <Route path='jobs/:jobId/apply' element={ <CreateProposal/>} />
+                                  
+        <Route path='/proposals/:proposalId/submission' element={ <ProposalSubmitted/>} />                                     
 
-        <Route path='/jobs/:jobId' element={<FreelancerAuth>
-                                              <JobDetails/>
-                                            </FreelancerAuth >
-                                              } />
+        <Route path='/fl/dashboard' element={<FreelancerDashboard/> } />  
+                                    
+        <Route path='/freelancer/profile' element={<FreelancerPrivateProfile/>  } /> 
+                                     
+        <Route path='/client/profiles/:clientId' element={ <ClientPublicProfile/> } />  
+                                
+        <Route path='/freelancer/contracts' element={<Dashboard/>  } />
+                                    
+        <Route path='/freelancer/contracts/:contractId' element={<Details/> } />
+
+        <Route path='/freelancer/notifications' element={  <Notification/> } />  
+                                       
+        <Route path='/freelancer/reviews/:contractId' element={ <Review/>} />  
+                                      
+        <Route path='/my-work' element={<FreelancerMyWork/> } />  
+                                              
+        <Route path='/freelancer/messages/:contractId' element={<Messages/>} />
         
-        <Route path='jobs/:jobId/apply' element={<FreelancerAuth>
-                                              <CreateProposal/>
-                                            </FreelancerAuth >
-                                              } />
-        <Route path='/proposals/:proposalId/submission' element={< FreelancerAuth>
-                                              <ProposalSubmitted/>
-                                            </FreelancerAuth >  } /> 
-
-        <Route path='/fl/dashboard' element={
-                                            <FreelancerAuth>
-                                              <FreelancerDashboard/>
-                                            </FreelancerAuth>                                          
-                                          } />      
-        <Route path='/freelancer/profile' element={
-                                            <FreelancerAuth>
-                                              <FreelancerPrivateProfile/>
-                                            </FreelancerAuth>                                          
-                                          } />   
-        <Route path='/client/profiles/:clientId' element={<FreelancerAuth>
-                                              <ClientPublicProfile/>
-                                            </FreelancerAuth >
-                                              } />  
-        <Route path='/freelancer/contracts' element={
-                                            <FreelancerAuth>
-                                              <Dashboard/>
-                                               </FreelancerAuth >
-                                                } />
-        <Route path='/freelancer/contracts/:contractId' element={
-                                            <FreelancerAuth>
-                                              <Details/>
-                                             </FreelancerAuth > 
-                                                } />
-
-        <Route path='/freelancer/notifications' element={
-                                               <FreelancerAuth>
-                                              <Notification/>
-                                         </FreelancerAuth>
-                                              } />  
-        <Route path='/freelancer/reviews/:contractId' element={
-                                               <FreelancerAuth>
-                                              <Review/>
-                                         </FreelancerAuth>
-                                              } />  
-        <Route path='/my-work' element={
-                                        <FreelancerAuth>
-                                           <FreelancerMyWork/>
-                                         </FreelancerAuth>
-                                              } />  
+        </Route>       
         
         </Route>
 
         <Route element={<ClientLayout/>}>
 
-          <Route path='/client/dashboard' element={<ClientAuth>
-                                              <ClientDashboard/>
-                                            </ClientAuth >
-                                              } />  
+        <Route element={<ClientAuth/>}>
 
-         <Route path='/my-jobs' element={<ClientAuth>
-                                              <ClientMyJobs/>
-                                            </ClientAuth >
-                                              } />
-         <Route path='/applicants' element={<ClientAuth>
-                                              <Applicants/>
-                                            </ClientAuth >
-                                              } />
-         <Route path='/post-job' element={<ClientAuth>
-                                              <JobPost/>
-                                            </ClientAuth >
-                                              } />
-         <Route path='/freelancer/profiles/:freelancerId' element={<ClientAuth>
-                                              <FreelancerPublicProfile/>
-                                            </ClientAuth >
-                                              } />
+        <Route path='/client/logout' element={<ClientLogout/>} />
 
-        <Route path='/client/profile' element={
-                                            <ClientAuth>
-                                              <ClientPrivateProfile/>
-                                            </ClientAuth>  
-                                                } />
+        <Route path='/client/dashboard' element={<ClientDashboard/>} />  
 
-        <Route path='/client/contracts' element={
-                                            <ClientAuth>
-                                              <Dashboard/>
-                                              </ClientAuth>
-                                                } />
-        <Route path='/client/contracts/:contractId' element={
-                                            <ClientAuth>
-                                              <Details/>
-                                             </ClientAuth>  
-                                                } />
-        <Route path='/client/notifications' element={
-                                                 <ClientAuth>
-                                              <Notification/>
-                                        </ClientAuth>  
-                                              } />  
-        <Route path='/client/reviews/:contractId' element={
-                                               <ClientAuth>
-                                              <Review/>
-                                         </ClientAuth>
-                                              } />  
+        <Route path='/my-jobs' element={ <ClientMyJobs/>} />
+
+        <Route path='/applicants' element={<Applicants/> } />
+                               
+        <Route path='/post-job' element={<JobPost/>} />
+                                 
+        <Route path='/freelancer/profiles/:freelancerId' element={ <FreelancerPublicProfile/> } />
+
+        <Route path='/client/profile' element={ <ClientPrivateProfile/> } />
+
+        <Route path='/client/contracts' element={<Dashboard/>} />                
+                                                
+        <Route path='/client/contracts/:contractId' element={<Details/> } />
+                                         
+        <Route path='/client/notifications' element={<Notification/>} />
+                                            
+        <Route path='/client/reviews/:contractId' element={<Review/> } /> 
+                                    
+        <Route path='/client/messages/:contractId' element={<Messages/>} />    
         
-
+        </Route>
         </Route>
 
+      {/* Unprotected Routes */}
       <Route path='/' element={<LandingPage />} />
       <Route path='/register' element={<RegisterPage />} />
       <Route path='/fl/login' element={<LoginFLPage/>} />
       <Route path='/client/login' element={<ClinetLoginPage/>} />
-      
-      <Route path='/fl/logout' element={ <FreelancerAuth>
-                                              <FreelancerLogout/>
-                                            </FreelancerAuth >                                          
-                                          } />
       <Route path='/client/register' element={<ClientRegisterPage />} />
 
-                                           
-      <Route path='/client/logout' element={<ClientAuth>
-                                              <ClientLogout/>
-                                            </ClientAuth >
-                                              } />
-      
       </Routes>
-
-    </>
     
   )
 }

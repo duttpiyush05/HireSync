@@ -11,6 +11,8 @@ const proposalRoutes = require('./routes/proposals_routes')
 const contractRoutes = require('./routes/contract_routes')
 const notificationRoutes = require('./routes/notification_route')
 const reviewRoutes= require('./routes/review_routes')
+const conversationRoutes = require('./routes/conversation_router')
+const messageRoutes = require('./routes/message_routes')
 const cookieParser = require('cookie-parser')
 
 connectToDB();
@@ -34,4 +36,7 @@ app.use('/proposals', proposalRoutes)
 app.use('/contracts', contractRoutes)
 app.use('/notifications', notificationRoutes)
 app.use('/reviews', reviewRoutes)
+app.use('/conversations', conversationRoutes)
+app.use('/messages', messageRoutes)
+
 module.exports = app;
