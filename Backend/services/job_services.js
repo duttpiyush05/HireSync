@@ -6,10 +6,24 @@ exports.createJob = async (jobData) => {
   return await job.save();
 };
 
-module.exports.getMyJobs = async (clientId) => {
+module.exports.getMyJobs = async (req) => {  
+  const clientId = req?.user?._id
+  const page = Number(req?.query?.page)||1
+  console.log("Curr" , page);
+  
+  const limit = 5
   try {
-    const jobs = await jobModel.find({ client: clientId }).sort({ createdAt: -1 });
-    return jobs;
+    const jobs = await jobModel.
+    find({ client: clientId }).
+    sort({ createdAt: -1 }).
+    skip((page-1)*limit).
+    limit(limit)
+
+    const totalJobs = await jobModel.
+    countDocuments({ client: clientId })
+    return {jobs,
+      totalJobs,
+    totalPages : Math.ceil(totalJobs/limit)};
   } catch (error) {
     throw error;
   }

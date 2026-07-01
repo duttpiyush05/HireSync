@@ -5,6 +5,7 @@ import axios from 'axios'
 import { FLDataContext } from '../src/context/FLContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import socket from '../src/socket'
 
 const LoginFLPage = () => {
 
@@ -27,6 +28,8 @@ const LoginFLPage = () => {
       toast.error(response?.msg)
 
       if (response.status === 200) {
+        console.log(response);
+        
         const data = response.data
         localStorage.setItem('token', data.token)
         setfreelancer(data.freelancer)

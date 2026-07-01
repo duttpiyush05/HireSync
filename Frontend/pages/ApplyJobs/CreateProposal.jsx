@@ -82,6 +82,20 @@ const CreateProposal = () => {
   const handleSubmitProposal = async(e)=>
   {
     e.preventDefault()
+    if(coverLetter.length===0)
+    {
+      return toast.warning("Please fill the Cover Letter")
+    }
+    else if(coverLetter.length<=10)
+    {
+      return toast.warning("Coverletter must be atleast 15 Words")
+    }
+    else if(askingPrice<=0)
+    {
+      setAskingPrice(0)
+      return toast.warning("Enter a valid Price")
+    }
+
     try{
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/proposals/${jobId}`, formData ,
         {
@@ -121,7 +135,8 @@ const CreateProposal = () => {
      <div className=' min-h-screen bg-[#0c1324] text-white px-4 sm:px-8 md:px-12 lg:px-1 py-8'>
 
       {/* Back Link */}
-      <Link to={`/jobs/${jobId}`} className='flex items-center gap-2 text-lg text-gray-400 hover:text-white transition-colors mb-6'>
+      <Link 
+      to={-1} className='flex items-center gap-2 text-lg text-gray-400 hover:text-white transition-colors mb-6'>
         <i className="ri-arrow-left-line"></i>
         Back to Job Post
       </Link>
@@ -139,7 +154,7 @@ const CreateProposal = () => {
 
             {/* Cover Letter */}
 
-            <h2 className='text-xl font-bold mb-1'>Cover Letter</h2>
+            <h2 className='text-xl font-bold mb-1'>Cover Letter *</h2>
             <p className='text-lg text-gray-400 mb-3'>Introduce yourself and explain why you're the best fit for this role.</p>
             <textarea
               value={coverLetter}
@@ -180,7 +195,7 @@ const CreateProposal = () => {
             </div>
 
             {/* Proposed Rate */}
-            <h2 className='text-xl font-bold mt-8 mb-4'>Proposed Rate</h2>
+            <h2 className='text-xl font-bold mt-8 mb-4'>Proposed Rate *</h2>
 
             <div className='flex flex-col sm:flex-row gap-4 mb-6'>
               <div className='flex-1'>
@@ -234,11 +249,11 @@ const CreateProposal = () => {
             <div className='flex flex-col sm:flex-row items-center gap-4 mt-8'>
               <button 
               onClick={(e) => handleSubmitProposal(e)}
-              className='w-full sm:flex-1 h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors font-semibold text-md flex items-center justify-center gap-2'>
-                <i className="ri-send-plane-fill"></i>
+              className='w-full sm:flex-1 h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors font-semibold text-md flex items-center justify-center gap-2 cursor-pointer'>
+                <i className="ri-send-plane-fill "></i>
                 Send Proposal
               </button>
-                <button className='w-full sm:w-auto px-6 h-11 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-md text-gray-300 font-medium'>
+                <button className='w-full sm:w-auto px-6 h-15 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#2c2c5c] transition-colors text-md text-gray-300 font-medium'>
                 Save as Draft
               </button>
             </div>

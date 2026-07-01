@@ -32,7 +32,7 @@ module.exports.createJob = async (req, res, next) =>
 module.exports.getMyJobs = async (req, res, next) => {
   try
   {
-    const jobs = await jobServices.getMyJobs(req.user._id);
+    const jobs = await jobServices.getMyJobs(req);
     
     res.status(200).json({ jobs });
   }

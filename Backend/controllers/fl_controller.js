@@ -41,15 +41,12 @@ module.exports.register = async (req, res, next) =>
 module.exports.login = async (req, res, next) =>
 {
   const error = validationResult(req)
-  // console.log("J");
   
   if(!error.isEmpty())
   {
     console.log(error.array());
     return res.status(401).json({errors:error.array()})
   }
-    // console.log("J");
-
 
   const {email, password} = req.body
   
@@ -82,7 +79,7 @@ module.exports.logout = async (req, res, next)=>
 
 module.exports.getprofile = (req, res, next)=>
 {
-  res.status(200).json({freelancer : req.user})
+  res.status(200).json({user : req.user})
 }
 module.exports.getfreelancerbyId = async (req, res, next)=>
 {
