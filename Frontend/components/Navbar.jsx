@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState, useContext } from 'react'
 import { NotificationCountContext } from '../src/context/NotificationContext'
 import { useEffect } from 'react'
+import axios from 'axios'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
+    const [freelancer, setFreelancer] = useState()
   const navigate = useNavigate()
 
   const {unreadCount, setUnreadCount} = useContext(NotificationCountContext)
@@ -19,6 +21,34 @@ const Navbar = () => {
     navigate('/freelancer/notifications')
   }
 
+  useEffect(()=>
+  {
+    const getFreelancer = async()=>
+    {
+      try
+      {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/freelancers/profile`,
+          {
+            headers : 
+            {
+              Authorization : `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        )
+        console.log(res);
+        
+        setFreelancer(res?.data?.user)
+      }
+      catch(err)
+      {
+        
+      }
+    }
+    getFreelancer()
+  },[])
+
+  console.log(`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profilePicture}`);
+  
 
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
@@ -60,7 +90,13 @@ const Navbar = () => {
             </i>
             <div 
             onClick={gotoprofile}
-            className='bg-white w-10 h-10 rounded-full flex-shrink-0 cursor-pointer'></div>
+            className='bg-white w-10 h-10 rounded-full flex-shrink-0 cursor-pointer'>
+
+             <img 
+                      className="w-full h-full object-cover rounded-full"
+                      src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`} alt="profile" />
+
+            </div>
 
             {/* Hamburger — mobile only */}
             <button

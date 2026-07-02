@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { ClientDataContext } from '../src/context/ClientContext'
+import { toast } from 'react-toastify'
 
 const ClientDashboard = () => {
   const [progress, setProgress] = useState(70)
@@ -23,9 +24,8 @@ const ClientDashboard = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log(response);
-      setclient(response.data.client)
-      setClientId(response.data.client._id)
+      setclient(response.data.user)
+      setClientId(response.data.user._id)
       }catch(err)
       {
         
@@ -50,12 +50,11 @@ const ClientDashboard = () => {
               Authorization: `Bearer ${token}`
             }
           })
-          console.log(response);
           const data = response.data
           setProposals(data.proposals)
       }catch(err)
       {
-        console.log(err.response.data);        
+        toast.error(err.response.data.message);        
       }
     }
     getProposals()
@@ -82,14 +81,14 @@ const ClientDashboard = () => {
       <div className='h-full w-full max-w-[1600px] px-4 sm:px-6 lg:px-10'>
 
 
-        <div className='pt-6 sm:pt-8 lg:pt-[2rem]'>
-          <h1 className='text-2xl sm:text-4xl lg:text-5xl xl:text-[4rem] font-bold leading-tight'>
+        <div className='pt-6 sm:pt-8 lg:pt-[3rem]'>
+          <h1 className='text-2xl sm:text-4xl lg:text-5xl xl:text-[2.8rem] font-bold leading-tight'>
             Welcome Back, {client?.fullname?.firstname}!
           </h1>
 
-          <div className='flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4 mt-3'>
+          <div className='flex flex-col lg:flex-row lg:justify-between mt-5 '>
             <div>
-              <h3 className='mt-2 text-sm sm:text-lg lg:text-2xl text-gray-300 font-semibold'>
+              <h3 className='text-sm sm:text-lg lg:text-xl font-medium text-gray-300 '>
                 Here's an overview of your hiring pipeline and active engagements.
               </h3>
             </div>
@@ -97,14 +96,14 @@ const ClientDashboard = () => {
             <div className='flex gap-3 sm:gap-6 flex-wrap'>
               <Link
                 to='/post-job'
-                className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[12rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#3d4aff] gap-2 whitespace-nowrap'
+                className=' border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[12rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#3d4aff] gap-2 whitespace-nowrap'
               >
                 <i className="ri-add-line ri-xl"></i>
                 Post a New Job
               </Link>
               <Link
                               to='/client/profile'
-                              className='border border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#00bc00] hover:bg-[#1d6800]'
+                              className=' border-white h-[3.5rem] sm:h-[4rem] px-4 sm:w-[10rem] text-center flex items-center justify-center rounded-lg text-base sm:text-lg font-semibold bg-[#00bc00] hover:bg-[#1d6800]'
                             >
                               <i className="ri-pencil-line mr-1"></i> Edit Profile
               </Link>
@@ -178,7 +177,9 @@ const ClientDashboard = () => {
         </div>
 
         {/* APPLICANTS HEADER */}
-        <div className='mt-10 sm:mt-16 mb-6 flex items-center justify-between gap-4'>
+        <div className={`
+          ${proposals.length===0 ? 'hidden':'mt-10 sm:mt-16 mb-6 flex items-center justify-between gap-4'}
+          `}>
           <h2 className='text-xl sm:text-2xl lg:text-3xl font-bold'>
             Top Recent Applicants
           </h2>
@@ -204,10 +205,10 @@ const ClientDashboard = () => {
                     <p className='text-sm sm:text-lg text-gray-300 font-semibold'>{id?.job?.title}</p>
                   </div>
 
-                  <div className='px-4 rounded-3xl flex gap-1 sm:gap-3 items-center justify-center text-green-400 bg-[#3e4292] '>
+                  {/* <div className='px-4 rounded-3xl flex gap-1 sm:gap-3 items-center justify-center text-green-400 bg-[#3e4292] '>
                     <i className="ri-flashlight-fill"></i>
                     <h3 className='text-sm sm:text-lg  whitespace-nowrap'>X% Match</h3>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

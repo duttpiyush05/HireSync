@@ -6,6 +6,7 @@ const authentication = require('../middlewares/authentication')
 const freelancerModel = require('../models/fl_model')
 const {authFreelancer} = require('../middlewares/authentication')
 const {authClient} = require('../middlewares/authentication')
+const {uploadProfilePic}= require('../middlewares/multer')
 
 
 router.post('/register', [
@@ -27,5 +28,6 @@ router.get('/profile', authFreelancer, freelancerController.getprofile)
 
 router.get('/getfreelancer/:freelancerId', authClient, freelancerController.getfreelancerbyId)
 
-router.patch('/updateprofile', authFreelancer, freelancerController.updateProfile)
+router.patch('/updateprofile', authFreelancer, uploadProfilePic.single("profilePic"), freelancerController.updateProfile)
+
 module.exports = router

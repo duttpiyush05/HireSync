@@ -1,34 +1,48 @@
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../uploads'));
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    const name = `${Date.now()}-${file.fieldname}${ext}`;
-    cb(null, name);
-  },
-});
+const createUpload = (folder, allowedMimeTypes, maxSize) => {
 
-const fileFilter = (req, file, cb) => {
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, path.join(__dirname, `../uploads/${folder}`));
+        },
 
-  const allowedMimeTypes = [
-    'application/pdf'
-  ];
+        filename: (req, file, cb) => {
+            const ext = path.extname(file.originalname).toLowerCase();
+            cb(null, `${Date.now()}-${file.fieldname}${ext}`);
+        },
+    });
 
-  if (allowedMimeTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Only PDF files are allowed'));
-  }
+    const fileFilter = (req, file, cb) => {
+
+        if (allowedMimeTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error("Invalid file type"));
+        }
+
+    };
+
+    return multer({
+        storage,
+        fileFilter,
+        limits: {
+            fileSize: maxSize,
+        },
+    });
 };
 
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+const uploadProposal = createUpload("proposals", [
+    "application/pdf",
+], 10*1024*1024);
 
-module.exports = upload;
+const uploadProfilePic = createUpload("profilePics", [
+    "image/png",
+    "image/jpeg",
+],5*1024*1024);
+
+module.exports = {
+    uploadProposal,
+    uploadProfilePic,
+};

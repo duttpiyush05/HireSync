@@ -20,7 +20,7 @@ const FreelancerDashboard = () => {
           Authorization: `Bearer ${token}`
         }
       })       
-      setfreelancer(response.data.freelancer)
+      setfreelancer(response.data.user)
      }
      catch(err)
      {

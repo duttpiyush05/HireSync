@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../middlewares/multer');
+const {uploadProposal} = require('../middlewares/multer');
 const { authFreelancer, authClient } = require('../middlewares/authentication');
 const proposalController = require( '../controllers/proposal_controller')
 
-router.post('/:jobId', authFreelancer, upload.single('portfolio'), proposalController.createProposal)
+router.post('/:jobId', authFreelancer, uploadProposal.single('portfolio'), proposalController.createProposal)
 
 router.get('/getFreelancerProposal', authFreelancer, proposalController.getFreelancerProposal)
 

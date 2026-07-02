@@ -1,6 +1,7 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const ClientProfile = () => {
   
@@ -18,6 +19,7 @@ const ClientProfile = () => {
     linkedin : '',
     location: '',
     bio : '',
+    profilePicture:'',
     companyProfile : {
       companyName : '',
       description: '',
@@ -38,38 +40,114 @@ const ClientProfile = () => {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
           }
-        )
-        // console.log(response);
-        
+        )        
         const data = response?.data
-        const client = data.client
+        
+        const client = data.user
         const id = client._id
         setClientId(id)
         setClient(client)
-        // console.log(clientId);
          
       }catch(err)
       {
-        console.log(err);        
+        toast.error(err?.response?.data?.message);        
       }
-      
     }
     fetchClient()
   }, [])
 
-  const handleUpdateProfile = async()=>
+  const fileInputRef = useRef(null)
+  const [profilePreview, setProfilePreview] = useState(null)
+  const [profileFile, setProfileFile] = useState(null)
+
+  const handleProfilePic = (e) => {
+
+    const file = e.target.files[0]
+
+    if (!file) return
+
+    // for send to the backend
+    setProfileFile(file)
+
+    // This is only for Preview
+    setProfilePreview(URL.createObjectURL(file))
+  }  
+
+    const handleUpdateProfile = async()=>
   {
+    const formData = new FormData()
     try{
+
+      formData.append(
+    "firstname",
+    client.fullname.firstname
+      )
+
+      formData.append(
+          "lastname",
+          client.fullname.lastname
+      )
+
+      formData.append(
+          "email",
+          client.email
+      )
+
+      formData.append(
+          "contactno",
+          client.contactno
+      )
+
+      formData.append(
+          "gender",
+          client.gender
+      )
+
+      formData.append(
+          "github",
+          client.github
+      )
+
+      formData.append(
+          "linkedin",
+          client.linkedin
+      )
+
+      formData.append(
+          "location",
+          client.location
+      )
+      formData.append(
+          "bio",
+          client.bio
+      )
+      formData.append(
+          "companyName",
+          client.companyProfile.companyName
+      )
+      formData.append(
+          "description",
+          client.companyProfile.description
+      )
+      formData.append(
+          "website",
+          client.companyProfile.website
+      )
+      
+      if(profileFile)
+      {
+        formData.append('profilePic', profileFile)
+      }
+
       const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/clients/updateprofile`, 
-        client, {
+        formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // if(response.status===201)
-      alert("Profile Updated Successfully");
+      toast.success("Profile Updated Successfully")
     }catch (err) {
-    console.log(err.response.data);
+    toast.error(err?.response?.data?.message);
     } 
   }
 
@@ -86,11 +164,7 @@ const ClientProfile = () => {
   //     <h3 className='text-white block mt-5 font-bold text-xl'>Please Wait...</h3>
   //     </div>
   // )
-  // }
-
-  console.log(client);
-  
-  
+  // }  
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
       <div className='max-w-6xl mx-auto'>
@@ -99,11 +173,39 @@ const ClientProfile = () => {
         <div className='flex items-start gap-4 mb-8'>
           <div className='relative flex-shrink-0'>
             <div className='w-30 h-30 rounded-xl overflow-hidden bg-[#19192f] border border-[#1e2230]'>
-              <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
+              <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'>
+                {
+                    profilePreview || client?.profilePicture ? (
+                        <img
+                        
+                            src={
+                                profilePreview
+                                    ? profilePreview
+                                    : `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`
+                            }
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]"></div>
+                    )
+                }
+              </div>
             </div>
-            <button className='absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#6366F1] flex items-center justify-center hover:bg-[#4f52d9] transition-colors'>
-              <i className="ri-camera-line text-[10px] text-white"></i>
+            <button 
+            type='button'
+            onClick={()=> fileInputRef.current.click()}
+            className='absolute -bottom-1.5 -right-1.5 w-9 h-9 rounded-full bg-[#6366F1] flex items-center justify-center hover:bg-[#4f52d9] transition-colors cursor-pointer'>
+              <i className="ri-camera-line  text-white text-xl"></i>
             </button>
+
+            <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/png,image/jpeg"
+                      hidden
+                      onChange={handleProfilePic}
+                  />
           </div>
 
           <div className='pt-1'>
@@ -232,8 +334,6 @@ const ClientProfile = () => {
             <div className=''>
 
                 <label className='text-md text-gray-500 uppercase tracking-widest mb-2 block'>BIO</label>
-                {/* <div className='flex items-center gap-2 bg-[#111827] border border-[#1e2230] rounded-lg h-15 px-4 focus-within:border-[#6366F1] transition-colors'> */}
-                  {/* <i className="ri-user-line text-gray-400 text-lg flex-shrink-0"></i> */}
                   <textarea
                     // value={}
                     rows={6}
@@ -356,7 +456,7 @@ const ClientProfile = () => {
         <div className='flex justify-end gap-3'>
           <Link 
           to={'/client/dashboard'}
-          className='px-10 h-15 rounded-lg border-[#00e140] bg-[#00bc00] hover:bg-[#1d6800] transition-colors text-md font-bold text-gray-300 flex justify-center items-center'>
+          className='px-6 h-15 rounded-lg border-[#00e140] bg-[#00bc00] hover:bg-[#1d6800] transition-colors text-lg font-semibold flex justify-center items-center'>
             Dashboard
           </Link>
           <button 

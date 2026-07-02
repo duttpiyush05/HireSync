@@ -86,12 +86,31 @@ module.exports.getClientbyId = async (req, res, next) =>
       res.status(201).json({client})
 }
 
-module.exports.updateProfile = async(req, res, next) =>{
+module.exports.updateProfile = async(req, res, next) =>{    
   try {
+    const updateData = {
+            "fullname.firstname": req.body.firstname,
+            "fullname.lastname": req.body.lastname,
+
+            "email": req.body.email,
+            "contactno": req.body.contactno,
+            "gender": req.body.gender,
+            "github": req.body.github,
+            "linkedin": req.body.linkedin,
+            "location": req.body.location,
+            "bio": req.body.bio,
+            "companyProfile.companyName": req.body.companyName,
+            "companyProfile.description": req.body.description,
+            "companyProfile.website": req.body.website,
+        }
+        if (req.file) {
+            updateData["profilePicture"] = req.file.filename;
+        }
+
       const client = await clientModel.findByIdAndUpdate(
         req.user._id,
         {
-          $set: req.body
+          $set: updateData
         },
         {
           returnDocument: 'after',

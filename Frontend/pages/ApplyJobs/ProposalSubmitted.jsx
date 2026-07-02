@@ -176,7 +176,7 @@ const ProposalSubmitted = () => {
           <div className='grid grid-cols-2 gap-6 mb-6'>
             <div>
               <p className='text-md text-gray-500 uppercase tracking-widest mb-1'>Project Rate</p>
-              <p className='text-green-400 font-bold text-lg'>${proposal?.receivingAmt} USD</p>
+              <p className='text-green-400 font-semibold text-2xl'>₹{proposal?.receivingAmt}</p>
             </div>
             <div>
               <p className='text-md text-gray-500 uppercase tracking-widest mb-1'>Estimated Timeline</p>

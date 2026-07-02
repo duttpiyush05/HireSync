@@ -35,7 +35,9 @@ const Messages = () => {
             headers: {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
-          })                                   
+          })             
+          console.log(fetchContractDetails);
+                                
           setRole(fetchContractDetails?.data?.role)
           setClient(fetchContractDetails?.data?.contract?.client)
           setFreelancer(fetchContractDetails?.data?.contract?.freelancer)
@@ -195,6 +197,8 @@ const Messages = () => {
     })
   },[messages])
 
+  console.log(freelancer);
+  
 
   const handleTyping = (text)=>
   {
@@ -264,7 +268,34 @@ const Messages = () => {
         {/* Chat Header */}
         <div className='flex items-center gap-3 px-4 sm:px-6 border-b border-[#1e2230] flex-shrink-0 py-2'>
           <div className='w-10 h-10 rounded-full overflow-hidden bg-[#19192f] border border-[#1e2230] flex-shrink-0'>
-            <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
+
+            {
+              role==='client' ? 
+              <img
+                            src={
+                        `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`
+                            }
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                        />
+                    : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]"></div>
+                    )
+            }
+            {
+              role==='freelancer' ? 
+              <img
+                            src={
+                        `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profile?.profilePicture}`
+                            }
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                        />
+                    : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]"></div>
+                    )
+            }
+
           </div>
           <div className='flex-1'>
             <div className='flex items-center gap-2'>
@@ -280,12 +311,6 @@ const Messages = () => {
               }</p>
           </div>
           <div className='flex items-center gap-2 flex-shrink-0'>
-            <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center'>
-              <i className="ri-vidicon-line text-gray-300 text-2xl"></i>
-            </button>
-            <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center'>
-              <i className="ri-phone-line text-gray-300 text-2xl"></i>
-            </button>
             <button className='hidden sm:flex items-center gap-2 px-4 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'>
               <i className="ri-user-line"></i>
               View Profile

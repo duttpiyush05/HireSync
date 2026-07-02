@@ -41,7 +41,7 @@ const clientSchema = new mongoose.Schema({
     required : true
   },
   profilePicture: {
-      type: String
+      type: String,
     },
     github: {
       type: String,
