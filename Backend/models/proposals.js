@@ -8,7 +8,6 @@ const proposalSchema = new mongoose.Schema({
   },
   portfolio: {
     filename: String,
-    fileUrl: String,
     fileType: String
   },
   askingAmt :{

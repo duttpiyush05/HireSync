@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const FreelancerProfile = () => {
+
+  const navigate = useNavigate()
+  const fileInputRef = useRef(null)
 
     const token = localStorage.getItem('token')
     const [freelancer, setFreelancer] = useState({
@@ -20,16 +24,18 @@ const FreelancerProfile = () => {
       hourlyRate: '',
       experienceLevel : '',
       github : '',
+      profilePicture:'',
       linkedin : ''
     }
   })
-    const [isloading, setisLoading] = useState(true)
-
-    const navigate = useNavigate()
+  
+  const [isloading, setisLoading] = useState(true)
   const xplevel = freelancer?.profile?.experienceLevel
   const [experienceLevel, setExperienceLevel] = useState(xplevel)
-  // const [skills, setSkills] = useState(['React', 'Node.js', 'TypeScript', 'AWS'])
   const [newSkill, setNewSkill] = useState('')
+  const [profilePreview, setProfilePreview] = useState(null)
+  const [profileFile, setProfileFile] = useState(null)
+
 
   const addSkill = () => {
 
@@ -54,8 +60,7 @@ const FreelancerProfile = () => {
 }));
   
   setNewSkill('');
-};
-
+}
 
   const removeSkill = (skillToRemove) => {
   setFreelancer({
@@ -66,8 +71,8 @@ const FreelancerProfile = () => {
         skill => skill !== skillToRemove
       )
     }
-  });
-};
+  })
+}
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -87,8 +92,8 @@ const FreelancerProfile = () => {
                 Authorization: `Bearer ${token}`
               }
             })
-          const data = response.data          
-          setFreelancer(data.freelancer)
+          const data = response.data                   
+          setFreelancer(data.user)
         }catch(err)
         {
           console.log(err.response?.data)
@@ -117,11 +122,61 @@ const FreelancerProfile = () => {
   )
   }
 
+
   const handleUpdateProfile = async () => {
+      const formData = new FormData()
   try {
+
+    formData.append(
+    "firstname",
+    freelancer.fullname.firstname
+      )
+
+      formData.append(
+          "lastname",
+          freelancer.fullname.lastname
+      )
+
+      formData.append(
+          "title",
+          freelancer.profile.title
+      )
+
+      formData.append(
+          "bio",
+          freelancer.profile.bio
+      )
+
+      formData.append(
+          "hourlyRate",
+          freelancer.profile.hourlyRate
+      )
+
+      formData.append(
+          "experienceLevel",
+          freelancer.profile.experienceLevel
+      )
+
+      formData.append(
+          "github",
+          freelancer.profile.github
+      )
+
+      formData.append(
+          "linkedin",
+          freelancer.profile.linkedin
+      )
+      if(profileFile)
+      {
+        formData.append('profilePic', profileFile)
+      }
+      formData.append(
+        "skills",
+        JSON.stringify(freelancer.profile.skills)
+      )
     const response = await axios.patch(
       `${import.meta.env.VITE_BASE_URL}/freelancers/updateprofile`,
-      freelancer,
+      formData,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -129,8 +184,7 @@ const FreelancerProfile = () => {
       }
     );
     
-    if(response.status===201)
-      alert("Profile Updated Successfully");
+      toast.success("Profile Updated Successfully");
   } catch (err) {
     console.log(err.response.data);
   }finally{
@@ -138,7 +192,20 @@ const FreelancerProfile = () => {
       setisLoading(false)
     }, 1000);
   }
-};
+  }
+
+  const handleProfilePic = (e) => {
+
+    const file = e.target.files[0]
+
+    if (!file) return
+
+    // for send to the backend
+    setProfileFile(file)
+
+    // This is only for Preview
+    setProfilePreview(URL.createObjectURL(file))
+  }   
 
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 sm:px-8 md:px-12 lg:px-16 py-8'>
@@ -178,11 +245,37 @@ const FreelancerProfile = () => {
               <div className='flex flex-col items-center gap-4'>
                 <div className='relative'>
                   <div className='w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-[#1e2230] overflow-hidden bg-[#19192f]'>
-                    <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
+
+                 {
+                    profilePreview || freelancer.profile.profilePicture ? (
+                        <img
+                            src={
+                                profilePreview
+                                    ? profilePreview
+                                    : `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer.profile.profilePicture}`
+                            }
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]"></div>
+                    )
+                }
+
                   </div>
-                  <button className='absolute bottom-1 right-1 w-7 h-7 rounded-full bg-[#6366F1] flex items-center justify-center hover:bg-[#4f52d9] transition-colors'>
-                    <i className="ri-camera-line text-xs text-white"></i>
+                  <button 
+                  type='button'
+                  onClick={()=> fileInputRef.current.click()}
+                  className='absolute bottom-1 right-1 w-10 h-10 rounded-full bg-[#6366F1] flex items-center justify-center hover:bg-[#4f52d9] transition-colors'>
+                    <i className="ri-camera-line text-md text-white"></i>
                   </button>
+                  <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/png,image/jpeg"
+                      hidden
+                      onChange={handleProfilePic}
+                  />
                 </div>
                 <p className='text-md text-gray-400 text-center leading-relaxed'>
                   Upload a high-quality JPG or PNG. Minimum recommended size is 400×400px.

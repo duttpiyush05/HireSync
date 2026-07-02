@@ -30,8 +30,7 @@ module.exports.createProposal = async (req, res, next) => {
     const proposal = await proposalModel.create({
       coverLetter,
       portfolio:req.file ? {
-        filename : req.file.originalname,
-        fileUrl : req.file.path,
+        filename : req.file.filename,
         fileType: req.file.mimetype
       } : undefined,
       estCompletion,

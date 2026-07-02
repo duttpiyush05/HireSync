@@ -2,11 +2,14 @@ import React from 'react'
 import { Link , useNavigate} from 'react-router-dom'
 import { useState, useContext } from 'react'
 import { NotificationCountContext } from '../src/context/NotificationContext'
+import axios from 'axios'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 const ClientNavbar = () => {
+  const [client, setClient] = useState()
   const navigate = useNavigate()
-
-    const {unreadCount, setUnreadCount} = useContext(NotificationCountContext)
+  const {unreadCount, setUnreadCount} = useContext(NotificationCountContext)
 
   const gotoprofile=()=>
   {
@@ -19,6 +22,31 @@ const ClientNavbar = () => {
     }
 
   const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(()=>
+  {
+    const getClient = async()=>
+    {
+      try
+      {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/clients/profile`,
+          {
+            headers : 
+            {
+              Authorization : `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        )
+        setClient(res?.data?.user)
+      }
+      catch(err)
+      {
+      }
+    }
+
+    getClient()
+  },[])
+
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
     <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
@@ -31,10 +59,9 @@ const ClientNavbar = () => {
                   {/* Desktop Nav */}
                   <ol className='hidden md:flex gap-6 lg:gap-[4rem] items-center font-semibold text-base lg:text-xl text-gray-300'>
                     <Link to="/my-jobs">My Jobs</Link>
-                    <Link to="/messages">Messages</Link>
                     <Link to="/post-job">Post Job</Link>
                     <Link to="/client/contracts">Contracts</Link>
-                    <Link to="/invoices">Invoices</Link>
+                    <Link to="/applicants">Applications</Link>
                   </ol>
                 </div>
       
@@ -60,7 +87,13 @@ const ClientNavbar = () => {
                   </i>
                   <div 
                   onClick={gotoprofile}
-                  className='bg-white w-10 h-10 sm:w-9 sm:h-9 rounded-full flex-shrink-0'></div>
+                  className='bg-white w-10 h-10 sm:w-9 sm:h-9 rounded-full flex-shrink-0'>
+
+                      <img 
+                      className="w-full h-full object-cover rounded-full"
+                      src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`} alt="profile" />
+
+                  </div>
       
                   {/* Hamburger — mobile/tablet only */}
                   <button
@@ -84,11 +117,10 @@ const ClientNavbar = () => {
                         placeholder='Search....'
                       />
                     </div>
-                    <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Find Work</Link>
                     <Link to="/my-jobs" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>My Jobs</Link>
-                    <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Messages</Link>
                     <Link to="/post-job" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Post Job</Link>
-                    <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Invoices</Link>
+                    <Link to="/client/contracts" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Contracts</Link>
+                    <Link to="/applicants" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Applications</Link>
                   </div>
                 )}
               </nav>

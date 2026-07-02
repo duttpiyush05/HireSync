@@ -44,7 +44,6 @@ module.exports.login = async (req, res, next) =>
   
   if(!error.isEmpty())
   {
-    console.log(error.array());
     return res.status(401).json({errors:error.array()})
   }
 
@@ -89,28 +88,54 @@ module.exports.getfreelancerbyId = async (req, res, next)=>
     res.status(201).json({freelancer})
 }
 
-module.exports.updateProfile = async(req, res, next)=>
-{
-  try {
-    const freelancer = await freelancerModel.findByIdAndUpdate(
-      req.user._id,
-      {
-        $set: req.body
-      },
-      {
-        new: true,
-        runValidators: true
-      }
-    );
+module.exports.updateProfile = async (req, res) => {
+  console.log(req.body);
+  
+    try {
 
-    res.status(200).json({
-      message: "Profile updated successfully",
-      freelancer
-    });
+        const updateData = {
+            "fullname.firstname": req.body.firstname,
+            "fullname.lastname": req.body.lastname,
 
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
-}
+            "profile.title": req.body.title,
+            "profile.bio": req.body.bio,
+            "profile.hourlyRate": req.body.hourlyRate,
+            "profile.experienceLevel": req.body.experienceLevel,
+            "profile.github": req.body.github,
+            "profile.linkedin": req.body.linkedin,
+        };
+
+        // Skills
+        if (req.body.skills) {
+            updateData["profile.skills"] = JSON.parse(req.body.skills);
+        }
+
+        // Profile Picture
+        if (req.file) {
+            updateData["profile.profilePicture"] = req.file.filename;
+        }
+
+        const freelancer = await freelancerModel.findByIdAndUpdate(
+            req.user._id,
+            {
+                $set: updateData
+            },
+            {
+                returnDocument: 'after',
+                runValidators: true
+            }
+        );
+
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            freelancer
+        });
+
+    } catch (err) {
+
+        return res.status(500).json({
+            message: err.message
+        });
+
+    }
+};
