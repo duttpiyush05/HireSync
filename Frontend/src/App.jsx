@@ -35,14 +35,14 @@ import Messages from '../pages/Messages/Message'
 import Dashboard from '../pages/Contracts/Dashboard'
 
 //context api
-import {NotificationCountContext} from './context/NotificationContext'
+import {NotificationsContext} from './context/NotificationContext'
 
 //socket
 import socket from './socket'
 
 function App() {
 
-  const {unreadCount, setUnreadCount}= useContext(NotificationCountContext)
+  const {unreadCount, setUnreadCount}= useContext(NotificationsContext)
         
   useEffect(()=>
   {

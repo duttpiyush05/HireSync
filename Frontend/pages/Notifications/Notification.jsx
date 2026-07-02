@@ -1,10 +1,7 @@
 import axios from 'axios'
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import React,{useEffect, useState, useContext} from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import { NotificationCountContext } from '../../src/context/NotificationContext'
-import { useContext } from 'react'
+import { NotificationsContext } from '../../src/context/NotificationContext'
 import { useNavigate } from 'react-router-dom'
 
 const notification = () => {
@@ -20,12 +17,18 @@ const notification = () => {
 
   const tabs = ['All', 'Projects', 'Payments', 'Messages']
 
-  const {unreadCount,setUnreadCount}= useContext(NotificationCountContext)
+  const {notifications,setNotifications,unreadCount,setUnreadCount}= useContext(NotificationsContext)
 
   const [allnotifications, setAllNotifications] = useState([])
    
   useEffect(()=>
   {
+    if(page===1)
+    {
+      setAllNotifications(notifications)
+      setisLoading(false)
+      return
+    }
     const fetchNotifications = async()=>
     {
       try
@@ -36,11 +39,12 @@ const notification = () => {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
           }
-        )        
-        console.log(response);
-        
+        )                
         const data = response.data
-        setAllNotifications(data?.notifications)   
+        setAllNotifications(prev => [
+        ...prev,
+        ...data.notifications
+          ]) 
         setContractId(data?.notifications?.contract_id)   
         setRole(data?.role)  
         setTotalNotifications(data?.countNotifications)
@@ -54,14 +58,11 @@ const notification = () => {
         setTimeout(()=>
          {
             setisLoading(false)
-         }, 0)
+         }, 1000)
       }
     }
     fetchNotifications()
-  },[page])
-
-  console.log(totalPages);
-  
+  },[page, notifications])  
 
    if(isloading)
     {
@@ -99,10 +100,7 @@ const notification = () => {
   const handleReviewContract = (contractId)=>
   {
     navigate(`/${role}/contracts/${contractId}`)
-  }
-
-  console.log(totalPages);
-  
+  } 
 
   return (
     <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>

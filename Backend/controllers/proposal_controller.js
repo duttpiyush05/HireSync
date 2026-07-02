@@ -2,6 +2,16 @@ const proposalModel = require('../models/proposals');
 const jobModel = require('../models/job_model')
 const contractModel = require("../models/contracts_model")
 const notificationModel = require("../models/notification_model")
+const { getIO } = require("../socket");
+const { userToSocket } = require("../onlineUsers");
+
+const emitNotification = (userId, notification) => { 
+  const io = getIO();
+  const receiverSocket = userToSocket.get(userId.toString());
+  if (receiverSocket) {
+    io.to(receiverSocket).emit("new-notification", { notification });
+  }
+}
 
 module.exports.createProposal = async (req, res, next) => {
   try
@@ -42,6 +52,8 @@ module.exports.createProposal = async (req, res, next) => {
       receivingAmt,
     })
 
+        const io = getIO();
+
     //forClient
     const notificationForClient = await notificationModel.create({
       user : job.client,
@@ -49,11 +61,17 @@ module.exports.createProposal = async (req, res, next) => {
       message : "You Received a new Proposal"
     })
 
+    emitNotification(job.client, notificationForClient)
+
+    // for freelancer
+
     const notificationForFreelancer = await notificationModel.create({
       user : req.user._id,
       title : "Proposal Submitted",
       message : "Proposal submitted Successfully"
     })
+
+    emitNotification(req.user._id, notificationForFreelancer)
 
     res.status(201).json({proposal})
   } catch(error)
@@ -120,23 +138,23 @@ module.exports.updateProposalStatus = async (req, res) => {
     if (!["accepted", "rejected"].includes(status)) {
       return res.status(400).json({
         message: "Invalid status"
-      });
+      })
     }
 
     const proposal = await proposalModel.findById(
       req.params.proposalId
-    );
+    )
 
     if (!proposal) {
       return res.status(404).json({
         message: "Proposal not found"
-      });
+      })
     }
 
     if (proposal.status === "accepted") {
       return res.status(400).json({
         message: "Proposal already accepted"
-      });
+      })
     }
 
     proposal.status = status;
@@ -144,11 +162,16 @@ module.exports.updateProposalStatus = async (req, res) => {
 
     if (status === "accepted") {
 
+          const io = getIO();
+
       const notificationForFreelancer = await notificationModel.create({
       user : proposal.freelancer,
       title : "Proposal Accepted",
       message : "Your Proposal Successfully Accepted"
+      
     })
+
+   emitNotification(proposal.freelancer, notificationForFreelancer)
 
       const existingContract = await contractModel.findOne({
         proposal: proposal._id
@@ -194,6 +217,8 @@ module.exports.updateProposalStatus = async (req, res) => {
       message : "A new Contract has been Created"
     })
 
+    emitNotification(proposal.freelancer, notificationContract)
+
       return res.status(200).json({
         message: "Proposal successfully accepted",
         proposal,
@@ -202,12 +227,15 @@ module.exports.updateProposalStatus = async (req, res) => {
         notificationForFreelancer
       });
     }
+        const io = getIO();
 
     const notificationForFreelancer = await notificationModel.create({
       user : proposal.freelancer,
       title : "Proposal Rejected",
       message : "Your Proposal was Rejected"
     })
+
+    emitNotification(proposal.freelancer, notificationForFreelancer)
 
     res.status(200).json({
       message: `Proposal successfully ${status}`,
@@ -220,7 +248,7 @@ module.exports.updateProposalStatus = async (req, res) => {
       message: error.message
     });
   }
-};
+}
 
 module.exports.getFreelancerProposal= async(req, res, next)=>
 { 

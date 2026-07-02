@@ -30,6 +30,8 @@ const ProposalSubmitted = () => {
         )
 
           const data = response.data
+          console.log(data);
+          
           const proposal = data.proposal
 
           const freelancer = data.proposal.freelancer
@@ -163,7 +165,7 @@ const ProposalSubmitted = () => {
         {/* Title */}
         <h1 className='text-3xl sm:text-4xl font-bold text-center mb-3'>Proposal Submitted!</h1>
         <p className='text-sm sm:text-base text-gray-400 text-center leading-relaxed max-w-md mb-10'>
-          Your application for the <span className='text-white font-medium'>{job.title}</span> position to <span className='text-blue-400 hover:underline cursor-pointer'>{job?.client?.fullname?.firstname}</span> has been successfully delivered. You're one step closer to your next great project.
+          Your application for the <span className='text-white font-medium'>{job?.title}</span> position to <span className='text-blue-400 hover:underline cursor-pointer'>{job?.client?.fullname?.firstname}</span> has been successfully delivered. You're one step closer to your next great project.
         </p>
 
         {/* Submission Summary */}
@@ -180,7 +182,7 @@ const ProposalSubmitted = () => {
             </div>
             <div>
               <p className='text-md text-gray-500 uppercase tracking-widest mb-1'>Estimated Timeline</p>
-              <p className='text-white font-bold text-lg'>{proposal.estCompletion}</p>
+              <p className='text-white font-bold text-lg'>{proposal?.estCompletion}</p>
             </div>
             <div>
               <p className='text-md text-gray-500 uppercase tracking-widest mb-1'>Connects Used</p>

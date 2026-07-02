@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import socket from '../src/socket'
 import { Outlet } from 'react-router-dom'
+import { NotificationsContext } from '../src/context/NotificationContext'
 
 const FreelancerAuth = ({children}) => {
 
@@ -11,6 +12,7 @@ const FreelancerAuth = ({children}) => {
   const {freelancer, setfreelancer} = useContext(FLDataContext)
   const [isloading, setisloading] = useState(true)
   const navigate = useNavigate()
+  const {setNotifications, setUnreadCount} = useContext(NotificationsContext)
 
   useEffect(()=>
   {
@@ -36,6 +38,23 @@ const FreelancerAuth = ({children}) => {
           const data = response.data          
           setfreelancer(data.user)
           setisloading(false)
+
+          const notificationRes = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/notifications`,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          }
+      )
+
+      setNotifications(notificationRes.data.notifications);
+
+      setUnreadCount(
+          notificationRes.data.notifications.filter(
+              n => !n.isRead
+          ).length
+      )
         }
       }
       catch(err)

@@ -35,9 +35,7 @@ const Messages = () => {
             headers: {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
-          })             
-          console.log(fetchContractDetails);
-                                
+          })                                             
           setRole(fetchContractDetails?.data?.role)
           setClient(fetchContractDetails?.data?.contract?.client)
           setFreelancer(fetchContractDetails?.data?.contract?.freelancer)
@@ -195,10 +193,7 @@ const Messages = () => {
     bottomRef.current?.scrollIntoView({
       behavior : 'smooth'
     })
-  },[messages])
-
-  console.log(freelancer);
-  
+  },[messages])  
 
   const handleTyping = (text)=>
   {
@@ -248,7 +243,7 @@ const Messages = () => {
       socket.off('user-typing')
       socket.off('stop-typing')
     }
-  },[receiverId])
+  },[receiverId]) 
   
   return (
     <div className='bg-[#0c1324] min-h-screen text-white flex flex-col lg:flex-row max-w-7xl mx-auto my-5'>
@@ -270,30 +265,27 @@ const Messages = () => {
           <div className='w-10 h-10 rounded-full overflow-hidden bg-[#19192f] border border-[#1e2230] flex-shrink-0'>
 
             {
-              role==='client' ? 
-              <img
+              role==='client' && (
+                <img
                             src={
                         `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`
                             }
                             alt="Profile"
                             className="w-full h-full object-cover"
                         />
-                    : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]"></div>
-                    )
+              )
+              
             }
             {
-              role==='freelancer' ? 
-              <img
+              role==='freelancer' && (
+                <img
                             src={
-                        `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profile?.profilePicture}`
+                        `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`
                             }
                             alt="Profile"
                             className="w-full h-full object-cover"
                         />
-                    : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]"></div>
-                    )
+              )
             }
 
           </div>

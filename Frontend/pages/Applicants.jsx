@@ -41,7 +41,6 @@ const Applicants = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         const data = response.data
-        console.log(data);
         setProposals(data.proposals)
         setTotalPages(data?.totalPages)
         setTotalProposals(data?.countProposals)

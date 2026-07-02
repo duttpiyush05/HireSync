@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useContext } from 'react'
-import { NotificationCountContext } from '../src/context/NotificationContext'
+import { NotificationsContext } from '../src/context/NotificationContext'
 import { useEffect } from 'react'
 import axios from 'axios'
 
@@ -10,7 +10,7 @@ const Navbar = () => {
     const [freelancer, setFreelancer] = useState()
   const navigate = useNavigate()
 
-  const {unreadCount, setUnreadCount} = useContext(NotificationCountContext)
+  const {unreadCount, setUnreadCount} = useContext(NotificationsContext)
 
   const gotoprofile=()=>
   {
@@ -35,7 +35,6 @@ const Navbar = () => {
             }
           }
         )
-        console.log(res);
         
         setFreelancer(res?.data?.user)
       }
@@ -47,7 +46,6 @@ const Navbar = () => {
     getFreelancer()
   },[])
 
-  console.log(`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profilePicture}`);
   
 
   return (
@@ -72,12 +70,7 @@ const Navbar = () => {
           <div className='flex items-center gap-3 sm:gap-4'>
             {/* Search — hidden on mobile */}
             <div className='relative hidden sm:block'>
-              <i className="ri-search-line ri-xl absolute left-8 top-1/2 -translate-y-1/2 text-gray-400"></i>
-              <input
-                className='h-[4rem] w-[12rem] lg:w-[em] pl-16 rounded-full bg-[#37374b] text-xl font-semibold '
-                type="text"
-                placeholder='Search....'
-              />
+              
             </div>
 
             <i

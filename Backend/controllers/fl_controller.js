@@ -88,9 +88,7 @@ module.exports.getfreelancerbyId = async (req, res, next)=>
     res.status(201).json({freelancer})
 }
 
-module.exports.updateProfile = async (req, res) => {
-  console.log(req.body);
-  
+module.exports.updateProfile = async (req, res) => { 
     try {
 
         const updateData = {

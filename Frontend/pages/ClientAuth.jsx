@@ -4,11 +4,15 @@ import {ClientDataContext} from '../src/context/ClientContext'
 import axios from 'axios'
 import socket from '../src/socket'
 import { Outlet } from 'react-router-dom'
+import { NotificationsContext } from '../src/context/NotificationContext'
+
 
 const ClientAuth = ({children}) => {
   const token = localStorage.getItem('token')
   const {client, setclient} = useContext(ClientDataContext)
   const [isloading, setisloading] = useState(true)
+
+  const {setNotifications, setUnreadCount} = useContext(NotificationsContext)
 
   const navigate = useNavigate()
 
@@ -36,6 +40,23 @@ const ClientAuth = ({children}) => {
             const data = response.data
             setclient(data.user)
             setisloading(false)
+
+            const notificationRes = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/notifications`,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          }
+      )
+
+      setNotifications(notificationRes.data.notifications);
+
+      setUnreadCount(
+          notificationRes.data.notifications.filter(
+              n => !n.isRead
+          ).length
+      )
         }
       }
       catch(err)
