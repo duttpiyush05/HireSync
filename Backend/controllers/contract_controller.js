@@ -1,5 +1,15 @@
 const contractModel = require('../models/contracts_model')
 const notificationModel = require('../models/notification_model')
+const { getIO } = require("../socket");
+const { userToSocket } = require("../onlineUsers");
+
+const emitNotification = (userId, notification) => { 
+  const io = getIO();
+  const receiverSocket = userToSocket.get(userId.toString());
+  if (receiverSocket) {
+    io.to(receiverSocket).emit("new-notification", { notification });
+  }
+}
 
 module.exports.getAllContracts = async(req, res) =>
 {
@@ -106,11 +116,15 @@ module.exports.completionRequest = async(req, res, next) =>
       contract_id : contractId,
     })
 
+    emitNotification(contract?.client, notificationForClient)
+
     const notificationForFreelancer = await notificationModel.create({
       user : contract?.freelancer,
       title :"Contract Completion Requested",
       message: "A new Contract Completion Requested"
     })
+
+    emitNotification(contract?.freelancer, notificationForFreelancer)
 
     res.status(201).json({contract, notificationForClient, notificationForFreelancer})
   }catch(error)
@@ -144,6 +158,8 @@ module.exports.markCompleted = async(req, res, next) =>
       message: "Contract Completion Request has been Approved by client and mark Completed Sucessfully"
     })
 
+    emitNotification(contract?.freelancer, notificationForFreelancer)
+
     res.status(201).json({contract, notificationForFreelancer})
   }catch(error)
   {
@@ -175,6 +191,8 @@ module.exports.markCancel = async(req, res, next) =>
       title :"Contract Cancelled",
       message: "Contract Cancelled by the Client"
     })
+
+    emitNotification(contract?.freelancer, notificationForFreelancer)
 
     res.status(201).json({contract, notificationForFreelancer})
   }catch(error)

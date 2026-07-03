@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 
 const ClientMyJobs = () => {
 
+  const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [jobs, setJobs] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
   const [totalJobs, setTotalJobs] = useState()
-  const [totalPages, setTotalPages] = useState()
+  const [totalPages, setTotalPages] = useState(1)
 
   const [searchTitle, setSearchTitle] = useState('')
   const [openFilter, setOpenFilter] = useState('All')
@@ -22,17 +23,22 @@ const ClientMyJobs = () => {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
-        const data = await response.data;
-        console.log(response);
+        const data = await response.data;        
         setJobs(data.jobs.jobs);
         setTotalJobs(data?.jobs?.totalJobs)
         setTotalPages(data?.jobs?.totalPages)
       } catch (error) {
         console.error('Error fetching jobs:', error);
       }
+      finally {
+        setTimeout(()=>
+        {
+          setIsLoading(false)
+        },2000)
+      }
     }
     fetchJobs();
-  }, [currentPage]);
+  }, [currentPage])
 
   const filteredJobs = jobs?.filter((job)=>
   {
@@ -41,8 +47,6 @@ const ClientMyJobs = () => {
   
     return (titleMatched && openMatched)
   })
-
-  console.log(filteredJobs);
     const [isloading, setisLoading] = useState(true)
     
        useEffect(()=>
@@ -57,7 +61,7 @@ const ClientMyJobs = () => {
           settingisLoading()
        },[])
     
-       if(isloading)
+       if(isLoading)
         {
           return (
             <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
@@ -81,8 +85,8 @@ const ClientMyJobs = () => {
   }
   
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
-      <div className='max-w-7xl mx-auto'>
+    <div className='bg-[#0c1324] min-h-screen text-white'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
         {/* HEADER */}
         <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6'>
@@ -142,6 +146,13 @@ const ClientMyJobs = () => {
 
           {/* Rows */}
           <div className='flex flex-col'>
+            {
+              filteredJobs.length === 0 && (
+                <div className='mt-5 mb-5 min-h-full flex justify-center items-center font-bold text-3xl text-gray-500'>
+                  No Jobs Found
+                </div>
+              )
+            }
             {filteredJobs.map((job, i) => (
               <div
                 key={i}
@@ -150,14 +161,14 @@ const ClientMyJobs = () => {
 
                 {/* Title */}
                 <div className='min-w-0'>
-                  <p className='text-lg font-bold text-white capitalize'>{job.title}</p>
-                  {/* <p className='text-xs text-gray-500 mt-0.5'>{job.ref}</p> */}
+                  <p className='text-2xl font-bold text-white capitalize'>{job.title}</p>
+                  <p className='text-sm text-gray-500 mt-0.5'>{job.category}</p>
                 </div>
 
                 {/* Date Posted */}
                 <div className='flex items-center justify-between md:block'>
                   <span className='text-xs text-gray-500 md:hidden'>Date Posted</span>
-                  <span className='text-md text-gray-300'>{new Date(job?.createdAt).toDateString()}</span>
+                  <span className='text-lg font-medium text-gray-300'>{new Date(job?.createdAt).toDateString()}</span>
                 </div>
 
                 {/* Status */}
@@ -176,38 +187,14 @@ const ClientMyJobs = () => {
                 {/* Proposals */}
                 <div className='flex items-center justify-between md:block'>
                   <span className='text-xs text-gray-500 md:hidden'>Proposals</span>
-                  <span className='text-sm text-gray-300'>{job.proposals}X</span>
+                  <span className='text-base text-gray-300 font-medium'>{job.proposalsCount}</span>
                 </div>
-
-                {/* Messages
-                <div className='flex items-center justify-between md:block'>
-                  <span className='text-xs text-gray-500 md:hidden'>Messages</span>
-                  {job.messages?.includes('new') && !job.messages.startsWith('0') ? (
-                    <span className='text-xs px-2 py-0.5 rounded-full bg-[#6366F1]/20 text-[#9ea3ff] font-medium'>{job.messages}</span>
-                  ) : (
-                    <span className='text-sm text-gray-500'>{job.messages}</span>
-                  )}
-                </div> */}
 
                 {/* Actions */}
                 <div className='flex items-center justify-end gap-2'>
-                  {/* <button className={`flex-1 md:flex-none px-4 h-9 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap ${
-                    job.hasPublish
-                      ? 'bg-[#6366F1] hover:bg-[#4f52d9] text-white'
-                      : 'border border-[#1e2230] hover:bg-[#19192f] text-gray-300'
-                  }`}>
-                    {job.action}
-                  </button> */}
-
-                  {/* {job.hasArchive ? (
-                    <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
-                      <i className="ri-refresh-line text-sm"></i>
-                    </button>
-                  ) : ( */}
                     <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
                       <i className="ri-pencil-line text-lg"></i>
                     </button>
-                  {/* } */}
 
                   <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
                     <i className="ri-more-2-fill text-lg"></i>
@@ -220,11 +207,11 @@ const ClientMyJobs = () => {
 
           {/* Pagination */}
           <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-t border-[#1e2230]'>
-            <p className='text-sm text-gray-500'>Showing {5*currentPage-4} to {Math.min(totalJobs, 5*currentPage)} of {totalJobs} active postings</p>
+            <p className='text-sm text-gray-500'>Showing {Math.max(0, Math.min(5 * currentPage - 4, totalJobs))} to {Math.min(totalJobs, currentPage * 5)} of {totalJobs} active postings</p>
 
             <div className='flex items-center gap-2'>
               <button
-              disabled={currentPage===1}
+              disabled={currentPage===1 || currentPage===0}
                 onClick={() => setCurrentPage(currentPage-1)}
                 className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
               >
@@ -246,47 +233,12 @@ const ClientMyJobs = () => {
               ))}
 
               <button
-                disabled={currentPage===totalPages}
+                disabled={currentPage===totalPages || totalPages===0}
                 onClick={() => setCurrentPage(currentPage+1)}
                 className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
               >
                 <i className="ri-arrow-right-s-line"></i>
               </button>
-            </div>
-          </div>
-
-        </div>
-
-        {/* STAT CARDS */}
-        <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
-
-          <div className='flex items-center gap-3 bg-[#111827] border border-[#1e2230] rounded-xl p-4'>
-            <div className='w-15 h-15 rounded-lg bg-[#19192f] flex items-center justify-center flex-shrink-0'>
-              <i className="ri-team-line text-gray-400"></i>
-            </div>
-            <div>
-              <p className='text-md text-gray-500 uppercase tracking-widest'>Total Applicants</p>
-              <p className='text-xl font-bold text-white'>1,248</p>
-            </div>
-          </div>
-
-          <div className='flex items-center gap-3 bg-[#111827] border border-[#1e2230] rounded-xl p-4'>
-            <div className='w-15 h-15 rounded-lg bg-[#19192f] flex items-center justify-center flex-shrink-0'>
-              <i className="ri-line-chart-line text-green-400"></i>
-            </div>
-            <div>
-              <p className='text-md text-gray-500 uppercase tracking-widest'>Active Interviews</p>
-              <p className='text-xl font-bold text-white'>14</p>
-            </div>
-          </div>
-
-          <div className='flex items-center gap-3 bg-[#111827] border border-[#1e2230] rounded-xl p-4'>
-            <div className='w-15 h-15 rounded-lg bg-[#19192f] flex items-center justify-center flex-shrink-0'>
-              <i className="ri-time-line text-amber-400"></i>
-            </div>
-            <div>
-              <p className='text-md text-gray-500 uppercase tracking-widest'>Avg. Time to Hire</p>
-              <p className='text-xl font-bold text-white'>12 Days</p>
             </div>
           </div>
 

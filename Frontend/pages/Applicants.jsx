@@ -82,7 +82,7 @@ const Applicants = () => {
   return (
     <div className='bg-[#0c1324] min-h-screen text-white'>
 
-      <div className='max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
         {pendingProposals.length === 0 ? (
           <div className='flex flex-col items-center justify-center min-h-[60vh] text-center'>
@@ -113,7 +113,7 @@ const Applicants = () => {
             </div>
 
             {/* PROPOSAL CARDS */}
-            <div className='grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6'>
+            <div className='grid grid-cols-1 xl:grid-cols-1 gap-5 sm:gap-6'>
               {proposals.map((job) => (
                 job.status === 'rejected' || job.status === 'accepted' ? null : (
 
@@ -128,7 +128,7 @@ const Applicants = () => {
                     {/* Header: Avatar + Name + Job */}
                     <div className='flex items-start gap-4 mb-5 relative z-10'>
                       <div className='w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden flex-shrink-0 border border-[#33336e]'>
-                      {job.freelancer.profile.profilePicture.length>0 ? (
+                      {job.freelancer.profile?.profilePicture ? (
                         <img
                           src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${job.freelancer.profile.profilePicture}`}
                           alt={`${job.freelancer.fullname.firstname} ${job.freelancer.fullname.lastname}`}

@@ -8,7 +8,8 @@ const Dashboard = () => {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalContracts, setTotalContracts] = useState()
-  const [totalPages, setTotalPages] = useState()
+  const [totalPages, setTotalPages] = useState(1)
+  const [isloading, setisLoading] = useState(true)
 
 
   const statusStyles = {
@@ -20,6 +21,8 @@ const Dashboard = () => {
   const [allcontracts, setallContracts] = useState([])
   const [contractId, setcontractId] = useState('')
   const [role, setRole] = useState("")
+  const [totalActives, setTotalActives] = useState(0)
+  const [totalBudget, setTotalBudget] = useState(0)
 
   useEffect(()=>
   {
@@ -43,14 +46,42 @@ const Dashboard = () => {
       }catch(err)
       {
         toast.error(err?.response?.data?.message);
+      }finally {
+        setTimeout(() => setisLoading(false), 1000)
       }
     }
     fetchContracts()
-  },[currentPage]) 
-  
+  },[currentPage])
+
+  useEffect(() => {
+  const activeCount = allcontracts.filter(
+    contract => contract.status === "active"
+  ).length
+
+    setTotalActives(activeCount);
+  }, [allcontracts])
+
+  useEffect(() => {
+  const budgetCount = allcontracts.forEach((c)=>
+  {
+    setTotalBudget(prev => prev+c?.budget)
+  })
+  }, [allcontracts])
+
+
+
+    if (isloading) {
+    return (
+      <div className="h-screen flex flex-col justify-center items-center bg-[#0c1324]">
+        <div className="w-16 h-16 border-4 border-[#6366F1] border-t-transparent rounded-full animate-spin"></div>
+        <h3 className='text-white block mt-5 font-bold text-xl'>Loading Contracts...</h3>
+      </div>
+    )
+  }
+
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-10 lg:px-auto py-8'>
-      <div className='max-w-7xl mx-auto'>
+    <div className='bg-[#0c1324] min-h-screen text-white'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
         {/* PAGE HEADER */}
         <div className='flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8'>
@@ -77,8 +108,8 @@ const Dashboard = () => {
             <div>
               <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Total Active</p>
               <div className='flex items-baseline gap-2'>
-                <p className='text-3xl md:text-4xl font-bold'>12</p>
-                <span className='text-md text-green-400 font-medium'>+2 this month</span>
+                <p className='text-3xl md:text-4xl font-bold'>{totalActives}</p>
+                {/* <span className='text-md text-green-400 font-medium'>+2 this month</span> */}
               </div>
             </div>
             <div className='w-15 h-15 rounded-lg bg-[#19192f] flex items-center justify-center flex-shrink-0'>
@@ -90,27 +121,14 @@ const Dashboard = () => {
             <div>
               <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Total Budgeted</p>
               <div className='flex items-baseline gap-2'>
-                <p className='text-2xl md:text-4xl font-bold'>$42.8k</p>
-                <span className='text-md text-gray-400 font-medium'>Paid: $18k</span>
+                <p className='text-2xl md:text-4xl font-bold'>₹{totalBudget}</p>
+                {/* <span className='text-md text-gray-400 font-medium'>Paid: $18k</span> */}
               </div>
             </div>
             <div className='w-15 h-15 rounded-lg bg-[#19192f] flex items-center justify-center flex-shrink-0'>
               <i className="ri-bank-card-line text-gray-400 text-3xl"></i>
             </div>
           </div>
-
-          {/* <div className='bg-[#111827] border border-[#1e2230] rounded-xl p-5 flex items-center justify-between'>
-            <div className='w-full'>
-              <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Success Rate</p>
-              <p className='text-2xl md:text-3xl font-bold mb-2'>98.4%</p>
-              <div className='w-full h-1.5 bg-[#19192f] rounded-full overflow-hidden'>
-                <div className='h-full bg-green-400 rounded-full' style={{ width: '98.4%' }}></div>
-              </div>
-            </div>
-            <div className='w-10 h-10 rounded-lg bg-[#19192f] flex items-center justify-center flex-shrink-0 ml-3'>
-              <i className="ri-shield-check-line text-gray-400 text-lg"></i>
-            </div>
-          </div> */}
 
         </div>
 
@@ -128,8 +146,6 @@ const Dashboard = () => {
       />
     </div>
   </div>
-
-  {/* Table header — desktop only */}
   <div className='hidden md:grid grid-cols-[2.5fr_1fr_1.5fr_1.2fr_1fr_0.9fr] gap-5 px-3 pb-3 border-b border-[#1e2230] text-md text-gray-500 uppercase tracking-widest font-semibold'>
     <span>Contract title</span>
     <span>Budget</span>
@@ -139,8 +155,15 @@ const Dashboard = () => {
     <span className='text-right px-10'>Action</span>
   </div>
 
-  {/* Rows */}
   <div className='flex flex-col'>
+    {
+      allcontracts.length===0 && (
+        <div className='mt-5 min-h-full flex justify-center items-center font-bold text-3xl text-gray-500'>
+          No Recent Contracts        
+      </div>
+      )
+    }
+
     {allcontracts.map((c, i) => (
       <div
         key={i}
@@ -207,7 +230,7 @@ const Dashboard = () => {
       
             <Link
               to={`/${role}/messages/${c?._id}`}
-              className='w-full md:w-auto inline-flex items-center justify-center px-4 py-5 h-9 bg-[#2b5099] rounded-lg border border-[#2e49ab] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 py-5 h-9 bg-[#4773ca] rounded-lg border border-[#2e49ab] hover:bg-[#10689b] transition-colors text-md font-medium text-gray-300'
             >
             Message
             </Link>
@@ -225,7 +248,7 @@ const Dashboard = () => {
           ) : (
             <Link
               to={role==="freelancer" ?`/freelancer/contracts/${c?._id}` :`/client/contracts/${c?._id}`}
-              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-[#005e56] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300 py-6'
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-[#26988e] hover:bg-[#007552] transition-colors text-md font-medium text-gray-300 py-6'
             >
               View Contract
             </Link>
@@ -238,11 +261,11 @@ const Dashboard = () => {
 
   {/* Pagination */}
   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-5 pt-4 border-t border-[#1e2230]'>
-    <p className='text-sm text-gray-500'>Showing {Math.min(5*currentPage-4)} to {Math.min(totalContracts, currentPage*5)} of {totalContracts} contracts</p>
+    <p className='text-sm text-gray-500'>Showing {Math.max(0, Math.min(5 * currentPage - 4, totalContracts))} to {Math.min(totalContracts, currentPage * 5)} of {totalContracts} contracts</p>
 
     <div className='flex items-center gap-2'>
       <button
-        disabled={currentPage===1}
+        disabled={currentPage===1 || currentPage===1}
         onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
         className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
       >
@@ -264,7 +287,7 @@ const Dashboard = () => {
       ))}
 
       <button
-      disabled={currentPage===totalPages}
+      disabled={currentPage===totalPages || totalPages===1}
         onClick={() => setCurrentPage(currentPage+1)}
         className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-gray-400'
       >

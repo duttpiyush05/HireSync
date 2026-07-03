@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Details = () => {
 
@@ -31,9 +32,7 @@ const Details = () => {
         setClient(contract?.client)        
         setFreelancer(contract?.freelancer)        
         setJob(contract?.job) 
-        setRole(response?.data?.role)
-        console.log(response);
-               
+        setRole(response?.data?.role)               
       }catch(err)
       {
         console.log(err.response?.data);
@@ -52,7 +51,14 @@ const Details = () => {
           Authorization : `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // console.log(response);
+      if(response.status===201)
+      {
+        toast.success("Completion Request Sent Successfully")
+        setContract(prev =>({
+          ...prev,
+          status : "requested_completion"
+        }))
+      }
       
     }catch(err)
     {
@@ -68,8 +74,14 @@ const Details = () => {
           Authorization : `Bearer ${localStorage.getItem('token')}`
         }
       })
-      // console.log(response);
-      
+      if(response.status===201)
+      {
+        toast.success("Contract Marked as Completed")
+        setContract(prev =>({
+          ...prev,
+          status : "completed"
+        }))
+      }
     }catch(err)
     {
       console.log(err?.response?.data);      
@@ -85,7 +97,14 @@ const Details = () => {
           Authorization :  `Bearer ${localStorage.getItem('token')}`
         }
       })
-      console.log(response);
+      if(response.status===201)
+      {
+        toast.success("Contract Cancelled Successfully")
+        setContract(prev =>({
+          ...prev,
+          status : "cancelled"
+        }))
+      }
       
     }catch(err)
     {
@@ -143,7 +162,7 @@ const Details = () => {
                 </div>
                 <div>
                   <p className='text-lg text-gray-500 uppercase tracking-widest mb-2'>Total Budget</p>
-                  <p className='text-white font-semibold text-md md:text-lg'>${contract?.budget}</p>
+                  <p className='text-white font-semibold text-md md:text-lg'>₹{contract?.budget}</p>
                 </div>
 
                 <div>
@@ -200,7 +219,7 @@ const Details = () => {
               <div className='flex gap-10'>
                 <div>
                   <p className='text-lg text-gray-500 uppercase tracking-widest mb-2'>Asking Amount</p>
-                  <p className='text-green-400 font-bold text-lg'>${contract?.budget}</p>
+                  <p className='text-green-400 font-bold text-lg'>₹{contract?.budget}</p>
                 </div>
                 <div>
                   <p className='text-lg text-gray-500 uppercase tracking-widest mb-2'>Timeline</p>
@@ -330,22 +349,6 @@ const Details = () => {
               <div className='text-center pt-4 border-t border-[#1e2230]'>
                 <p className='text-md text-gray-400 mb-1'>Need help with this contract?</p>
                 <button className='text-md text-[#6366F1] hover:underline font-medium'>Contact Support</button>
-              </div>
-            </div>
-
-            {/* Milestone Progress */}
-            <div className='bg-[#111827] border border-[#1e2230] rounded-xl overflow-hidden'>
-              <div className='relative w-full h-50 bg-[#0c1324]'>
-                <div className='w-full h-full bg-gradient-to-br from-[#1a2540] to-[#0c1324]'></div>
-                <div className='absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/60 to-transparent'>
-                  <div className='flex items-center justify-between mb-2'>
-                    <span className='text-md font-medium text-white'>Milestone Progress</span>
-                    <span className='text-md font-bold text-white'>65%</span>
-                  </div>
-                  <div className='w-full h-3.5 bg-white/20 rounded-full overflow-hidden'>
-                    <div className='h-full bg-[#6366F1] rounded-full' style={{ width: '65%' }}></div>
-                  </div>
-                </div>
               </div>
             </div>
 

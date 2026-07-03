@@ -133,9 +133,11 @@ const Review = ({jobData, setjobData}) => {
 
         </div>
 
-        <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[20rem] col-span-[2] row-span-2'>
-        <h3 className='font-semibold text-2xl text-blue-400 pb-[1rem]'>Job Description</h3>
-          <h3 className=' text-xl'>{jobData.description}</h3>
+        <div className='rounded-lg shadow-2xl bg-[#151b2d] p-[2rem] h-auto min-h-[20rem] max-w-full col-span-[2] row-span-2 overflow-hidden pr-[2rem]'>
+        <h3 className='font-semibold text-2xl text-blue-400 pb-[1rem] break-words'>Job Description</h3>
+          <p className='text-xl text-gray-100 leading-relaxed line-clamp-6 break-words whitespace-normal'>
+            {jobData.description}
+          </p>
 
         </div>
 

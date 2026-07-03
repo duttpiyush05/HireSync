@@ -4,7 +4,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { NotificationsContext } from '../../src/context/NotificationContext'
 import { useNavigate } from 'react-router-dom'
 
-const notification = () => {
+const Notification = () => {
   const [isloading, setisLoading] = useState(true)
   const navigate = useNavigate()
   const [contractId, setContractId] = useState("")
@@ -20,7 +20,27 @@ const notification = () => {
   const {notifications,setNotifications,unreadCount,setUnreadCount}= useContext(NotificationsContext)
 
   const [allnotifications, setAllNotifications] = useState([])
-   
+
+  const markAllAsRead = async()=>
+  {
+    try{
+      const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/notifications/markAllasRead`,{},
+        {
+          headers : {
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      )
+      const data = response.data
+      setNotifications(data?.notifications)
+      setAllNotifications(data?.notifications)
+      setUnreadCount(0)
+    }catch(err)
+    {
+      console.log(err.response.data);      
+    }
+  }
+
   useEffect(()=>
   {
     if(page===1)
@@ -41,10 +61,11 @@ const notification = () => {
           }
         )                
         const data = response.data
+        console.log(data);        
         setAllNotifications(prev => [
-        ...prev,
-        ...data.notifications
-          ]) 
+            ...prev,
+            ...data.notifications
+        ]);  
         setContractId(data?.notifications?.contract_id)   
         setRole(data?.role)  
         setTotalNotifications(data?.countNotifications)
@@ -64,6 +85,18 @@ const notification = () => {
     fetchNotifications()
   },[page, notifications])  
 
+  useEffect(()=>
+  {
+    if(unreadCount>0)
+    {
+      markAllAsRead()
+    }
+  },[])
+
+  const handleReviewContract = (contractId)=>
+  {
+    navigate(`/client/contracts/${contractId}`)
+  } 
    if(isloading)
     {
       return (
@@ -78,33 +111,15 @@ const notification = () => {
         </div>
       )
     }
-  const markAllAsRead = async()=>
-  {
-    try{
-      const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/notifications/markAllasRead`,{},
-        {
-          headers : {
-            Authorization : `Bearer ${localStorage.getItem('token')}`
-          }
-        }
-      )
-      const data = response.data
-      setAllNotifications(data?.notifications)
-      setUnreadCount(0)
-    }catch(err)
-    {
-      console.log(err.response.data);      
-    }
-  }
 
-  const handleReviewContract = (contractId)=>
-  {
-    navigate(`/${role}/contracts/${contractId}`)
-  } 
+    // console.log(page);
+    console.log(totalPages);
+    // console.log(totalNotifications);
+    
 
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
-      <div className='max-w-7xl mx-auto'>
+    <div className='bg-[#0c1324] min-h-screen text-white'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
         {/* PAGE HEADER */}
         <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6 mt-5'>
@@ -112,12 +127,6 @@ const notification = () => {
             <h1 className='text-2xl md:text-4xl font-bold'>Notifications</h1>
             <p className='text-md text-gray-400 mt-1'>Stay updated with your latest project activity and earnings.</p>
           </div>
-          <button 
-          onClick={markAllAsRead}
-          className='flex items-center gap-2 text-lg text-[#6366F1] font-semibold flex-shrink-0 whitespace-nowrap border border-[#141c3b] hover:border-[#33336e] p-2 rounded-lg cursor-pointer'>
-            <i className="ri-check-double-line"></i>
-            Mark all as read
-          </button>
         </div>
 
         {/* TABS */}
@@ -184,33 +193,20 @@ const notification = () => {
 ))}
         </div>
 
-        {/* LOAD MORE */}
-        {/* <div className='flex justify-center mt-6'>
-          <button className='px-6 h-20 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-lg font-medium text-gray-300'>
-            Load earlier notifications
-          </button>
-        </div> */}
-
       </div>
 
       <div 
         className=
-        {!allnotifications?.length==0 ?`flex justify-between px-100 py-10`:'hidden'}>
+        {allnotifications.length>0 ?`flex justify-center items-center px-100 py-10 `:'hidden'}>
         <button 
-        disabled={page===1}
-        onClick={()=> setPage(page-1)}
-        className='px-10 py-3 text-lg bg-[#262634] rounded-md cursor-pointer'>
-          Previous
-        </button>
-        <button
         disabled={page===totalPages}
         onClick={()=> setPage(page+1)}
-         className='px-10 py-3 text-lg bg-blue-500 rounded-md cursor-pointer'>
-          More
+        className='px-15 py-5 text-lg bg-[#262634] rounded-md cursor-pointer font-semibold'>
+          Load More
         </button>
         </div>
     </div>
   )
 }
 
-export default notification
+export default Notification

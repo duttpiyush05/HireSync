@@ -9,16 +9,47 @@ exports.createJob = async (jobData) => {
 module.exports.getMyJobs = async (req) => {  
   const clientId = req?.user?._id
   const page = Number(req?.query?.page)||1
-  console.log("Curr" , page);
   
   const limit = 5
   try {
-    const jobs = await jobModel.
-    find({ client: clientId }).
-    sort({ createdAt: -1 }).
-    skip((page-1)*limit).
-    limit(limit)
-
+    const jobs = await jobModel.aggregate([
+  {
+    $match: {
+      client: clientId
+    }
+  },
+  {
+    $lookup: {
+      from: "proposals",
+      localField: "_id",
+      foreignField: "job",
+      as: "proposals"
+    }
+  },
+  {
+    $addFields: {
+      proposalsCount: {
+        $size: "$proposals"
+      }
+    }
+  },
+  {
+    $project: {
+      proposals: 0   // Remove the proposals array
+    }
+  },
+  {
+    $sort: {
+      createdAt: -1
+    }
+  },
+  {
+    $skip: (page - 1) * limit
+  },
+  {
+    $limit: limit
+  }
+]);
     const totalJobs = await jobModel.
     countDocuments({ client: clientId })
     return {jobs,

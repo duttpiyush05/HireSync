@@ -3,6 +3,11 @@ const clientServices = require('../services/client_services')
 const blacklistTokenModel = require('../models/blackListTokenModel')
 const {validationResult} = require('express-validator')
 // const clientServices = require('../services/client_services')
+const jobModel = require('../models/job_model')
+const proposalModel = require('../models/proposals')
+const contractModel = require('../models/contracts_model')
+const notificationModel = require('../models/notification_model')
+const { path } = require('../app')
 
 module.exports.register = async (req, res, next) =>
 {
@@ -73,9 +78,46 @@ module.exports.logout = async (req, res, next) =>
   res.status(200).json({message : "Logout Successfully"})
 }
 
-module.exports.getprofile = (req, res, next) =>
+module.exports.getprofile = async (req, res, next) =>
 {
-  res.status(200).json({user : req.user})
+  const activeJobs = await jobModel.countDocuments({client : req.user._id, status : "open"})
+  const activeContractsCount = await contractModel.countDocuments({client : req.user._id, status : "active"})
+  const activeContracts = await contractModel.find({client : req.user._id, status : "active"}).populate('freelancer').populate('job').populate('proposal').sort({createdAt: -1}).limit(3)
+  const completedContracts = await contractModel.countDocuments({client : req.user._id, status : "completed"})
+  const pendingProposals = await proposalModel.find({client : req.user._id, status : "pending"}).sort({createdAt: -1}).limit(3).
+  populate('job').
+  populate({
+    path: 'freelancer',
+    select : 'fullname profile.profilePicture'
+  })
+  const totalSpent = await contractModel.aggregate([
+    {
+      $match: {
+        client: req.user._id,
+        status: "completed"
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        totalAmount: { $sum: "$budget" }
+      }
+    }
+  ])
+  const notifications = await notificationModel.
+  find({user: req.user._id}).
+  sort({createdAt: -1}).
+  limit(3).
+  populate({
+    path: 'contract_id',
+    populate: [
+      {
+        path: 'freelancer',
+      }
+    ]
+  })
+  const spent = totalSpent.length > 0 ? totalSpent[0].totalAmount : 0
+  res.status(200).json({user : req.user, activeJobs,activeContractsCount, pendingProposals, activeContracts, completedContracts, spent, notifications})
 }
 
 module.exports.getClientbyId = async (req, res, next) =>
@@ -129,4 +171,3 @@ module.exports.updateProfile = async(req, res, next) =>{
       });
     }
 }
-

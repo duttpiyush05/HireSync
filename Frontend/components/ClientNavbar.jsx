@@ -43,7 +43,6 @@ const ClientNavbar = () => {
       {
       }
     }
-
     getClient()
   },[])
 
@@ -82,7 +81,7 @@ const ClientNavbar = () => {
                   </i>
                   <div 
                   onClick={gotoprofile}
-                  className='bg-white w-10 h-10 sm:w-9 sm:h-9 rounded-full flex-shrink-0'>
+                  className='bg-white w-10 h-10 sm:w-9 sm:h-9 rounded-full flex-shrink-0 cursor-pointer overflow-hidden'>
 
                       <img 
                       className="w-full h-full object-cover rounded-full"

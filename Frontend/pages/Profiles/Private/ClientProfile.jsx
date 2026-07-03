@@ -166,8 +166,8 @@ const ClientProfile = () => {
   // )
   // }  
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
-      <div className='max-w-6xl mx-auto'>
+    <div className='bg-[#0c1324] min-h-screen text-white'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
         {/* PROFILE HEADER */}
         <div className='flex items-start gap-4 mb-8'>
