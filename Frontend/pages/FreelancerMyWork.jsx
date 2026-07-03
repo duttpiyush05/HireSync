@@ -30,44 +30,14 @@ const FreelancerMyWork = () => {
     fetchJobs()
   },[])
 
-  // const jobs = [
-  //   {
-  //     icon: 'ri-code-s-slash-line',
-  //     iconBg: 'bg-[#33336e] text-[#9ea3ff]',
-  //     title: 'Senior React Developer',
-  //     client: 'TechFlow Systems',
-  //     date: 'Oct 24, 2024',
-  //     status: 'Interviewing',
-  //     action: 'View Proposal',
-  //   },
-  //   {
-  //     icon: 'ri-tools-line',
-  //     iconBg: 'bg-amber-900/40 text-amber-400',
-  //     title: 'UX Architect for Fintech App',
-  //     client: 'Nexa Finance',
-  //     date: 'Oct 22, 2024',
-  //     status: 'Pending',
-  //     action: 'View Proposal',
-  //   },
-  //   {
-  //     icon: 'ri-compasses-2-line',
-  //     iconBg: 'bg-[#19192f] text-gray-400',
-  //     title: 'Cloud Infrastructure Audit',
-  //     client: 'CloudScale Inc',
-  //     date: 'Oct 18, 2024',
-  //     status: 'Declined',
-  //     action: 'View Details',
-  //   },
-  // ]
-
   const statusStyles = {
     Interviewing: 'bg-green-500/20 text-green-400',
     Pending: 'bg-gray-500/20 text-gray-300',
     Declined: 'bg-red-500/20 text-red-400',
   }
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white px-4 md:px-8 lg:px-16 py-8'>
-      <div className='max-w-7xl mx-auto'>
+    <div className='bg-[#0c1324] min-h-screen text-white'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
         {/* HEADER */}
         <div className='flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6'>

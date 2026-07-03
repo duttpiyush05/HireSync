@@ -28,6 +28,8 @@ const ClientDashboard = () => {
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/clients/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         })        
+        console.log();
+        
         setclient(response.data.user)
         setClientId(response.data.user._id)
         setActiveContracts(response.data.activeContracts)

@@ -1,4 +1,8 @@
 const freelancerModel = require('../models/fl_model')
+const contractModel = require('../models/contracts_model')
+const notificationModel = require('../models/notification_model')
+const jobModel = require('../models/job_model')
+const proposalModel = require('../models/proposals')
 const blacklistTokenModel = require('../models/blackListTokenModel')
 const {validationResult} = require('express-validator')
 const freelancerServices = require('../services/freelancer_services')
@@ -76,9 +80,61 @@ module.exports.logout = async (req, res, next)=>
   res.status(200).json({message : "Logout Successfully"})
 }
 
-module.exports.getprofile = (req, res, next)=>
+module.exports.getprofile = async(req, res, next)=>
 {
-  res.status(200).json({user : req.user})
+  const activeContractsCount = await contractModel.
+  countDocuments({freelancer : req.user._id, status : "active"})
+    const activeContracts = await contractModel.find({freelancer : req.user._id, status : "active"}).populate('client').populate('job').populate('proposal').sort({createdAt: -1}).limit(3).
+  populate('freelancer')
+    const pendingProposalsCount = await proposalModel.countDocuments({freelancer:req.user._id, status:'pending'})
+    const completedContractsCount = await contractModel.countDocuments({freelancer:req.user._id, status:'completed'})
+    const pendingProposals = await proposalModel.find({freelancer:req.user._id, status:'pending'}).
+    populate({
+      path:  'client',
+      select: 'fullname companyProfile.companyName'
+    }).populate({
+      path : 'job',
+      select : 'title'
+    })
+    const totalSpent = await contractModel.aggregate([
+        {
+          $match: {
+            freelancer: req.user._id,
+            status: "completed"
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalAmount: { $sum: "$budget" }
+          }
+        }
+      ])
+      const notifications = await notificationModel.
+        find({user: req.user._id}).
+        sort({createdAt: -1}).
+        limit(3).
+        populate({
+          path: 'contract_id',
+          populate: [
+            {
+              path: 'client',
+            }
+          ]
+        })
+      const spent = totalSpent.length > 0 ? totalSpent[0].totalAmount : 0
+
+      const jobs = await jobModel.find({
+        status:'open'
+      }).
+      sort({createdAt : -1}).
+      limit(3).
+      populate({
+        path:'client',
+        select:'companyProfile.companyName'
+      })
+
+  res.status(200).json({activeContractsCount, activeContracts,pendingProposalsCount,pendingProposals,completedContractsCount, spent, notifications, jobs, user : req.user})
 }
 module.exports.getfreelancerbyId = async (req, res, next)=>
 {

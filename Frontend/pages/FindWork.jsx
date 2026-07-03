@@ -75,11 +75,11 @@ const FindWork = () => {
   }
 
   return (
-    <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
+    <div className='bg-[#0c1324] min-h-screen text-white'>
 
-      <div className='h-full w-full max-w-[1600px] px-4 sm:px-6 lg:px-10'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
 
-        <h1 className='text-2xl sm:text-3xl font-bold p-1 mt-8 sm:mt-10'>Available Jobs</h1>
+        <h1 className='text-2xl sm:text-4xl font-bold p-1 '>Available Jobs</h1>
 
         {/* FILTER BAR */}
         <div className='flex flex-col lg:flex-row gap-3 mt-5 mb-6'>
