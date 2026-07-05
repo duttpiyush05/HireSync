@@ -307,9 +307,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact & Support
 
 **Developer**: Piyush Dutt  
-**Email**: piyush.dutt@example.com  
-**GitHub**: [@piyushdutt](https://github.com/yourgithub)  
-**LinkedIn**: [Piyush Dutt](https://linkedin.com/in/piyushdutt)
+**Email**: dutt.piyush286@gmail.com  
+**GitHub**: (https://github.com/yourgithub)  
+**LinkedIn**: ([https://linkedin.com/in/piyushdutt](https://www.linkedin.com/in/piyush-dutt-309128324/))
 
 For questions, issues, or suggestions:
 - Open an issue on GitHub
@@ -328,7 +328,7 @@ For questions, issues, or suggestions:
 ---
 
 **Project Status**: Active Development  
-**Last Updated**: June 2026  
+**Last Updated**: July 2026  
 **Version**: 1.0.0
 
 ---
