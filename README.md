@@ -308,8 +308,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Developer**: Piyush Dutt  
 **Email**: dutt.piyush286@gmail.com  
-**GitHub**: (https://github.com/yourgithub)  
-**LinkedIn**: ([https://linkedin.com/in/piyushdutt](https://www.linkedin.com/in/piyush-dutt-309128324/))
+**GitHub**: https://github.com/duttpiyush05
+**LinkedIn**: https://www.linkedin.com/in/piyush-dutt-309128324
 
 For questions, issues, or suggestions:
 - Open an issue on GitHub
