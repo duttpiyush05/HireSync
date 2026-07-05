@@ -20,7 +20,7 @@ const Review = () => {
         })
 
         const data = response?.data
-        setRole(data?.role)
+        setRole(data?.role)        
         if (data?.role === 'freelancer') {
           setReviewer(data?.contract?.freelancer)
           setReviewee(data?.contract?.client)
@@ -30,7 +30,7 @@ const Review = () => {
           setReviewee(data?.contract?.freelancer)
         }
       } catch (err) {
-        console.log(err?.response?.data)
+        toast.error(err?.response?.data?.message)
       }
     }
 
@@ -105,6 +105,20 @@ const Review = () => {
             {/* Reviewee Info */}
             <div className='bg-[#0c1324] border border-[#1e2230] rounded-xl p-5 flex flex-col items-center mb-6'>
               <div className='w-25 h-25 rounded-full overflow-hidden bg-[#19192f] border border-[#1e2230] mb-3'>
+
+                {
+                  (role==='freelancer' && reviewee?.profilePicture) ? 
+                    <img 
+                    className='w-full h-full object-cover'
+                    src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${reviewee?.profilePicture}`} alt="Profile" />
+                    :
+                   (role==='client' && reviewee?.profile?.profilePicture) ? 
+                    <img 
+                    className='w-full h-full object-cover'
+                    src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${reviewee?.profile?.profilePicture}`} alt="Profile" />
+                    :
+                    <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
+                }
                 <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
               </div>
               <h2 className='text-lg font-bold'>{reviewee?.fullname?.firstname} {reviewee?.fullname?.lastname}</h2>

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect} from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import {formatDistanceToNow} from 'date-fns'
 
 const ProposalSubmitted = () => {
 
@@ -14,6 +15,7 @@ const ProposalSubmitted = () => {
   const [freelancerId, setFreelanerId] = useState('')
   const [clientId, setClientId] = useState('')
   const [client, setClient] = useState('')
+  const [recommend, setRecommend] = useState([])
 
   useEffect(() =>{
     const fetchProposal = async ()=>
@@ -29,9 +31,7 @@ const ProposalSubmitted = () => {
           }
         )
 
-          const data = response.data
-          console.log(data);
-          
+          const data = response.data          
           const proposal = data.proposal
 
           const freelancer = data.proposal.freelancer
@@ -42,6 +42,7 @@ const ProposalSubmitted = () => {
           setClientId(client)
           setJobId(job)
           setProposal(proposal)
+          setRecommend(data?.jobs)
         
       }catch(err){
     } finally
@@ -60,9 +61,7 @@ const ProposalSubmitted = () => {
     const fetchClient = async ()=>
     {
       try
-      {
-        console.log(`${import.meta.env.VITE_BASE_URL}/jobs/${jobId}`);
-        
+      {        
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs/${jobId}`,
           {
             headers : {
@@ -80,6 +79,7 @@ const ProposalSubmitted = () => {
     }
     fetchClient()
   }, [jobId])
+
   useEffect(() => {
     if(!jobId ) return 
     const fetchJob = async ()=>
@@ -119,33 +119,19 @@ const ProposalSubmitted = () => {
       </div>
     )
   }
+    const recommendations = []
 
-  const recommendations = [
-    {
-      icon: 'ri-server-line',
+  if(recommend && recommend.length > 0) {
+    recommendations.push(...recommend.map((recommend, index) => ({
+      icon: 'ri-file-list-3-line',
       tag: 'NEW',
-      title: 'Backend Infrastructure Architect',
-      desc: 'Scale the core cloud services for a leading fintech platform using Rust and AWS.',
-      rate: '$120/hr',
-      posted: 'Posted 2h ago',
-    },
-    {
-      icon: 'ri-layout-line',
-      tag: null,
-      title: 'UI/UX System Lead',
-      desc: 'Develop a comprehensive design system for a global logistics enterprise application.',
-      rate: '$95/hr',
-      posted: 'Posted 5h ago',
-    },
-    {
-      icon: 'ri-code-box-line',
-      tag: null,
-      title: 'Machine Learning Research Engineer',
-      desc: 'Fine-tune LLMs for specific healthcare documentation use cases with Python.',
-      rate: '$150/hr',
-      posted: 'Posted 1d ago',
-    },
-  ]
+      title: `${recommend?.title}`,
+      desc: `${recommend?.description}`,
+      rate: `₹${recommend?.budget?.maxbudget}`,
+      posted: recommend.createdAt ? formatDistanceToNow(new Date(recommend.createdAt), { addSuffix: true }) : '',
+    })))
+  }
+
   return (
      <div className='bg-[#0c1324] min-h-screen flex justify-center text-white'>
 
@@ -231,7 +217,7 @@ const ProposalSubmitted = () => {
               <p className='text-2xl font-semibold text-white'>Recommended for you</p>
               <p className='text-md text-gray-400'>Based on your recent application</p>
             </div>
-            <Link to='/' className='text-md text-[#6366F1] hover:underline flex items-center gap-1 mt-1'>
+            <Link to='/find-work' className='text-md text-[#6366F1] hover:underline flex items-center gap-1 mt-1'>
               View all recommendations
               <i className="ri-arrow-right-line"></i>
             </Link>
@@ -241,7 +227,7 @@ const ProposalSubmitted = () => {
             {recommendations.map((job, i) => (
               <div
                 key={i}
-                className='bg-[#111827] border border-[#1e2230] rounded-xl p-5 cursor-pointer hover:border-[#33336e] transition-colors flex flex-col gap-3'
+                className='bg-[#111827] border border-[#1e2230] rounded-xl p-5 cursor-pointer hover:border-[#33336e] transition-colors flex flex-col gap-3 '
               >
                 <div className='flex items-center justify-between'>
                   <div className='w-8 h-8 rounded-lg bg-[#19192f] border border-[#1e2230] flex items-center justify-center'>
@@ -253,7 +239,7 @@ const ProposalSubmitted = () => {
                     </span>
                   )}
                 </div>
-                <div>
+                <div className='max-h-50 overflow-hidden '>
                   <h3 className='text-xl font-bold text-white mb-1 leading-snug'>{job.title}</h3>
                   <p className='text-md text-gray-400 leading-relaxed'>{job.desc}</p>
                 </div>

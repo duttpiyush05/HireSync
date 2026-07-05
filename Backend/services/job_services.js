@@ -35,7 +35,7 @@ module.exports.getMyJobs = async (req) => {
   },
   {
     $project: {
-      proposals: 0   // Remove the proposals array
+      proposals: 0 
     }
   },
   {
@@ -43,13 +43,7 @@ module.exports.getMyJobs = async (req) => {
       createdAt: -1
     }
   },
-  {
-    $skip: (page - 1) * limit
-  },
-  {
-    $limit: limit
-  }
-]);
+  ]);
     const totalJobs = await jobModel.
     countDocuments({ client: clientId })
     return {jobs,
@@ -90,9 +84,40 @@ module.exports.getAllJobs = async (id, page) => {
 
 module.exports.getJobsbyId = async (jobId) => {
   try
-  {    const job = await jobModel.findById(jobId).populate('client', 'fullname');
+  {    
+    const job = await jobModel.findById(jobId).populate('client', 'fullname');
     return job;
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     throw error;
   }   
+}
+
+module.exports.getJobInfo = async(req, res, next)=>
+{
+  const jobId = req.params.jobId
+  const role = req.role
+  
+  try
+  {
+    const [job, proposalsCount] = await Promise.all([
+        jobModel.findById(jobId).populate({
+          path : 'client',
+          select : 'fullname email'
+        })
+        ,
+        proposalModel.countDocuments({ job: jobId })
+      ]);
+
+      const result = {
+        ...job?.toObject(),
+        proposalsCount
+      };
+    return {job, proposalsCount, role}
+  }
+  catch(err)
+  {
+    throw(err)
+  }
 }

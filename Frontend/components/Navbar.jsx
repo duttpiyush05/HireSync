@@ -4,6 +4,7 @@ import { useState, useContext } from 'react'
 import { NotificationsContext } from '../src/context/NotificationContext'
 import { useEffect } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -34,89 +35,114 @@ const Navbar = () => {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
           }
-        )
-        
+        )        
         setFreelancer(res?.data?.user)
       }
       catch(err)
       {
-        
+        toast.error(err?.res?.data?.message)
       }
     }
     getFreelancer()
   },[])
 
-  
-
   return (
     <div className='bg-[#0c1324] flex justify-center text-white'>
-    <div className='h-full w-full max-w-[1700px] px-4 sm:px-6 lg:px-10'>
-      <nav className='w-full border-[#0013be] min-h-[7rem] flex border-b-4 justify-between items-center py-3 relative sticky top-0 z-50 bg-[#15152a] rounded-b p-6'>
+    <div className='h-full w-full max-w-[1900px] px-4 sm:px-6 lg:px-20'>
+      <nav className='w-full min-h-[5rem] flex justify-between items-center py-3 relative sticky top-0 z-50 bg-[#111827]/80 backdrop-blur-xl border border-[#1e2230] rounded-2xl mt-4 px-4 sm:px-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)]'>
 
           {/* Left: Logo + Nav Links */}
-          <div className='flex items-center gap-4 flex-1'>
-            <Link to='/' className='text-2xl sm:text-3xl font-bold mr-2 sm:mr-5 whitespace-nowrap '>HireSync</Link>
+          <div className='flex items-center gap-4 sm:gap-8 flex-1'>
+            <Link
+              to='/'
+              className='text-xl sm:text-2xl lg:text-3xl font-extrabold whitespace-nowrap'
+            >
+              HireSync
+            </Link>
 
             {/* Desktop Nav */}
-            <ol className='hidden md:flex gap-6 lg:gap-[4rem] items-center font-semibold text-base lg:text-xl text-gray-300'>
-              <Link to="/find-work">Find Work</Link>
-              <Link to="/my-work">My Jobs</Link>
-              <Link to="/">Messages</Link>
-              <Link to="/freelancer/contracts">Contracts</Link>
+            <ol className='hidden md:flex gap-1 lg:gap-2 items-center font-semibold text-sm lg:text-base'>
+              <Link
+                to="/find-work"
+                className='px-3 lg:px-4 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-[#1e2230] transition-colors'
+              >
+                Find Work
+              </Link>
+              <Link
+                to="/my-work"
+                className='px-3 lg:px-4 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-[#1e2230] transition-colors'
+              >
+                My Jobs
+              </Link>
+              <Link
+                to="/freelancer/contracts"
+                className='px-3 lg:px-4 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-[#1e2230] transition-colors'
+              >
+                Contracts
+              </Link>
             </ol>
           </div>
 
-          {/* Right: Search + Icons */}
-          <div className='flex items-center gap-3 sm:gap-4'>
-            {/* Search — hidden on mobile */}
-            <div className='relative hidden sm:block'>
-              
-            </div>
+          {/* Right: Icons */}
+          <div className='flex items-center gap-2 sm:gap-3'>
 
-            <i
-            onClick={gotonotifications} 
-            className="ri-mail-unread-line text-3xl cursor-pointer  flex items-center gap-1">
-              <span 
-              className={unreadCount>0?'text-2xl font-bold':'hidden'} >
-                {unreadCount}
-                </span>
-            </i>
-            <div 
-            onClick={gotoprofile}
-            className='bg-white w-10 h-10 rounded-full flex-shrink-0 cursor-pointer'>
+            <button
+              onClick={gotonotifications}
+              aria-label="Notifications"
+              className='relative w-11 h-11 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#1e2230] transition-colors flex-shrink-0'
+            >
+              <i className="ri-notification-3-line text-2xl sm:text-xl"></i>
+              {unreadCount > 0 && (
+                <span className='absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-[#ef4444] ring-2 ring-[#111827] animate-pulse'></span>
+              )}
+            </button>
 
-             <img 
-                      className="w-full h-full object-cover rounded-full"
-                      src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`} alt="profile" />
-
-            </div>
+            <button
+              onClick={gotoprofile}
+              aria-label="Profile"
+              className='bg-gradient-to-br from-[#6366F1] to-[#a855f7] w-11 h-11 sm:w-10 sm:h-10 rounded-full flex-shrink-0 cursor-pointer p-[2px] hover:opacity-90 transition-opacity'
+            >
+              <img
+                className="w-full h-full object-cover rounded-full border-2 border-[#111827]"
+                src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`}
+                alt="profile"
+              />
+            </button>
 
             {/* Hamburger — mobile only */}
             <button
-              className='md:hidden ml-1 text-white'
+              className='md:hidden w-11 h-11 rounded-xl flex items-center justify-center text-white hover:bg-[#1e2230] transition-colors flex-shrink-0'
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle menu"
             >
-              <i className={`ri-xl ${menuOpen ? 'ri-close-line' : 'ri-menu-line'}`}></i>
+              <i className={`text-2xl ${menuOpen ? 'ri-close-line' : 'ri-menu-line'}`}></i>
             </button>
           </div>
 
           {/* Mobile Dropdown Menu */}
           {menuOpen && (
-            <div className='absolute top-full left-0 w-full bg-[#151b2d] z-50 flex flex-col gap-4 p-5 border-t border-[#0013be] md:hidden'>
-              {/* Mobile Search */}
-              <div className='relative sm:hidden'>
-                <i className="ri-search-line ri-xl absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input
-                  className='h-[3rem] w-full pl-10 rounded-full bg-[#37374b] text-base font-semibold'
-                  type="text"
-                  placeholder='Search....'
-                />
-              </div>
-              <Link to="/find-work" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Find Work</Link>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>My Jobs</Link>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Messages</Link>
-              <Link to="/" className='font-semibold text-gray-300 text-lg' onClick={() => setMenuOpen(false)}>Invoices</Link>
+            <div className='absolute top-[calc(100%+0.5rem)] left-0 w-full bg-[#111827] border border-[#1e2230] rounded-2xl z-50 flex flex-col gap-1 p-3 md:hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]'>
+              <Link
+                to="/find-work"
+                className='font-semibold text-gray-300 hover:text-white hover:bg-[#1e2230] text-base rounded-xl px-4 py-3 transition-colors'
+                onClick={() => setMenuOpen(false)}
+              >
+                Find Work
+              </Link>
+              <Link
+                to="/my-work"
+                className='font-semibold text-gray-300 hover:text-white hover:bg-[#1e2230] text-base rounded-xl px-4 py-3 transition-colors'
+                onClick={() => setMenuOpen(false)}
+              >
+                My Jobs
+              </Link>
+              <Link
+                to="/freelancer/contracts"
+                className='font-semibold text-gray-300 hover:text-white hover:bg-[#1e2230] text-base rounded-xl px-4 py-3 transition-colors'
+                onClick={() => setMenuOpen(false)}
+              >
+                Contracts
+              </Link>
             </div>
           )}
         </nav>

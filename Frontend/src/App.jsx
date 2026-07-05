@@ -33,6 +33,8 @@ import FreelancerMyWork from '../pages/FreelancerMyWork'
 import Review from '../pages/Reviews/Review'
 import Messages from '../pages/Messages/Message'
 import Dashboard from '../pages/Contracts/Dashboard'
+import JobInfo from '../pages/Jobs/JobInfo'
+import EditJob from '../pages/Jobs/EditJob'
 
 //context api
 import {NotificationsContext} from './context/NotificationContext'
@@ -105,6 +107,8 @@ function App() {
         <Route path='/my-work' element={<FreelancerMyWork/> } />  
                                               
         <Route path='/freelancer/messages/:contractId' element={<Messages/>} />
+
+        <Route path='/freelancer/jobInfo/:jobId' element={<JobInfo/>}/>
         
         </Route>       
         
@@ -137,6 +141,10 @@ function App() {
         <Route path='/client/reviews/:contractId' element={<Review/> } /> 
                                     
         <Route path='/client/messages/:contractId' element={<Messages/>} />    
+
+        <Route path='/client/jobInfo/:jobId' element={<JobInfo/>}/>
+
+        <Route path='/edit-job/:jobId' element={<EditJob/>}/>
         
         </Route>
         </Route>

@@ -53,7 +53,6 @@ module.exports.markAllasRead = async(req, res, next) =>
 
 module.exports.getunreadcount = async(req, res, next)=>
 {
-  console.log(req.user._id);  
   try
   {
     const count = await notificationModel.countDocuments({

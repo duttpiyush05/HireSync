@@ -44,9 +44,7 @@ module.exports.login = async (req, res, next) =>
 {
   const error = validationResult(req)
   if(!error.isEmpty())
-  {
-    console.log(error.array());
-    
+  {    
     return res.status(401).json({errors : error.array()})
   }
 
@@ -125,7 +123,8 @@ module.exports.getClientbyId = async (req, res, next) =>
   const id = req.params.clientId
   
       const client = await clientModel.findById(id)
-      res.status(201).json({client})
+      const totalJobs = await jobModel.countDocuments({client:id})
+      res.status(201).json({client, totalJobs})
 }
 
 module.exports.updateProfile = async(req, res, next) =>{    

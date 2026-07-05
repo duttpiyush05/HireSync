@@ -267,6 +267,7 @@ const ClientProfile = () => {
                 <div className='flex items-center gap-2 bg-[#111827] border border-[#1e2230] rounded-lg h-15 px-4 focus-within:border-[#6366F1] transition-colors'>
                   <i className="ri-mail-line text-gray-400 text-lg flex-shrink-0"></i>
                   <input
+                  disabled='true'
                     type='email'
                     value={client?.email}
                     // onChange={(e) => setEmail(e.target.value)}

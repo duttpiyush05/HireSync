@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import socket from '../../src/socket'
+import { Link } from 'react-router-dom'
 
 
 const Messages = () => {
@@ -246,23 +247,58 @@ const Messages = () => {
   },[receiverId]) 
   
   return (
-    <div className='bg-[#0c1324] min-h-screen text-white flex flex-col lg:flex-row max-w-7xl mx-auto my-5'>
+    <div className='bg-[#0c1324] min-h-screen text-white flex justify-center'>
+    <div className='flex flex-col lg:flex-row w-full max-w-7xl my-0 lg:my-5 lg:h-[calc(100vh-2.5rem)] rounded-2xl overflow-hidden border border-[#1e2230] shadow-[0_8px_40px_rgba(0,0,0,0.35)]'>
 
       {/* SIDEBAR */}
-      <div className='w-full lg:w-60 border-b lg:border-b-0 lg:border-r border-[#1e2230] flex-shrink-0'>
-        <div className='p-4'>
-          <h2 className='text-3xl font-bold uppercase tracking-widest'>Messages</h2>
+      <div className='w-full lg:w-72 bg-[#111827] border-b lg:border-b-0 lg:border-r border-[#1e2230] flex-shrink-0 flex flex-col'>
+        <div className='px-5 py-5 border-b border-[#1e2230]'>
+          <h2 className='text-2xl font-bold'>Messages</h2>
+          <p className='text-xs text-gray-500 mt-0.5'>Your active conversation</p>
         </div>
 
-        {/*  */}
+        {/* Current conversation preview */}
+        {(client || freelancer) && (
+          <div className='px-3 py-3'>
+            <div className='flex items-center gap-3 px-3 py-3 rounded-xl bg-[#1e2230]/60 border border-[#1e2230]'>
+              <div className='relative w-11 h-11 rounded-full overflow-hidden bg-[#1e2230] border border-[#2a2c4a] flex-shrink-0'>
+                {role==='client' && freelancer?.profile?.profilePicture && (
+                  <img
+                    src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                )}
+                {role==='freelancer' && client?.profilePicture && (
+                  <img
+                    src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                )}
+                {receiverStatus && (
+                  <span className='absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#22c55e] border-2 border-[#111827]'></span>
+                )}
+              </div>
+              <div className='min-w-0 flex-1'>
+                <p className='text-sm font-semibold text-white truncate'>
+                  {role==='freelancer' ? `${client?.fullname?.firstname} ${client?.fullname?.lastname}`: `${freelancer?.fullname?.firstname} ${freelancer?.fullname?.lastname}`}
+                </p>
+                <p className='text-xs text-gray-500 truncate'>
+                  {istyping ? 'Typing...' : receiverStatus ? 'Active now' : 'Offline'}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* CHAT WINDOW */}
-      <div className='flex-1 flex flex-col min-h-[30vh] lg:min-h-screen py-5'>
+      <div className='flex-1 flex flex-col min-h-[75vh] lg:min-h-0 bg-[#0c1324]'>
 
         {/* Chat Header */}
-        <div className='flex items-center gap-3 px-4 sm:px-6 border-b border-[#1e2230] flex-shrink-0 py-2'>
-          <div className='w-10 h-10 rounded-full overflow-hidden bg-[#19192f] border border-[#1e2230] flex-shrink-0'>
+        <div className='flex items-center gap-3 px-4 sm:px-6 border-b border-[#1e2230] flex-shrink-0 py-3 bg-[#111827]/60 backdrop-blur-sm'>
+          <div className='relative w-11 h-11 rounded-full overflow-hidden bg-[#1e2230] border border-[#2a2c4a] flex-shrink-0'>
 
             {
               role==='client' && (
@@ -287,38 +323,49 @@ const Messages = () => {
                         />
               )
             }
+            {receiverStatus && (
+              <span className='absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#22c55e] border-2 border-[#0c1324]'></span>
+            )}
 
           </div>
-          <div className='flex-1'>
+          <div className='flex-1 min-w-0'>
             <div className='flex items-center gap-2'>
-              <p className='text-xl font-bold text-white truncate'>
+              <p className='text-base sm:text-lg font-bold text-white truncate'>
                 {
                   role==='freelancer' ? `${client?.fullname?.firstname} ${client?.fullname?.lastname}`: `${freelancer?.fullname?.firstname} ${freelancer?.fullname?.lastname}`
                 }
                 </p>
             </div>
-            <p className='text-xl text-green-400 font-medium'>
+            <p className={`text-xs sm:text-sm font-medium truncate ${istyping ? 'text-[#a5a8ff]' : 'text-gray-500'}`}>
               {
-                istyping?'Typing...':receiverStatus?'Active':''
+                istyping?'Typing...':receiverStatus?'Active now':'Offline'
               }</p>
           </div>
           <div className='flex items-center gap-2 flex-shrink-0'>
-            <button className='hidden sm:flex items-center gap-2 px-4 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'>
+
+            <Link 
+            to={role==='client' ? `/freelancer/profiles/${freelancer?._id}`:`/client/profiles/${client?._id}`}
+            className='hidden sm:flex items-center gap-2 px-4 h-10 rounded-xl border border-[#1e2230] hover:bg-[#1e2230] transition-colors text-sm font-medium text-gray-300'>
               <i className="ri-user-line"></i>
               View Profile
+            </Link>
+
+            <button className='sm:hidden w-10 h-10 rounded-xl border border-[#1e2230] hover:bg-[#1e2230] transition-colors flex items-center justify-center text-gray-300 flex-shrink-0'>
+              <i className="ri-user-line text-lg"></i>
             </button>
           </div>
         </div>
 
         {/* Messages Body */}
-        <div className='flex-1 overflow-y-auto px-4 sm:px-6 py-5 flex flex-col gap-4  max-h-[100vh]'>
+        <div className='flex-1 overflow-y-auto px-3 sm:px-6 py-5 flex flex-col gap-1.5'>
             {
               messages.length===0 && (
-                <div className=' h-screen flex flex-col justify-center items-center text-4xl font-medium'>
-                  Start Your Conversation...
-                  <div className='text-xl text-gray-500 '>
-                    Say hii ....👋
+                <div className='flex-1 flex flex-col justify-center items-center text-center gap-2 min-h-[50vh]'>
+                  <div className='w-16 h-16 rounded-full bg-[#1e2230] flex items-center justify-center text-3xl mb-2'>
+                    👋
                   </div>
+                  <p className='text-2xl sm:text-3xl font-bold text-white'>Start Your Conversation</p>
+                  <p className='text-sm sm:text-base text-gray-500'>Say hi and get things moving</p>
                 </div>
                
               )
@@ -327,34 +374,38 @@ const Messages = () => {
                   messages.map((m, i)=> (
                     <div
                     key={i}
-                    className={`${user===m?.sender ? 'flex justify-end':'flex items-left'} p-1 text-lg px-5 py-2 `}>
-                      <div className={`p-3 rounded-xl border ${user===m.sender?' border-[#0f9200]':' border-[#005589]'} flex flex-col gap-0 max-w-[75%]`}>
-                        <div>
+                    className={`flex ${user===m?.sender ? 'justify-end':'justify-start'} px-1 py-0.5`}>
+                      <div className={`relative px-4 py-2.5 rounded-2xl max-w-[80%] sm:max-w-[65%] ${
+                        user===m.sender
+                          ? 'bg-gradient-to-br from-[#6366F1] to-[#4f52d9] text-white rounded-br-sm'
+                          : 'bg-[#1e2230] text-gray-100 rounded-bl-sm'
+                      }`}>
+                        <p className='text-sm sm:text-base leading-relaxed break-words pr-2'>
                           {m.text}
-                        {
-                          m.status==='sent' && m.sender===sender && (
-                            <i className="ml-2 ri-check-line"></i>
-                          )
-                        }
-                        {
-                          m.status==='delivered'&& m.sender===sender && (
-                            <i className="ml-2 ri-check-double-line"></i>
-                          )
-                        }
-                        {
-                          m.status==='read' && m.sender===sender && (
-                            <i className="ml-2 ri-check-double-line text-blue-500"></i>
-                          )
-                        }
-                        </div>
-                         <div className='text-sm self-end text-gray-500 '>
-                          <p className='self-start'>
-                          {new Date(m.createdAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
                         </p>
-                         </div>
+                        <div className={`flex items-center gap-1 mt-1 justify-end ${user===m.sender ? 'text-indigo-100/70' : 'text-gray-500'}`}>
+                          <span className='text-[11px]'>
+                            {new Date(m.createdAt).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                          {
+                            m.status==='sent' && m.sender===sender && (
+                              <i className="ri-check-line text-xs"></i>
+                            )
+                          }
+                          {
+                            m.status==='delivered'&& m.sender===sender && (
+                              <i className="ri-check-double-line text-xs"></i>
+                            )
+                          }
+                          {
+                            m.status==='read' && m.sender===sender && (
+                              <i className="ri-check-double-line text-xs text-[#7dd3fc]"></i>
+                            )
+                          }
+                        </div>
                       </div>
                      
                       
@@ -365,34 +416,36 @@ const Messages = () => {
         </div>
 
         {/* Input Bar */}
-        <div className='px-4 sm:px-6 py-5 border-t border-[#1e2230] flex-shrink-0 border'>
-          <div className='flex items-center gap-2'>
-            <button className='w-12 h-12 rounded-lg hover:bg-[#19192f] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
-              <i className="ri-add-circle-line  text-2xl"></i>
+        <div className='px-3 sm:px-6 py-3 sm:py-4 border-t border-[#1e2230] flex-shrink-0 bg-[#111827]/60 backdrop-blur-sm'>
+          <div className='flex items-center gap-1.5 sm:gap-2'>
+            <button className='w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-[#1e2230] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
+              <i className="ri-add-circle-line text-xl sm:text-2xl"></i>
             </button>
-            <button className='hidden sm:flex w-12 h-12 rounded-lg hover:bg-[#19192f] transition-colors items-center justify-center text-gray-400 flex-shrink-0'>
-              <i className="ri-attachment-2  text-2xl"></i>
+            <button className='hidden sm:flex w-11 h-11 rounded-full hover:bg-[#1e2230] transition-colors items-center justify-center text-gray-400 flex-shrink-0'>
+              <i className="ri-attachment-2 text-2xl"></i>
             </button>
-            <button className='hidden sm:flex w-12 h-12 rounded-lg hover:bg-[#19192f] transition-colors items-center justify-center text-gray-400 flex-shrink-0'>
-              <i className="ri-emotion-line  text-2xl"></i>
+            <button className='hidden sm:flex w-11 h-11 rounded-full hover:bg-[#1e2230] transition-colors items-center justify-center text-gray-400 flex-shrink-0'>
+              <i className="ri-emotion-line text-2xl"></i>
             </button>
             <input
               type='text'
               value={messageText}
               onChange={(e) => handleTyping(e.target.value)}
-              placeholder={`Type your message to ${role==='freelancer'?`${client?.fullname?.firstname}`:`${freelancer?.fullname?.firstname}`}...`}
-              className='flex-1 pl-6 min-w-0 bg-[#161c33] border border-[#1e2230] rounded-full h-15 px-4 text-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#6366F1] transition-colors'
+              onKeyDown={(e) => { if (e.key === 'Enter') handleSendMessage() }}
+              placeholder={`Message ${role==='freelancer'?`${client?.fullname?.firstname||''}`:`${freelancer?.fullname?.firstname||''}`}...`}
+              className='flex-1 min-w-0 bg-[#1e2230] border border-[#2a2c4a] rounded-full h-11 sm:h-12 px-5 text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-[#6366F1] transition-colors'
             />
             <button 
             onClick={handleSendMessage}
-            className='w-14 h-14 rounded-full bg-[#6366F1] hover:bg-[#4f52d9] transition-colors flex items-center justify-center flex-shrink-0'>
-              <i className="ri-send-plane-fill text-white text-2xl cursor-pointer"></i>
+            className='w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#6366F1] to-[#4f52d9] hover:opacity-90 transition-opacity flex items-center justify-center flex-shrink-0'>
+              <i className="ri-send-plane-fill text-white text-lg sm:text-xl"></i>
             </button>
           </div>
         </div>
 
       </div>
 
+    </div>
     </div>
   )
 }

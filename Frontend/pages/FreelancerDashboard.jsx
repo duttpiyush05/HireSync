@@ -210,7 +210,7 @@ const FreelancerDashboard = () => {
                   <h2 className='text-xl font-bold'>Pending Proposals</h2>
                   <span className='text-sm px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 font-semibold border border-amber-500/30'>{pendingProposals.length}</span>
                 </div>
-                <Link to='/fl/proposals' className='text-lg text-[#a5a8ff] hover:underline font-medium'>View all →</Link>
+                <Link to='/my-work' className='text-lg text-[#a5a8ff] hover:underline font-medium'>View all →</Link>
               </div>
               <div className='divide-y divide-[#1e2230]'>
                 {pending_Proposals.length === 0 && (
@@ -307,7 +307,7 @@ const FreelancerDashboard = () => {
                 <div className='flex items-center gap-2'>
                   <h2 className='text-xl font-bold'>Latest Notifications</h2>
                 </div>
-                <Link to='/fl/notifications' className='text-lg text-[#a5a8ff] hover:underline font-medium'>View all →</Link>
+                <Link to='/freelancer/notifications' className='text-lg text-[#a5a8ff] hover:underline font-medium'>View all →</Link>
               </div>
               <div className='divide-y divide-[#1e2230]'>
                 {notifications.length === 0 && (

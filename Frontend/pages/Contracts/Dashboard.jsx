@@ -36,8 +36,7 @@ const Dashboard = () => {
             Authorization : `Bearer ${localStorage.getItem('token')}`
           }
         })
-        const data = response.data
-        
+        const data = response.data        
         const allContracts = data.contracts
         setallContracts(allContracts)
         setRole(data?.role)     
@@ -88,16 +87,6 @@ const Dashboard = () => {
           <div>
             <h1 className='text-2xl md:text-4xl font-bold'>Contracts Dashboard</h1>
             <p className='text-sm md:text-lg text-gray-400 mt-1'>Manage your active agreements and track project milestones.</p>
-          </div>
-          <div className='flex gap-3 flex-shrink-0'>
-            <button className='flex items-center gap-2 px-4 h-15 rounded-lg border border-[#1e2230] bg-transparent hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300'>
-              <i className="ri-filter-3-line"></i>
-              Filters
-            </button>
-            <button className='flex items-center gap-2 px-4 h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-md font-semibold text-white whitespace-nowrap'>
-              <i className="ri-add-line"></i>
-              New Contract
-            </button>
           </div>
         </div>
 

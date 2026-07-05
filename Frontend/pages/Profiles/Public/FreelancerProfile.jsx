@@ -23,9 +23,7 @@ const Profiles = () => {
               Authorization: `Bearer ${token}`
             }
           })
-        const data = response.data
-        console.log(data);
-        
+        const data = response.data        
         setFreelancer(data.freelancer)
       }catch(err)
       {
@@ -49,6 +47,13 @@ const Profiles = () => {
           {/* Avatar */}
           <div className='relative mb-4'>
             <div className='w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#1e2230] overflow-hidden bg-[#19192f]'>
+
+            {
+              freelancer?.profile?.profilePicture && (
+                <img src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`} alt="" />
+              )
+            }
+
               <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
             </div>
             <span className='absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-bold px-3 py-0.5 rounded-full bg-green-400/90 text-[#0c1324] whitespace-nowrap'>
@@ -147,7 +152,7 @@ const Profiles = () => {
 
                 <div>
                   <p className='text-md text-gray-500 uppercase tracking-widest mb-1'>Last Active</p>
-                  <p className='text-xl font-medium text-gray-300'>2 days ago</p>
+                  <p className='text-xl font-medium text-gray-300'>X days ago</p>
                 </div>
               </div>
             </div>

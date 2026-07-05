@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import {Link} from 'react-router-dom'
 
 const FreelancerMyWork = () => {
   const [activeTab, setActiveTab] = useState('Applied')
@@ -17,9 +18,10 @@ const FreelancerMyWork = () => {
           headers : {
             Authorization : `Bearer ${localStorage.getItem('token')}`
           }
-        })
-        console.log(response)        
+        })     
         const data= response?.data
+        console.log(data);
+        
         setJobs(data?.jobs)
       }
       catch(err)
@@ -121,9 +123,6 @@ const FreelancerMyWork = () => {
 
               {/* Icon + Title */}
               <div className='flex items-center gap-4 flex-1 min-w-0'>
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${job.iconBg}`}>
-                  <i className={`${job.icon} text-xl`}></i>
-                </div>
                 <div className='min-w-0'>
                   <h3 className='text-lg font-bold text-white truncate capitalize'>{job?.job?.title}</h3>
                   <div className='flex items-center gap-3 text-sm text-gray-400 mt-1'>
@@ -169,9 +168,11 @@ const FreelancerMyWork = () => {
                   </span>
                 </div>
 
-                <button className='px-5 h-15 rounded-lg border border-[#011b7c] bg-transparent hover:bg-[#19192f] transition-colors text-base font-medium text-gray-300 whitespace-nowrap '>
+                <Link 
+                to={`/freelancer/jobInfo/${job?.job?._id}`}
+                className='flex justify-center items-center px-5 h-15 rounded-lg border border-[#011b7c] bg-transparent hover:bg-[#19192f] transition-colors text-base font-medium text-gray-300 whitespace-nowrap '>
                   View Deatils
-                </button>
+                </Link>
               </div>
 
             </div>

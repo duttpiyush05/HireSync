@@ -92,7 +92,51 @@ module.exports.getProposalInfo = async (req, res, next)=>
     {
       return res.status(404).json({message : "Proposal Not Found"})
     }
-    res.status(201).json({proposal})
+    const jobs = await jobModel.aggregate([
+  {
+    $match: {
+      status: "open"
+    }
+  },
+  {
+    $lookup: {
+      from: "proposals",
+      let: { jobId: "$_id" },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: ["$job", "$$jobId"] },
+                { $eq: ["$freelancer", req.user._id] }
+              ]
+            }
+          }
+        }
+      ],
+      as: "myProposal"
+    }
+  },
+  {
+    $match: {
+      myProposal: { $size: 0 }
+    }
+  },
+  {
+    $sort: {
+      createdAt: -1
+    }
+  },
+  {
+    $limit: 3
+  },
+  {
+    $project: {
+      myProposal: 0
+    }
+  }
+]);
+    res.status(201).json({jobs, proposal})
   }
   catch(error)
   {

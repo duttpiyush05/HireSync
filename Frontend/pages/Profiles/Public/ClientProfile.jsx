@@ -7,8 +7,8 @@ import { useParams } from 'react-router-dom'
 const ClientProfile = () => {
 
   const {clientId} = useParams()
-  // console.log(clientId);
   const [client, setClient] = useState()
+  const [totalJobs, setTotalJobs] = useState(0)
   
   useEffect(()=>
   {
@@ -21,17 +21,14 @@ const ClientProfile = () => {
               Authorization : `Bearer ${localStorage.getItem('token')}`
             }
           }
-        )
-        console.log(response);
-        
-        const data = response?.data
-        // console.log(data);
+        )        
+        const data = response?.data        
+        setTotalJobs(response?.data?.totalJobs)
         setClient(data.client)
         
       }catch(err)
       {
         console.log(err);
-        
       }
     }
     fetchClient()
@@ -48,7 +45,16 @@ const ClientProfile = () => {
             {/* Avatar */}
             <div className='relative flex-shrink-0'>
               <div className='w-15 h-15 md:w-35 md:h-35 rounded-xl overflow-hidden bg-[#19192f] border border-[#1e2230]'>
-                <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'></div>
+                {
+                  client?.profilePicture && (
+                    <img
+                    className='w-full h-full object-cover' 
+                    src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`} alt="Profile" />
+                  )
+                }
+                <div className='w-full h-full bg-gradient-to-br from-[#2a2a4a] to-[#1a1a2e]'>
+
+                </div>
               </div>
               <span className='w-[80%] flex justify-center items-center absolute -bottom-1.5 left-1/2 -translate-x-1/2 text-[15px] font-bold px-2 py-0.5 rounded-full bg-green-400/90 text-[#0c1324] whitespace-nowrap'>
                 AVAILABLE
@@ -71,26 +77,19 @@ const ClientProfile = () => {
             </div>
           </div>
 
-          <button className='w-full md:w-40 px-5 h-15 rounded-lg bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-md font-semibold text-white flex-shrink-0'>
-            Message
-          </button>
         </div>
 
         {/* STAT CARDS */}
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-3 mb-6'>
+        <div className='grid grid-cols-2 md:grid-cols-3 gap-3 mb-6'>
           <div className='bg-[#0c1324] border border-[#1e2230] rounded-lg p-4'>
             <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Total Job Posted</p>
-            <p className='text-green-400 font-bold text-lg'>100%</p>
+            <p className='text-green-400 font-bold text-lg'>{totalJobs}</p>
           </div>
           <div className='bg-[#0c1324] border border-[#1e2230] rounded-lg p-4'>
             <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Email</p>
-            <p className='font-bold text-lg flex items-center gap-1'>
+            <p className='font-bold text-lg flex items-center gap-1 truncate'>
               {client?.email}
             </p>
-          </div>
-          <div className='bg-[#0c1324] border border-[#1e2230] rounded-lg p-4'>
-            <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Total Earnings</p>
-            <p className='font-bold text-lg'>$200K+</p>
           </div>
           <div className='bg-[#0c1324] border border-[#1e2230] rounded-lg p-4'>
             <p className='text-md text-gray-500 uppercase tracking-widest mb-2'>Contact Number</p>
@@ -111,7 +110,7 @@ const ClientProfile = () => {
                 Bio
               </h2>
 
-              <div className='text-md text-gray-400 leading-relaxed mb-4 bg-[#0c1324] h-50 border border-[#1e2230]'>
+              <div className='text-md text-gray-400 p-5 font-medium leading-relaxed mb-4 bg-[#0c1324] h-50 border border-[#1e2230]'>
                 {client?.bio}
               </div>
 
@@ -128,7 +127,8 @@ const ClientProfile = () => {
                 <p className='text-md text-gray-400 leading-relaxed mb-2'>
                   {client?.companyProfile?.description}.
                 </p>
-                <a href='https://sterlingtech.io' className='text-xl font-medium text-green-400 hover:underline'>{client?.companyProfile?.website}</a>
+                <a 
+                href={`https://${client?.companyProfile?.website}}`} className='text-xl font-medium text-green-400 hover:underline'>{client?.companyProfile?.website}</a>
               </div>
             </div>
 
@@ -143,7 +143,7 @@ const ClientProfile = () => {
             <div className='flex flex-col gap-3 '>
               
             <a
-                href={client?.companyProfile?.website}
+                href={client?.github}
                 target='_blank'
                 rel='noreferrer'
                 className='flex items-center gap-2 px-4 h-15 rounded-lg border border-[#1e2230] bg-[#0c1324] hover:bg-[#19192f] transition-colors text-md font-medium text-gray-300 '

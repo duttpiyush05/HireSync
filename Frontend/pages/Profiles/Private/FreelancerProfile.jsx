@@ -385,6 +385,7 @@ const FreelancerProfile = () => {
                   <div>
                     <label className='text-md text-gray-500 uppercase tracking-widest mb-2 block'>Email Address</label>
                     <input
+                    disabled='true'
                       type='email'
                       value={freelancer?.email}
                       className='disable  w-full bg-[#0c1324] border border-[#1e2230] rounded-lg h-15 px-4 text-md text-white focus:outline-none focus:border-[#6366F1] transition-colors'

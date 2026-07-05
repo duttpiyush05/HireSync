@@ -3,6 +3,16 @@ const freelancerModel = require('../models/fl_model')
 const clientModel = require('../models/client_model')
 const reviewModel = require('../models/review_model')
 const notificationModel = require('../models/notification_model')
+const { getIO } = require("../socket");
+const { userToSocket } = require("../onlineUsers")
+
+const emitNotification = (userId, notification) => { 
+  const io = getIO();
+  const receiverSocket = userToSocket.get(userId.toString());
+  if (receiverSocket) {
+    io.to(receiverSocket).emit("new-notification", { notification });
+  }
+}
 
 module.exports.leaveReviews = async(req, res, next)=>
 {
@@ -67,7 +77,8 @@ module.exports.postReview = async(req, res, next)=>
         message : "Review Successfully Submitted",
         contract_id : contract
       })
-      res.status(201).json({newReview, notificationForFreelancer})
+      emitNotification(req.user._id, notificationForFreelancer)
+      res.status(201).json({newReview})
     }
     if(role==="client")
     {
@@ -77,7 +88,8 @@ module.exports.postReview = async(req, res, next)=>
         message : "Review Successfully Submitted",
         contract_id : contract
       })
-      res.status(201).json({newReview, notificationForClient})
+      emitNotification(req.user._id, notificationForClient)
+      res.status(201).json({newReview})
     }
     
   }catch(error)

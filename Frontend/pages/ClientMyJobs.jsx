@@ -13,11 +13,12 @@ const ClientMyJobs = () => {
 
   const [searchTitle, setSearchTitle] = useState('')
   const [openFilter, setOpenFilter] = useState('All')
+  const [openMenu, setOpenMenu] = useState(null)
 
   useEffect(() => { 
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs/my-jobs?page=${currentPage}`, {  
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs/my-jobs`, {  
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -82,6 +83,13 @@ const ClientMyJobs = () => {
     Active: 'bg-green-500/20 text-green-400',
     Draft: 'bg-gray-500/20 text-gray-300',
     Closed: 'bg-red-500/20 text-red-400',
+  }
+
+  const handleModify = ()=>
+  {
+    return (
+      <div className='border h-50 w-50'>Hello</div>
+    )
   }
   
   return (
@@ -192,13 +200,34 @@ const ClientMyJobs = () => {
 
                 {/* Actions */}
                 <div className='flex items-center justify-end gap-2'>
-                    <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
-                      <i className="ri-pencil-line text-lg"></i>
-                    </button>
-
-                  <button className='w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f] transition-colors flex items-center justify-center text-gray-400 flex-shrink-0'>
+                    <div className="relative">
+                  <button
+                    onClick={() =>
+                      setOpenMenu(openMenu === job._id ? null : job._id)
+                    }
+                    className="w-12 h-12 rounded-lg border border-[#1e2230] hover:bg-[#19192f]"
+                  >
                     <i className="ri-more-2-fill text-lg"></i>
                   </button>
+
+                  {openMenu === job._id && (
+                    <div className="absolute top-14 right-0 w-40 bg-[#19192f] border border-[#1e2230] rounded-lg shadow-lg z-10">
+                      <Link
+                      to={`/client/jobInfo/${job._id}`}
+                        className="w-full text-left px-4 py-3 hover:bg-[#262634]"
+                      >
+                        Edit Job
+                      </Link>
+
+                      <button
+                        className="w-full text-left px-4 py-3 hover:bg-[#262634] text-red-400"
+                      >
+                        Delete Job
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 </div>
 
               </div>
@@ -206,7 +235,7 @@ const ClientMyJobs = () => {
           </div>
 
           {/* Pagination */}
-          <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-t border-[#1e2230]'>
+          {/* <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-t border-[#1e2230]'>
             <p className='text-sm text-gray-500'>Showing {Math.max(0, Math.min(5 * currentPage - 4, totalJobs))} to {Math.min(totalJobs, currentPage * 5)} of {totalJobs} active postings</p>
 
             <div className='flex items-center gap-2'>
@@ -240,7 +269,7 @@ const ClientMyJobs = () => {
                 <i className="ri-arrow-right-s-line"></i>
               </button>
             </div>
-          </div>
+          </div> */}
 
         </div>
 
