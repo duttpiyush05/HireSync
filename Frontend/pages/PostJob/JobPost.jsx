@@ -112,9 +112,7 @@ const JobPost = () => {
                   return
                }
                else if(jobData.description.trim().length<10)
-               {
-                  console.log(jobData.description);
-                  
+               {                  
                   toast.warning('Please Enter atleast 10 words')
                   return
                }

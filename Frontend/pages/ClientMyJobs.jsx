@@ -84,13 +84,6 @@ const ClientMyJobs = () => {
     Draft: 'bg-gray-500/20 text-gray-300',
     Closed: 'bg-red-500/20 text-red-400',
   }
-
-  const handleModify = ()=>
-  {
-    return (
-      <div className='border h-50 w-50'>Hello</div>
-    )
-  }
   
   return (
     <div className='bg-[#0c1324] min-h-screen text-white'>
@@ -142,7 +135,7 @@ const ClientMyJobs = () => {
           </div>
         </div>
 
-        <div className='bg-[#111827] border border-[#1e2230] rounded-xl overflow-hidden mb-6'>
+        <div className='bg-[#111827] border border-[#1e2230] rounded-xl overflow-hidde mb-6 py-10'>
 
           <div className='hidden md:grid grid-cols-[2.5fr_2fr_1fr_1.2fr_1.2fr] gap-4 px-5 py-3 border-b border-[#1e2230] text-md text-gray-500 uppercase tracking-widest font-semibold'>
             <span>Job title</span>
@@ -211,19 +204,19 @@ const ClientMyJobs = () => {
                   </button>
 
                   {openMenu === job._id && (
-                    <div className="absolute top-14 right-0 w-40 bg-[#19192f] border border-[#1e2230] rounded-lg shadow-lg z-10">
+                    <div className="absolute top-14 right-0 w-40 bg-[#19192f] border border-[#1e2223] flex items-center justify-center rounded-lg shadow-lg z-10 py-" >
                       <Link
                       to={`/client/jobInfo/${job._id}`}
-                        className="w-full text-left px-4 py-3 hover:bg-[#262634]"
+                        className="w-full text-left px-4 py-3 hover:bg-[#262634] w-full flex items-center justify-center"
                       >
                         Edit Job
                       </Link>
 
-                      <button
+                      {/* <button
                         className="w-full text-left px-4 py-3 hover:bg-[#262634] text-red-400"
                       >
                         Delete Job
-                      </button>
+                      </button> */}
                     </div>
                   )}
                 </div>
@@ -235,7 +228,9 @@ const ClientMyJobs = () => {
           </div>
 
           {/* Pagination */}
-          {/* <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-t border-[#1e2230]'>
+          {
+            filteredJobs.length>=0 && (
+              <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4 border-t border-[#1e2230]'>
             <p className='text-sm text-gray-500'>Showing {Math.max(0, Math.min(5 * currentPage - 4, totalJobs))} to {Math.min(totalJobs, currentPage * 5)} of {totalJobs} active postings</p>
 
             <div className='flex items-center gap-2'>
@@ -250,7 +245,7 @@ const ClientMyJobs = () => {
               {[1, 2, 3].map((p) => (
                 <button
                   key={p}
-                  onClick={() => setCurrentPage(p)}
+                  onClick={`() => setCurrentPage(p)`}
                   className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
                     currentPage === p
                       ? 'bg-[#6366F1] text-white'
@@ -269,7 +264,9 @@ const ClientMyJobs = () => {
                 <i className="ri-arrow-right-s-line"></i>
               </button>
             </div>
-          </div> */}
+          </div>
+            )
+          }
 
         </div>
 

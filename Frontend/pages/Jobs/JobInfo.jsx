@@ -59,18 +59,6 @@ const JobInfo = () => {
         setTotalProposals(response.data?.jobs?.proposalsCount || 0)
         setRole(response.data?.jobs?.role)
         setClient(response?.data?.jobs?.job?.client)
-        // setNewProposals(response.data.stats?.newProposals || 0)
-        // setInterviewedCount(response.data.stats?.interviewed || 0)
-        // setPendingInterviews(response.data.stats?.pending || 0)
-        // setShortlistedCount(response.data.stats?.shortlisted || 0)
-        // setApplicants(response?.data?.applicants || [])
-        // setIsPublic(response?.data?.visibility?.isPublic ?? true)
-        // setTotalSpend(response?.data?.hiringStats?.totalSpend || 0)
-        // setJobsPosted(response?.data?.hiringStats?.jobsPosted || 0)
-        // setHireRate(response?.data?.hiringStats?.hireRate || 0)
-        // setAvgResponse(response?.data?.hiringStats?.avgResponse || '')
-        // setActiveContracts(response?.data?.activeContracts || [])
-        // setRecommendedMatches(response?.data?.recommendedMatches || [])
       } catch (err) {
         toast.error(err?.response?.data?.message)
       } finally {
@@ -122,7 +110,18 @@ const JobInfo = () => {
         headers:{Authorization : `Bearer ${token}`}
       }
     )
-          console.log(res)
+
+    if(res.status===201)
+    {
+      setTimeout(()=>
+      {
+        setisLoading(false)
+      }, 2000)
+      setJob(prev=>({
+        ...prev, status:"closed"
+      }))
+      toast.success(`${job.title} has been Successfully Closed`)
+    }
   }
 
   if (isloading) {

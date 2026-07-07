@@ -77,7 +77,6 @@ module.exports.createProposal = async (req, res, next) => {
   } catch(error)
   {
     res.status(401).json("There is some error")
-    console.log(error)
     next(error)
   }
 };

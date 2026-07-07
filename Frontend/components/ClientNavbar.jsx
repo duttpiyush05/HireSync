@@ -108,11 +108,15 @@ const ClientNavbar = () => {
                     aria-label="Profile"
                     className='bg-gradient-to-br from-[#6366F1] to-[#a855f7] w-11 h-11 sm:w-10 sm:h-10 rounded-full flex-shrink-0 cursor-pointer p-[2px] hover:opacity-90 transition-opacity'
                   >
-                    <img
+                    {
+                      client?.profilePicture && (
+                        <img
                       className="w-full h-full object-cover rounded-full border-2 border-[#111827]"
                       src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`}
                       alt="profile"
                     />
+                      )
+                    }
                   </button>
 
                   {/* Hamburger — mobile/tablet only */}

@@ -23,12 +23,10 @@ const LoginClientPage = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/clients/login`, client)
-      console.log(response)
       if (response.status === 201) {
         const data = response.data
         localStorage.setItem('token', data.token)
         setclient(data.client)
-        console.log(data.client)
         toast.success("Login Sucessfully", {
           hideProgressBar: true
         })

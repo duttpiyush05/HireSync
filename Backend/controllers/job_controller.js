@@ -111,10 +111,10 @@ module.exports.closeJob = async(req, res, next)=>
   await jobModel.findOneAndUpdate({
     _id: jobId
   },
-{
-  status:'closed'
-})
-  res.status(401).json({message:"job Closed Successfully"})
+  {
+    status:'closed'
+  })
+  res.status(201).json({message:"job Closed Successfully"})
 }
 
 module.exports.updateJob = async(req, res, next)=>

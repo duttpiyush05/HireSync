@@ -7,6 +7,8 @@ const jobModel = require('../models/job_model')
 const proposalModel = require('../models/proposals')
 const contractModel = require('../models/contracts_model')
 const notificationModel = require('../models/notification_model')
+const pendingUserModel = require('../models/pending_users')
+const {sendOTP} = require('../services/mail_services')
 const { path } = require('../app')
 
 module.exports.register = async (req, res, next) =>
@@ -24,20 +26,122 @@ module.exports.register = async (req, res, next) =>
     return res.status(400).json({message : "User Already Exists"})
   }
 
-  const hashedPassword = await clientModel.hashPassword(password)
+  const pendingUser = await pendingUserModel.findOne({email})
+  if(pendingUser)
+  {
+    await pendingUserModel.deleteOne({email})
+  }
 
-  const client = await clientServices.createClient({
-    firstname : fullname.firstname,
-    lastname : fullname.lastname,
+  const hashedPassword = await pendingUserModel.hashPassword(password)
+  const otp = Math.floor(100000+Math.random() *900000).toString()
+  const otpExpire = new Date(Date.now()+5*60*1000)
+
+  const newpendingUser = await pendingUserModel.create({
+    fullname:{
+      firstname: fullname.firstname,
+      lastname : fullname.lastname
+    },
     email : email,
     password : hashedPassword,
     contactno : contactno,
-    gender :  gender
+    gender : gender,
+    role: 'freelancer',
+    otp,
+    otpExpire,
   })
 
-  const token = await client.generatetoken()
-  res.cookie('token', token)
-  res.status(201).json({token, client})
+  await newpendingUser.save()
+  sendOTP(email, otp)
+
+  res.status(201).json({email, message : "OTP Sent Successfully to your Email"})
+
+  // const client = await clientServices.createClient({
+  //   firstname : fullname.firstname,
+  //   lastname : fullname.lastname,
+  //   email : email,
+  //   password : hashedPassword,
+  //   contactno : contactno,
+  //   gender :  gender
+  // })
+
+  // const token = await client.generatetoken()
+  // res.cookie('token', token)
+  // res.status(201).json({token, client})
+}
+
+module.exports.verifyOtp = async(req, res)=>
+{
+  const {email, otp} = req.body
+
+  const pendingUser = await pendingUserModel.findOne({email})
+
+  if(!pendingUser)
+  {
+    return  res.status(404).json({message : "OTP is Isvalid"})
+  }
+
+  if(pendingUser.otpExpire < Date.now())
+  {
+    return res.status(404).json({message : "OTP has been expired"})
+  }
+
+  if(pendingUser.otp!==otp)
+  {
+    return res.status(404).json({message : "Invalid OTP"})
+  }
+
+  const client = await clientModel.create({
+    fullname :
+    {
+      firstname : pendingUser.fullname.firstname,
+      lastname :  pendingUser.fullname.lastname
+    },
+    email:pendingUser.email,
+    password:pendingUser.password,
+    contactno:pendingUser.contactno,
+    gender:pendingUser.gender,
+  })
+
+  await client.save()
+
+  await pendingUserModel.deleteOne({email})
+
+  const token = client.generatetoken()
+  res.status(201).json({message : "Account Created Successfully", token ,client})
+}
+
+module.exports.resendOtp = async(req, res)=>
+{
+  const {email} = req.body
+  
+  const pendingUser = await pendingUserModel.findOne({email})
+
+  if(!pendingUser) 
+  {
+    return res.status(404).json({message: "Please Login again, Session has been expired"})
+  }
+
+  const now = Date.now()
+  const diff = now-pendingUser.lastOtpSentAt.getTime()
+
+  if(diff<30000)
+  {
+    return res.status(429).json({
+        message: "Please wait before requesting another OTP."
+    })
+  }
+
+  const otp = Math.floor(100000+Math.random() *900000).toString()
+  const otpExpire = new Date(Date.now()+5*60*1000)
+
+  pendingUser.otp = otp
+  pendingUser.otpExpire = otpExpire
+  await pendingUser.save()
+
+
+  sendOTP(email, otp)
+
+  res.status(201).json({message : "OTP Resend Successfully"})
 }
 
 module.exports.login = async (req, res, next) =>

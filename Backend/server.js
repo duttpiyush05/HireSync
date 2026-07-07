@@ -50,7 +50,7 @@ io.on("connection", (socket)=>
         }
         catch(err)
         {
-            console.log("err in deli :",err);
+            throw new Error(err)
         }
     })
     socket.on('message-read', async({convoId, reader})=>
@@ -74,7 +74,7 @@ io.on("connection", (socket)=>
         }
         catch(err)
         {
-            console.log("err in read :",err);
+            throw new Error(err)
         }
     })
 
@@ -113,5 +113,5 @@ io.on("connection", (socket)=>
 })
 
 httpServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    // console.log(`Server is running on port ${PORT}`);
 });

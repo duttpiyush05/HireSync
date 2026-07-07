@@ -6,6 +6,8 @@ const proposalModel = require('../models/proposals')
 const blacklistTokenModel = require('../models/blackListTokenModel')
 const {validationResult} = require('express-validator')
 const freelancerServices = require('../services/freelancer_services')
+const pendingUserModel = require('../models/pending_users')
+const {sendOTP} = require('../services/mail_services')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -17,7 +19,7 @@ module.exports.register = async (req, res, next) =>
   {
     return res.status(400).json({message : error.array()})
   }
-
+  
   const {fullname, email, password, contactno, gender} = req.body;
 
   const isFreelancer = await freelancerModel.findOne({email})
@@ -26,20 +28,95 @@ module.exports.register = async (req, res, next) =>
     return res.status(400).json({message : "User Already exists"})
   }
 
-  const hashedPassword = await freelancerModel.hashPassword(password)
+  const pendingFreelancer = await pendingUserModel.find({email})
+  if(pendingFreelancer)
+  {
+    await pendingUserModel.deleteOne({email})
+  }
 
-  const freelancer = await freelancerServices.createFreelancer({
-    firstname : fullname.firstname,
-    lastname : fullname.lastname,
+  const hashedPassword = await pendingUserModel.hashPassword(password)
+  const otp = Math.floor(100000+Math.random() *900000).toString()
+  const otpExpire = new Date(Date.now()+5*60*1000)
+
+  const newPendingFreelancer = await pendingUserModel.create({
+    fullname:{
+      firstname: fullname.firstname,
+      lastname : fullname.lastname
+    },
     email : email,
     password : hashedPassword,
     contactno : contactno,
-    gender : gender
+    gender : gender,
+    role: 'freelancer',
+    otp,
+    otpExpire,
   })
 
-  const token = await freelancer.generateToken()
-  res.cookie('token', token)
-  res.status(201).json({token, freelancer})
+  await sendOTP(email, otp)
+  // const token = await freelancer.generateToken()
+  // res.cookie('token', token)
+  res.status(201).json({email, message: "Otp Send Successfully"})
+}
+
+module.exports.verifyOtp = async(req, res, next)=>
+{
+  const {email, otp} = req.body  
+
+  const pendingUser = await pendingUserModel.findOne({email})
+  if(!pendingUser)
+  {
+    return  res.status(404).json({message : "OTP is Isvalid"})
+  }  
+  if(pendingUser.otpExpire < Date.now())
+  {
+    return res.status(404).json({message : "OTP has been expired"})
+  }
+
+  if(pendingUser.otp!==otp)
+  {
+    return res.status(404).json({message : "Invalid OTP"})
+  }
+
+  const freelancer = await freelancerModel.create({
+    fullname :
+    {
+      firstname : pendingUser.fullname.firstname,
+      lastname :  pendingUser.fullname.lastname
+    },
+    email:pendingUser.email,
+    password:pendingUser.password,
+    contactno:pendingUser.contactno,
+    gender:pendingUser.gender,
+  })
+  await freelancer.save()
+
+  await pendingUserModel.deleteOne({email})
+  const token = freelancer.generateToken();
+
+  res.status(201).json({message : "Account Created Successfully", token ,freelancer})
+}
+
+module.exports.resendOtp = async(req, res)=>
+{
+  const {email} = req.body
+  
+  const pendingUser = await pendingUserModel.findOne({email})
+
+  if(!pendingUser) 
+  {
+    return res.status(404).json({message: "Please Login again, Session has been expired"})
+  }
+
+  const otp = Math.floor(100000+Math.random() *900000).toString()
+  const otpExpire = new Date(Date.now()+5*60*1000)
+
+  pendingUser.otp = otp
+  pendingUser.otpExpire = otpExpire
+  await pendingUser.save()
+
+    sendOTP(email, otp)
+
+  res.status(201).json({message : "OTP Resend Successfully"})
 }
 
 module.exports.login = async (req, res, next) =>

@@ -96,7 +96,7 @@ const FreelancerProfile = () => {
           setFreelancer(data.user)
         }catch(err)
         {
-          console.log(err.response?.data)
+            toast.error(err?.response?.data?.message) 
         }finally{
           setTimeout(() => {
             setisLoading(false)
@@ -186,7 +186,8 @@ const FreelancerProfile = () => {
     
       toast.success("Profile Updated Successfully");
   } catch (err) {
-    console.log(err.response.data);
+          toast.error(err?.response?.data?.message)  
+    
   }finally{
     setTimeout(() => {
       setisLoading(false)

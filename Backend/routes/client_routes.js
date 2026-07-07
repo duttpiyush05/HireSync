@@ -21,6 +21,10 @@ router.post('/login',[
   body('password').isLength({min:6}).withMessage("Invalid Credentials")
 ], clientController.login)
 
+router.post('/auth/verify-otp', clientController.verifyOtp)
+
+router.post('/auth/resend-otp', clientController.resendOtp)
+
 router.get('/logout',authClient, clientController.logout)
 
 router.get('/profile', authClient, clientController.getprofile)

@@ -3,6 +3,7 @@ import React,{useEffect, useState, useContext} from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { NotificationsContext } from '../../src/context/NotificationContext'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Notification = () => {
   const [isloading, setisLoading] = useState(true)
@@ -37,18 +38,18 @@ const Notification = () => {
       setUnreadCount(0)
     }catch(err)
     {
-      console.log(err.response.data);      
+      toast.error(err.response.data?.message);      
     }
   }
 
   useEffect(()=>
   {
-    if(page===1)
-    {
-      setAllNotifications(notifications)
-      setisLoading(false)
-      return
-    }
+    // if(page===1)
+    // {
+    //   setAllNotifications(notifications)
+    //   setisLoading(false)
+    //   return
+    // }
     const fetchNotifications = async()=>
     {
       try
@@ -60,8 +61,8 @@ const Notification = () => {
             }
           }
         )                
-        const data = response.data
-        console.log(data);        
+        const data = response.data 
+            
         setAllNotifications(prev => [
             ...prev,
             ...data.notifications
@@ -73,7 +74,7 @@ const Notification = () => {
       }
       catch(err)
       {
-        console.log(err?.response?.data);        
+        toast.error(err?.response?.data?.message);        
       }
       finally{
         setTimeout(()=>
@@ -92,10 +93,9 @@ const Notification = () => {
       markAllAsRead()
     }
   },[])
-
   const handleReviewContract = (contractId)=>
   {
-    navigate(`/client/contracts/${contractId}`)
+    navigate(`/${role}/contracts/${contractId}`)
   } 
    if(isloading)
     {
@@ -111,11 +111,6 @@ const Notification = () => {
         </div>
       )
     }
-
-    // console.log(page);
-    console.log(totalPages);
-    // console.log(totalNotifications);
-    
 
   return (
     <div className='bg-[#0c1324] min-h-screen text-white'>

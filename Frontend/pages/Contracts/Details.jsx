@@ -35,7 +35,7 @@ const Details = () => {
         setRole(response?.data?.role)               
       }catch(err)
       {
-        console.log(err.response?.data);
+        toast.error(err.response?.data?.message);
       }
     }
     fetchContract()
@@ -62,7 +62,7 @@ const Details = () => {
       
     }catch(err)
     {
-      console.log(err?.response?.data);
+      toast.error(err?.response?.data?.message);
     }
   }
 
@@ -84,7 +84,7 @@ const Details = () => {
       }
     }catch(err)
     {
-      console.log(err?.response?.data);      
+      toast.error(err?.response?.data?.message)  
     }
   }
 
@@ -108,7 +108,7 @@ const Details = () => {
       
     }catch(err)
     {
-      console.log(err?.response?.data);
+      toast.error(err?.response?.data?.message)  
     }
   }
 
