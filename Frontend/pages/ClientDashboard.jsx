@@ -27,9 +27,7 @@ const ClientDashboard = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/clients/profile`, {
           headers: { Authorization: `Bearer ${token}` }
-        })        
-        console.log();
-        
+        })                
         setclient(response.data.user)
         setClientId(response.data.user._id)
         setActiveContracts(response.data.activeContracts)
@@ -343,12 +341,12 @@ const ClientDashboard = () => {
               <div className='flex items-center justify-between px-5 py-4 border-b border-[#1e2230]'>
                 <div>
                   <h2 className='text-xl font-bold'>Reviews Received</h2>
-                  <div className='flex items-center gap-1.5 mt-1'>
+                  {/* <div className='flex items-center gap-1.5 mt-1'>
                     {[1,2,3,4,5].map(s => (
                       <i key={s} className="ri-star-fill text-amber-400 text-lg"></i>
                     ))}
                     <span className='text-xs text-gray-400 ml-1'>4.7 avg rating</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='divide-y divide-[#1e2230]'>

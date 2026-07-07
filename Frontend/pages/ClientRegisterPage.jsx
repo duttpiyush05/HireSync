@@ -4,10 +4,11 @@ import registerImage from '../src/assets/register.png'
 import { ClientDataContext } from '../src/context/ClientContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const RegisterPage = () => {
 
-    const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [firstname, setfirstname] = useState('')
   const [lastname, setlastname] = useState('')
   const [email, setEmail] = useState('')
@@ -42,10 +43,17 @@ const RegisterPage = () => {
         const data = response.data
         setclient(data.client)
         localStorage.setItem('token', data.token)
-        navigate('/client/dashboard')
+        navigate('/verify-otp',
+          {
+            state: {
+            email : response?.data?.email,
+            role : 'clients'
+          }
+          }
+        )
       }
     } catch (err) {
-      console.log(err.response.data)
+      toast.error(err.response.data?.message || "Something Went Wrong")
     }
 
     setfirstname('')

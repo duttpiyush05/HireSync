@@ -27,9 +27,7 @@ const LoginFLPage = () => {
 
       toast.error(response?.msg)
 
-      if (response.status === 200) {
-        console.log(response);
-        
+      if (response.status === 200) {        
         const data = response.data
         localStorage.setItem('token', data.token)
         setfreelancer(data.freelancer)

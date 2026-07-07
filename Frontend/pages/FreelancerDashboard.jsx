@@ -34,7 +34,7 @@ const FreelancerDashboard = () => {
         setSpent(response.data.spent)
         setfreelancer(response.data.user)
       } catch (err) {
-        console.log(err?.response?.data)
+              toast.error(err?.response?.data?.message)  
       } finally {
         setTimeout(() => setisLoading(false), 2000)
       }

@@ -219,7 +219,7 @@ const Dashboard = () => {
       
             <Link
               to={`/${role}/messages/${c?._id}`}
-              className='w-full md:w-auto inline-flex items-center justify-center px-4 py-5 h-9 bg-[#4773ca] rounded-lg border border-[#2e49ab] hover:bg-[#10689b] transition-colors text-md font-medium text-gray-300'
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 py-5 h-9 bg-[#538dff] rounded-lg border border-[#2e49ab] hover:bg-[#006aa7] transition-colors text-md font-medium text-gray-300'
             >
             Message
             </Link>
@@ -237,7 +237,7 @@ const Dashboard = () => {
           ) : (
             <Link
               to={role==="freelancer" ?`/freelancer/contracts/${c?._id}` :`/client/contracts/${c?._id}`}
-              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-[#26988e] hover:bg-[#007552] transition-colors text-md font-medium text-gray-300 py-6'
+              className='w-full md:w-auto inline-flex items-center justify-center px-4 h-9 rounded-lg border border-[#1e2230] bg-[#00aa60] hover:bg-[#007552] transition-colors text-sm font-medium text-gray-300 py-6'
             >
               View Contract
             </Link>

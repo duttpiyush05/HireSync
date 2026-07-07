@@ -44,9 +44,7 @@ const Review = ({jobData, setjobData}) => {
           'Content-Type' : 'application/json',
           'Authorization' : `Bearer ${localStorage.getItem('token')}`
         }
-      })  
-      console.log(response);
-      
+      })        
       const data = await response.data
       if(response.status === 201)
       {
@@ -71,8 +69,7 @@ const Review = ({jobData, setjobData}) => {
       } 
     }catch(err)
     {
-      console.log(err.response.data)
-      alert('An error occurred while posting the job. Please try again.')
+      toast.error('An error occurred while posting the job. Please try again.')
     }
   }
 

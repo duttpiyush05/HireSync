@@ -35,6 +35,7 @@ import Messages from '../pages/Messages/Message'
 import Dashboard from '../pages/Contracts/Dashboard'
 import JobInfo from '../pages/Jobs/JobInfo'
 import EditJob from '../pages/Jobs/EditJob'
+import OtpVerification from '../pages/OtpVerification/OtpVerification'
 
 //context api
 import {NotificationsContext} from './context/NotificationContext'
@@ -60,7 +61,7 @@ function App() {
       }
       catch(err)
       {
-        console.log(err.response.data);        
+            
       }
     }
     fetchUnreadCount()
@@ -155,6 +156,7 @@ function App() {
       <Route path='/fl/login' element={<LoginFLPage/>} />
       <Route path='/client/login' element={<ClinetLoginPage/>} />
       <Route path='/client/register' element={<ClientRegisterPage />} />
+      <Route path='/verify-otp' element={<OtpVerification />} />
 
       </Routes>
     

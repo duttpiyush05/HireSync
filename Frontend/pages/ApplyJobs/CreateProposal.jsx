@@ -112,9 +112,7 @@ const CreateProposal = () => {
       {
         navigate(`/proposals/${proposalId}/submission`)
         toast.success("Proposal Sucessfully Submitted")
-      }
-      console.log(response);
-      
+      }      
     }catch(err)
     {
       toast.error(err?.response?.data?.message)   

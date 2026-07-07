@@ -1,302 +1,115 @@
 # HireSync
 
-HireSync is a full-stack freelance marketplace platform with separate Frontend and Backend projects.
+HireSync is a full-stack freelance marketplace platform built to connect clients and freelancers in one unified experience. It allows clients to publish jobs, evaluate proposals, and manage work contracts, while freelancers can explore available opportunities, submit proposals, communicate with clients, and monitor their work progress.
 
-## Overview
+## Project overview
 
-- **Frontend:** React + Vite application for client and freelancer workflows.
-- **Backend:** Node.js + Express API with MongoDB persistence and Socket.io realtime support.
-- **Features:** job posting, proposals, contracts, profiles, notifications, messaging, and realtime presence.
+This repository contains the complete application as a split-stack project:
+
+- Frontend: a React + Vite web application that provides the user-facing interface for the marketplace experience
+- Backend: an Express + MongoDB service that handles authentication, database operations, business logic, API endpoints, and real-time communication
+
+At this stage, the project is in an active MVP-style development phase. The core freelance marketplace workflows have already been implemented and connected across both layers, which means the application is moving beyond a basic prototype and into a more complete, practical product experience.
+
+## What this platform is meant to do
+
+HireSync is designed to support the full lifecycle of freelance work, from discovering an opportunity to completing the job. The key user journeys covered by the platform include:
+
+- User registration and login for both clients and freelancers
+- Job creation, browsing, editing, and closing
+- Freelancer proposal submission for open jobs
+- Client review and decision-making on submitted proposals
+- Contract creation and status updates for accepted work
+- Profile creation and editing, portfolio uploads, and review history
+- Notifications and messaging between users
+- Live online presence and real-time chat through socket-based communication
+
+## Why the project matters
+
+The purpose of this repository is not only to build a freelance marketplace, but also to demonstrate how a modern web application can be organized in a practical and scalable way. It brings together frontend user interface design, backend API development, database modeling, authentication, file handling, and real-time interaction in one coherent system.
+
+## Architecture at a glance
+
+The application is structured around a clean separation of concerns:
+
+- The frontend focuses on presenting information, capturing user input, and guiding the user through each workflow
+- The backend focuses on protecting data, applying business rules, and exposing the services the frontend needs
+- The database stores persistent records for users, jobs, proposals, contracts, messages, and notifications
+- Real-time communication is handled separately so users can receive updates instantly without refreshing the page
+
+This makes the project easier to understand, maintain, and extend as new features are added later.
+
+## Main technologies used
+
+### Frontend
+- React for building interactive user interfaces
+- Vite for fast local development and efficient production builds
+- React Router for navigation between screens
+- Axios for communicating with the backend API
+- Socket.IO client for live updates and messaging
+
+### Backend
+- Node.js and Express for the server and API layer
+- MongoDB with Mongoose for storing and organizing application data
+- JWT for authentication and protected routes
+- Socket.IO for real-time messaging and online status features
+- Nodemailer for email-based features such as OTP and notifications
+
+### Development tooling
+- ESLint for maintaining code quality
+- Nodemon for automatic backend restarts during development
+- Concurrently for launching frontend and backend together
 
 ## Repository structure
 
-```
+```text
 HireSync/
-├── README.md          # Root project documentation
-├── Frontend/          # Frontend React + Vite application
-└── Backend/           # Backend Express API service
+├── Frontend/        # React/Vite frontend application
+├── Backend/         # Express/MongoDB backend service
+├── package.json     # Root scripts for running both services
+└── README.md        # Project-level documentation
 ```
 
-## Frontend
+## How to run the project locally
 
-The `Frontend` folder contains the React client application.
+### 1. Install dependencies
 
-Key files:
-- `Frontend/package.json` — frontend dependencies and scripts
-- `Frontend/vite.config.js` — Vite configuration
-- `Frontend/src/main.jsx` — app entry point
-- `Frontend/src/App.jsx` — root application component
-- `Frontend/src/socket.js` — Socket.io client initialization
-- `Frontend/src/context/` — auth and notification providers
-- `Frontend/pages/` — page routes for jobs, proposals, contracts, notifications, and profiles
-- `Frontend/components/` — reusable UI components
-
-## Backend
-
-The `Backend` folder contains the API service and realtime server.
-
-Key files:
-- `Backend/package.json` — backend dependencies
-- `Backend/server.js` — server startup and Socket.io configuration
-- `Backend/app.js` — Express application setup
-- `Backend/db/db.js` — MongoDB connection helper
-- `Backend/routes/` — API route definitions
-- `Backend/controllers/` — request handlers and business logic
-- `Backend/models/` — database schemas
-- `Backend/middlewares/` — auth and file upload middleware
-- `Backend/socket.js` — realtime helper functions
-
-## Run locally
-
-### Backend
+From the project root, install the dependencies for the root workspace first, then install the frontend and backend dependencies separately:
 
 ```bash
-cd Backend
 npm install
-node server.js
+cd Frontend && npm install
+cd ../Backend && npm install
 ```
 
-For development reload, run:
+### 2. Start the application
+
+Once the dependencies are installed, you can start the full project from the repository root using:
 
 ```bash
-cd Backend
-npx nodemon
+npm run dev:all
 ```
 
-### Frontend
+This command launches both the backend and frontend together so the application can be used locally in a single workflow.
 
-```bash
-cd Frontend
-npm install
-npm run dev
-```
+## Root scripts
 
-The frontend typically launches at `http://localhost:5173`.
+The root package provides a few useful commands for development:
 
-## Notes
+- `npm run start:backend` — starts the backend service
+- `npm run start:frontend` — starts the frontend development server
+- `npm run dev:all` — starts both services in parallel
 
-- Start the backend before the frontend.
-- The frontend uses `Frontend/src/socket.js` for realtime socket connections.
-- The backend service starts in `Backend/server.js`.
+## Documentation
+
+For deeper information about each part of the application, see:
+
+- [Frontend README](Frontend/README.md) — detailed documentation for the frontend application
+- [Backend README](Backend/Readme.md) — detailed documentation for the backend service
 
 ## Current status
 
-- Client and freelancer dashboards are available.
-- Job posting, proposal submission, contract management, profiles, notifications, and messaging are implemented.
-- Realtime socket events support chat and presence.
-
-## Support
-
-This repository includes a root-level helper script to run both the Backend and Frontend together.
-
-### Root commands
-- `npm install` — install root dependencies, including `concurrently`
-- `npm run start:backend` — start the backend service
-- `npm run start:frontend` — start the frontend dev server
-- `npm run dev:all` — run backend and frontend in parallel
-
-### Notes
-- The backend starts from `Backend/server.js`.
-- The frontend starts from `Frontend/src/main.jsx`.
-- Use `npm run dev:all` for a single command development workflow.
-
----
-
-## 🔐 Security Features
-```javascript
-{
-  _id: ObjectId,
-  title: String,
-  description: String,
-  category: String,
-  skillsRequired: [String],
-  budget: {
-    type: String (fixed/hourly),
-    min: Number,
-    max: Number
-  },
-  duration: String,
-  experienceLevel: String (entry/intermediate/expert),
-  clientId: ObjectId (ref: Client),
-  status: String (active/closed/completed),
-  proposals: [ObjectId],
-  createdAt: Date,
-  deadline: Date,
-  updatedAt: Date
-}
-```
-
-### Proposal Schema
-```javascript
-{
-  _id: ObjectId,
-  jobId: ObjectId (ref: Job),
-  freelancerId: ObjectId (ref: Freelancer),
-  bidAmount: Number,
-  estimatedDuration: String,
-  message: String,
-  attachments: [String],
-  status: String (pending/accepted/rejected),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Contract Schema
-```javascript
-{
-  _id: ObjectId,
-  jobId: ObjectId (ref: Job),
-  clientId: ObjectId (ref: Client),
-  freelancerId: ObjectId (ref: Freelancer),
-  amount: Number,
-  currency: String,
-  startDate: Date,
-  endDate: Date,
-  milestones: [{
-    title: String,
-    amount: Number,
-    dueDate: Date,
-    completed: Boolean
-  }],
-  status: String (active/completed/cancelled),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
----
-
-## 🔐 Security Features
-
-### Authentication & Authorization
-- **JWT Tokens**: Secure token-based authentication
-- **Password Hashing**: BCrypt for secure password storage
-- **Token Blacklisting**: Revoke tokens on logout
-- **Role-based Access Control**: Separate permissions for Clients and Freelancers
-- **Protected Routes**: Frontend route guards and backend middleware
-
-### Data Security
-- **Input Validation**: All API inputs validated
-- **CORS Protection**: Cross-origin requests controlled
-- **SQL Injection Prevention**: Mongoose prevents NoSQL injection
-- **XSS Protection**: React escapes content by default
-- **Rate Limiting**: Prevent brute force attacks (can be added)
-
-### File Upload Security
-- **File Type Validation**: Only allowed file types accepted
-- **File Size Limits**: Maximum file size enforced
-- **Secure Storage**: Files stored outside web root
-- **Access Control**: Only authorized users can access files
-
----
-
-## 🧪 Testing
-
-### Frontend Testing
-```bash
-cd Frontend
-npm run test          # Run unit tests
-npm run test:coverage # Generate coverage report
-```
-
-### Backend Testing
-```bash
-cd Backend
-npm run test          # Run unit tests
-npm run test:api      # Run API integration tests
-```
-
----
-
-## 📊 Performance Optimization
-
-### Frontend Optimizations
-- **Code Splitting**: Dynamic imports for lazy loading
-- **Image Optimization**: Responsive images and compression
-- **Caching**: Browser cache for static assets
-- **Minification**: Production builds automatically minified
-
-### Backend Optimizations
-- **Database Indexing**: Indexes on frequently queried fields
-- **Pagination**: Large result sets paginated
-- **Caching**: Redis for session and query caching (optional)
-- **Load Balancing**: Can be deployed across multiple instances
-
----
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Port Already in Use**
-```bash
-# Change port or kill process
-# Windows: netstat -ano | findstr :5000
-# Mac/Linux: lsof -i :5000
-```
-
-**MongoDB Connection Error**
-- Verify MongoDB is running
-- Check the backend database connection string
-- Ensure IP whitelist includes your machine (for cloud DB)
-
-**CORS Errors**
-- Verify the frontend uses the correct API base URL
-- Check CORS configuration in Backend app.js
-- Ensure backend server is running
-
-**Module Not Found**
-```bash
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-```
-
----
-
-## 📈 Deployment
-
-### Frontend Deployment (Netlify/Vercel)
-1. Build the frontend: `npm run build`
-2. Deploy the `dist` folder to your hosting service
-3. Set environment variables for production API URL
-
-### Backend Deployment (Heroku/AWS/DigitalOcean)
-1. Set production environment variables
-2. Ensure MongoDB cloud instance is set up
-3. Deploy code using Git or container images
-4. Configure custom domain and SSL
-
----
-
-## 📚 Documentation
-
-- **[Backend README](./Backend/Readme.md)** - Detailed backend setup and API docs
-- **[Frontend Setup](./Frontend/README.md)** - Frontend-specific configuration
-- API Postman Collection: [Download](./api-collection.json)
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. **Fork the repository** to your GitHub account
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes** with clear, descriptive commits
-4. **Commit with messages**: `git commit -m 'Add amazing feature'`
-5. **Push to your branch**: `git push origin feature/amazing-feature`
-6. **Submit a Pull Request** with detailed description
-
-### Code Standards
-- Follow ESLint configuration in `eslint.config.js`
-- Write meaningful commit messages
-- Add comments for complex logic
-- Keep functions small and focused
-- Test your code before submitting
-
----
+The core marketplace experience is already implemented and connected across the stack. The project is now in a stage where refinement, stability, validation, and preparation for deployment are the next important steps.
 
 ## 📞 Contact & Support
 

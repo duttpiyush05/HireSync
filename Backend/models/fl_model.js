@@ -81,12 +81,6 @@ freelancerSchema.methods.generateToken = function()
   return token
 }
 
-freelancerSchema.statics.hashPassword = async function (password)
-{
-  const hashedPassword = await bcrypt.hash(password, 10)
-  return hashedPassword
-}
-
 freelancerSchema.methods.comparePassword = async function (password)
 {
   return await bcrypt.compare(password, this.password)

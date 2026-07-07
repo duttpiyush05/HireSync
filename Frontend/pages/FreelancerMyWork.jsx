@@ -19,9 +19,7 @@ const FreelancerMyWork = () => {
             Authorization : `Bearer ${localStorage.getItem('token')}`
           }
         })     
-        const data= response?.data
-        console.log(data);
-        
+        const data= response?.data        
         setJobs(data?.jobs)
       }
       catch(err)

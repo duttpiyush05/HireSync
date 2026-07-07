@@ -47,8 +47,15 @@ const RegisterPage = () => {
         const data = response.data
         setfreelancer(data.freelancer)
         localStorage.setItem('token', data.token)
-        console.log(data.freelancer)
-        navigate('/fl/dashboard')
+        toast.success(response?.data?.message)
+        navigate(`/verify-otp`,
+          {
+            state: {
+              email : response?.data?.email,
+              role : 'freelancers'
+            }
+          }
+        )
       }
     } catch(err) {
       toast.error(err?.response?.data?.message)

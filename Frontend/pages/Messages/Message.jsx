@@ -301,7 +301,7 @@ const Messages = () => {
           <div className='relative w-11 h-11 rounded-full overflow-hidden bg-[#1e2230] border border-[#2a2c4a] flex-shrink-0'>
 
             {
-              role==='client' && (
+              role==='client' && freelancer?.profile?.profilePicture &&(
                 <img
                             src={
                         `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`
@@ -313,7 +313,7 @@ const Messages = () => {
               
             }
             {
-              role==='freelancer' && (
+              role==='freelancer' && client?.profilePicture &&(
                 <img
                             src={
                         `${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${client?.profilePicture}`

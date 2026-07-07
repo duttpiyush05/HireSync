@@ -5,6 +5,7 @@ import axios from 'axios'
 import socket from '../src/socket'
 import { Outlet } from 'react-router-dom'
 import { NotificationsContext } from '../src/context/NotificationContext'
+import { toast } from 'react-toastify'
 
 const FreelancerAuth = ({children}) => {
 
@@ -59,7 +60,7 @@ const FreelancerAuth = ({children}) => {
       }
       catch(err)
       {
-        console.log(err)
+        toast(err?.response?.data?.message)
         navigate('/fl/login')
       }
     }
