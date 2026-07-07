@@ -55,7 +55,7 @@ const Navbar = () => {
           <div className='flex items-center gap-4 sm:gap-8 flex-1'>
             <Link
               to='/'
-              className='text-xl sm:text-2xl lg:text-3xl font-extrabold whitespace-nowrap'
+              className='text-xl sm:text-2xl lg:text-3xl font-extrabold whitespace-nowrap bg-gradient-to-r from-[#a5a8ff] via-[#c7c9ff] to-[#a855f7] bg-clip-text text-transparent'
             >
               HireSync
             </Link>
@@ -102,11 +102,15 @@ const Navbar = () => {
               aria-label="Profile"
               className='bg-gradient-to-br from-[#6366F1] to-[#a855f7] w-11 h-11 sm:w-10 sm:h-10 rounded-full flex-shrink-0 cursor-pointer p-[2px] hover:opacity-90 transition-opacity'
             >
-              <img
+              {
+                freelancer?.profile?.profilePicture && (
+                  <img
                 className="w-full h-full object-cover rounded-full border-2 border-[#111827]"
                 src={`${import.meta.env.VITE_BASE_URL}/uploads/profilePics/${freelancer?.profile?.profilePicture}`}
                 alt="profile"
               />
+                )
+              }
             </button>
 
             {/* Hamburger — mobile only */}
