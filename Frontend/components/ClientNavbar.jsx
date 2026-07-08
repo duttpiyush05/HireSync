@@ -54,11 +54,11 @@ const ClientNavbar = () => {
                 {/* Left: Logo + Nav Links */}
                 <div className='flex items-center gap-4 sm:gap-8 flex-1'>
                   <Link
-                    to='/'
-                    className='text-xl sm:text-2xl lg:text-3xl font-extrabold whitespace-nowrap'
-                  >
-                    HireSync
-                  </Link>
+              to='/'
+              className='text-xl sm:text-2xl lg:text-3xl font-extrabold whitespace-nowrap bg-gradient-to-r from-[#a5a8ff] via-[#c7c9ff] to-[#a855f7] bg-clip-text text-transparent'
+            >
+              HireSync
+            </Link>
 
                   {/* Desktop Nav */}
                   <ol className='hidden md:flex gap-1 lg:gap-2 items-center font-semibold text-sm lg:text-base'>

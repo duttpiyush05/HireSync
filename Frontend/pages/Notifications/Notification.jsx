@@ -44,12 +44,12 @@ const Notification = () => {
 
   useEffect(()=>
   {
-    // if(page===1)
-    // {
-    //   setAllNotifications(notifications)
-    //   setisLoading(false)
-    //   return
-    // }
+    if(page===1)
+    {
+      setAllNotifications(notifications)
+      setisLoading(false)
+      return
+    }
     const fetchNotifications = async()=>
     {
       try
@@ -173,7 +173,7 @@ const Notification = () => {
                     {!n.isRead && <span className='w-2 h-2 rounded-full bg-[#6366F1] flex-shrink-0'></span>}
                   </div>
 
-                  {n?.contract_id?.length > 0 && (
+                  {n?.contract_id?.length > 0 && role=='client' &&(
                     <button
                       onClick={() => handleReviewContract(n?.contract_id)}
                       className='px-8 py-1.5 text-xs sm:text-lg font-medium text-blue-400 border border-blue-500/40 rounded-lg hover:bg-blue-500/10 transition-colors whitespace-nowrap'

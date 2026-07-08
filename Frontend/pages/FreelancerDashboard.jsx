@@ -11,6 +11,7 @@ const FreelancerDashboard = () => {
   const [pendingProposals, setPendingProposals] = useState([])
   const [notifications, setNotifications] = useState([])
   const [jobs, setJobs]= useState([])
+  const [reviews, setReviews] = useState([])
   const [activeContractsCount, setActiveContractsCount] = useState(0)
   const [completedContractsCount, setCompletedContractsCount] = useState(0)
   const [pendingProposalsCount, setPendingProposalsCount] = useState(0)
@@ -28,6 +29,7 @@ const FreelancerDashboard = () => {
         setPendingProposals(response.data.pendingProposals)
         setNotifications(response.data.notifications)
         setJobs(response?.data?.jobs)
+        setReviews(response?.data?.reviews)
         setActiveContractsCount(response.data.activeContractsCount)
         setCompletedContractsCount(response.data.completedContractsCount)
         setPendingProposalsCount(response.data.pendingProposalsCount)
@@ -97,10 +99,12 @@ const FreelancerDashboard = () => {
   }
 
 
-  const reviews = [
-    { name: 'Sarah Jenkins', company: 'ABC Pvt Ltd', rating: 5, comment: 'Exceptional work, delivered ahead of schedule. Highly recommend!', avatar: 'SJ', color: '#6366F1' },
-    { name: 'Marcus Thorne', company: 'TechFlow', rating: 5, comment: 'Great communication and top-tier technical skills.', avatar: 'MT', color: '#1d9e75' },
-  ]
+  const _reviews = []
+
+  // const reviews = [
+  //   { name: 'Sarah Jenkins', company: 'ABC Pvt Ltd', rating: 5, comment: 'Exceptional work, delivered ahead of schedule. Highly recommend!', avatar: 'SJ', color: '#6366F1' },
+  //   { name: 'Marcus Thorne', company: 'TechFlow', rating: 5, comment: 'Great communication and top-tier technical skills.', avatar: 'MT', color: '#1d9e75' },
+  // ]
 
   if (isloading) {
     return (
@@ -337,21 +341,21 @@ const FreelancerDashboard = () => {
               <div className='flex items-center justify-between px-5 py-4 border-b border-[#1e2230]'>
                 <div>
                   <h2 className='text-xl font-bold'>Reviews</h2>
-                  <div className='flex items-center gap-1.5 mt-1'>
+                  {/* <div className='flex items-center gap-1.5 mt-1'>
                     {[1,2,3,4,5].map(s => (
                       <i key={s} className="ri-star-fill text-amber-400 text-lg"></i>
                     ))}
                     <span className='text-xs text-gray-400 ml-1'>4.9 avg • 12 reviews</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='divide-y divide-[#1e2230]'>
-                {reviews.length === 0 && (
+                {_reviews.length === 0 && (
                   <div className='py-10 flex justify-center items-center font-bold text-base text-gray-500'>
                     No Reviews Yet
                   </div>
                 )}
-                {reviews.map((r, i) => (
+                {_reviews.map((r, i) => (
                   <div key={i} className='px-5 py-4 hover:bg-[#161c2a] transition-colors'>
                     <div className='flex items-center gap-3 mb-2'>
                       <div className='w-12 h-12 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0' style={{ background: r.color + '33' }}>
