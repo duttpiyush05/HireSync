@@ -177,7 +177,7 @@ const FindWork = () => {
                           <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 text-gray-400 text-sm mt-5 min-w-0'>
                             <div className='text-sm sm:text-base flex flex-col gap-1 bg-[#0e1226] p-3 border border-[#23284a] rounded-lg min-w-0'>
                               <span>Budget</span>
-                              <span className='font-semibold text-white truncate'>${job.budget.minbudget}-${job.budget.maxbudget}</span>
+                              <span className='font-semibold text-white truncate'>₹{job.budget.minbudget}-₹{job.budget.maxbudget}</span>
                             </div>
                             <div className='text-sm sm:text-base flex flex-col gap-1 bg-[#0e1226] p-3 border border-[#23284a] rounded-lg min-w-0'>
                               <span>Duration</span>

@@ -113,7 +113,7 @@ const Applicants = () => {
             </div>
 
             {/* PROPOSAL CARDS */}
-            <div className='grid grid-cols-1 xl:grid-cols-1 gap-5 sm:gap-6'>
+            <div className='grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6'>
               {proposals.map((job) => (
                 job.status === 'rejected' || job.status === 'accepted' ? null : (
 
@@ -167,13 +167,13 @@ const Applicants = () => {
 
                     {/* Stats Row */}
                     <div className='grid grid-cols-3 gap-3 mb-5 relative z-10'>
-                      <div className='bg-[#0c1324] border border-[#1e2230] rounded-xl p-3'>
-                        <p className='text-base text-gray-500 mb-1'>Asking</p>
-                        <p className='text-sm sm:text-base font-bold text-green-400'>₹{job?.receivingAmt}</p>
+                      <div className='h-25 bg-[#0c1324] border border-[#1e2230] rounded-xl p-3'>
+                        <p className='text-lg text-gray-500 mb-1'>Asking</p>
+                        <p className='text-sm sm:text-lg font-bold text-green-400'>₹{job?.receivingAmt}</p>
                       </div>
                       <div className='bg-[#0c1324] border border-[#1e2230] rounded-xl p-3'>
-                        <p className='text-base text-gray-500 mb-1'>Duration</p>
-                        <p className='text-sm sm:text-base font-bold text-white truncate'>{job.estCompletion}</p>
+                        <p className='text-lg text-gray-500 mb-1'>Duration</p>
+                        <p className='text-sm sm:text-lg font-bold text-white truncate'>{job.estCompletion}</p>
                       </div>
                       <div className='bg-[#0c1324] border border-[#1e2230] rounded-xl p-3 cursor-pointer'>
                         <p className='text-base text-gray-500 mb-1'>Portfolio</p>
@@ -199,7 +199,7 @@ const Applicants = () => {
                     <div className='grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 relative z-10'>
                       <Link
                         to={`/freelancer/profiles/${job?.freelancer?._id}`}
-                        className='flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 rounded-xl bg-[#19192f] border border-[#33336e] hover:bg-[#23234f] transition-colors text-xs sm:text-base font-semibold text-[#a5a8ff]'
+                        className='flex items-center justify-center gap-1.5 h-10 sm:h-15 px-3 rounded-xl bg-[#19192f] border border-[#33336e] hover:bg-[#23234f] transition-colors text-xs sm:text-base font-semibold text-[#a5a8ff]'
                       >
                         <i className="ri-user-line"></i>
                         <span className='hidden sm:inline'>Profile</span>
@@ -208,7 +208,7 @@ const Applicants = () => {
 
                       <button
                         onClick={() => updateProposalStatus(job?._id, "accepted")}
-                        className='flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 rounded-xl bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-xs sm:text-base font-semibold text-white'
+                        className='flex items-center justify-center gap-1.5 h-10 sm:h-15 px-3 rounded-xl bg-[#6366F1] hover:bg-[#4f52d9] transition-colors text-xs sm:text-base font-semibold text-white'
                       >
                         <i className="ri-checkbox-circle-line"></i>
                         Accept
@@ -216,7 +216,7 @@ const Applicants = () => {
 
                       <button
                         onClick={() => updateProposalStatus(job?._id, "rejected")}
-                        className='flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 rounded-xl bg-[#2a0a0a] border border-red-800/50 hover:bg-[#3a1010] transition-colors text-xs sm:text-base font-semibold text-red-400'
+                        className='flex items-center justify-center gap-1.5 h-10 sm:h-15 px-3 rounded-xl bg-[#2a0a0a] border border-red-800/50 hover:bg-[#3a1010] transition-colors text-xs sm:text-base font-semibold text-red-400'
                       >
                         <i className="ri-close-circle-line"></i>
                         Reject

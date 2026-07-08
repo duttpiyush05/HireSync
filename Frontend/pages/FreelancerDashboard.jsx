@@ -24,7 +24,7 @@ const FreelancerDashboard = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/freelancers/profile`, {
           headers: { Authorization: `Bearer ${token}` }
-        })
+        })        
         setActiveContacts(response.data.activeContracts)
         setPendingProposals(response.data.pendingProposals)
         setNotifications(response.data.notifications)
@@ -114,7 +114,6 @@ const FreelancerDashboard = () => {
       </div>
     )
   }
-
   return (
     <div className='bg-[#0c1324] min-h-screen text-white'>
       <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 py-8'>
@@ -278,7 +277,7 @@ const FreelancerDashboard = () => {
                     </div>
                     <div className='flex-1 min-w-0'>
                       <p className='text-base font-bold capitalize text-white truncate'>{job.title}</p>
-                      <p className='text-sm text-gray-400 mt-0.5'>{job.company} • {job.duration}</p>
+                      <p className='text-sm text-gray-400 mt-0.5'>{job?.company} • {job.duration}</p>
                       <div className='flex gap-2 mt-2 flex-wrap'>
                         {job.skills.map((s, j) => (
                           <span key={j} className='text-sm px-2 py-2.5 rounded-md bg-[#19192f] border border-[#33336e] text-gray-300'>{s}</span>

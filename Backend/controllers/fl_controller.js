@@ -10,6 +10,7 @@ const pendingUserModel = require('../models/pending_users')
 const {sendOTP} = require('../services/mail_services')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
 
 
 module.exports.register = async (req, res, next) =>
@@ -201,15 +202,53 @@ module.exports.getprofile = async(req, res, next)=>
         })
       const spent = totalSpent.length > 0 ? totalSpent[0].totalAmount : 0
 
-      const jobs = await jobModel.find({
-        status:'open'
-      }).
-      sort({createdAt : -1}).
-      limit(3).
-      populate({
-        path:'client',
-        select:'companyProfile.companyName'
-      })
+   const jobs = await jobModel.aggregate([
+  {
+    $match: {
+      status: "open"
+    }
+  },
+  {
+    $lookup: {
+      from: "proposals",
+      let: { jobId: "$_id" },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: ["$job", "$$jobId"] },
+                { $eq: ["$freelancer", new mongoose.Types.ObjectId(req.user._id)] }
+              ]
+            }
+          }
+        }
+      ],
+      as: "myProposal"
+    }
+  },
+  {
+    $match: {
+      myProposal: { $size: 0 }
+    }
+  },
+  {
+    $project: {
+      myProposal: 0
+    }
+  },
+  {
+    $sort: {
+      createdAt: -1
+    }
+  }
+]);
+
+await jobModel.populate(jobs, {
+  path: "client",
+  select: "companyProfile.companyName"
+});
+
 
   res.status(200).json({activeContractsCount, activeContracts,pendingProposalsCount,pendingProposals,completedContractsCount, spent, notifications, jobs, user : req.user})
 }
@@ -221,7 +260,7 @@ module.exports.getfreelancerbyId = async (req, res, next)=>
     res.status(201).json({freelancer})
 }
 
-module.exports.updateProfile = async (req, res) => { 
+module.exports.updateProfile = async (req, res) => {   
     try {
 
         const updateData = {

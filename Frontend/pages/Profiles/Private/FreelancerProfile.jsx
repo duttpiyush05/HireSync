@@ -295,12 +295,12 @@ const FreelancerProfile = () => {
                     <i className="ri-github-fill text-gray-400 text-3xl flex-shrink-0"></i>
                     <input
                       type='text'
-                      value={freelancer?.profile?.github}
+                      value={freelancer?.profile?.github || ""}
                       onChange={(e)=>
                       {
                         setFreelancer({
                           ...freelancer, profile : {
-                            ...freelancer, github : e.target.value
+                            ...freelancer.profile, github : e.target.value
                           }
                         })
                       }
@@ -321,7 +321,7 @@ const FreelancerProfile = () => {
                       {
                         setFreelancer({
                           ...freelancer, profile : {
-                            ...freelancer, linkedin : e.target.value
+                            ...freelancer.profile, linkedin : e.target.value
                           }
                         })
                       }
@@ -386,7 +386,7 @@ const FreelancerProfile = () => {
                   <div>
                     <label className='text-md text-gray-500 uppercase tracking-widest mb-2 block'>Email Address</label>
                     <input
-                    disabled='true'
+                    disabled={true}
                       type='email'
                       value={freelancer?.email}
                       className='disable  w-full bg-[#0c1324] border border-[#1e2230] rounded-lg h-15 px-4 text-md text-white focus:outline-none focus:border-[#6366F1] transition-colors'
@@ -525,7 +525,7 @@ const FreelancerProfile = () => {
                   <div>
                     <label className='text-md text-gray-500 uppercase tracking-widest mb-2 block'>Hourly Rate ($)</label>
                     <div className='flex items-center gap-2 bg-[#0c1324] border border-[#1e2230] rounded-lg h-15 px-4 focus-within:border-[#6366F1] transition-colors'>
-                      <span className='text-gray-400 text-xl'>$</span>
+                      <span className='text-gray-400 text-xl'>₹</span>
                       <input
                         type='number'
                         value={freelancer?.profile?.hourlyRate}

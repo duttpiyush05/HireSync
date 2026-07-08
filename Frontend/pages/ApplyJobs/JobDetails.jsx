@@ -80,7 +80,7 @@ const JobDetails = () => {
             <div className='flex flex-wrap items-center gap-4 text-lg text-gray-400'>
               <span className='flex items-center gap-1'>
                 <i className="ri-money-dollar-circle-line text-green-400"></i>
-                {jobDetails?.budget ? `$${jobDetails?.budget.minbudget} - $${jobDetails?.budget.maxbudget}` : 'Negotiable'} <span className='text-xl text-blue-300 pl-2 pr-10'>
+                {jobDetails?.budget ? `₹${jobDetails?.budget.minbudget} - ₹${jobDetails?.budget.maxbudget}` : 'Negotiable'} <span className='text-xl text-blue-300 pl-2 pr-10'>
                   {jobDetails?.budget.type}
                 </span>
               </span>
