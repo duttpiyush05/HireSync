@@ -197,9 +197,9 @@ const CreateProposal = () => {
 
             <div className='flex flex-col sm:flex-row gap-4 mb-6'>
               <div className='flex-1'>
-                <label className='text-md text-gray-400 mb-2 block'>Your Asking Price ($)</label>
+                <label className='text-md text-gray-400 mb-2 block'>Your Asking Price (₹)</label>
                 <div className='flex items-center bg-[#0c1324] border border-[#1e2230] rounded-lg h-15 px-4 gap-2'>
-                  <span className='text-gray-400 text-md'>$</span>
+                  <span className='text-gray-400 text-md'>₹</span>
                   <input
                     type='number'
                     value= {askingPrice!=0? askingPrice : ''}
@@ -230,16 +230,16 @@ const CreateProposal = () => {
             <div className='bg-[#0c1324] border border-[#1e2230] rounded-xl p-5 flex flex-col gap-3'>
               <div className='flex items-center justify-between text-md'>
                 <span className='text-gray-400'>Service Amount</span>
-                <span className='text-white font-medium'>${askingPrice.toFixed(2)}</span>
+                <span className='text-white font-medium'>₹{askingPrice.toFixed(2)}</span>
               </div>
               <div className='flex items-center justify-between text-md'>
                 <span className='text-gray-400'>HireSync Platform Fee (10%)</span>
-                <span className='text-red-400 font-medium'>-${serviceFee.toFixed(2)}</span>
+                <span className='text-red-400 font-medium'>-₹{serviceFee.toFixed(2)}</span>
               </div>
               <div className='h-px bg-[#1e2230]'></div>
               <div className='flex items-center justify-between'>
                 <span className='text-md font-bold text-white'>You'll Receive</span>
-                <span className='text-green-400 font-bold text-xl'>${youReceive.toFixed(2)}</span>
+                <span className='text-green-400 font-bold text-xl'>₹{youReceive.toFixed(2)}</span>
               </div>
             </div>
 

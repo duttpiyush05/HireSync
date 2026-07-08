@@ -212,7 +212,7 @@ const JobInfo = () => {
                 ></i> 
                 {client?.email}
             </div>
-
+{/* 
             <button 
             disabled={job?.status==='closed'}
             onClick={handleCloseJob} 
@@ -224,7 +224,7 @@ const JobInfo = () => {
               {
                 job?.status==='open' ? 'Close Job' : 'Closed'
               }
-            </button>
+            </button> */}
           </div>
               </div>
               
