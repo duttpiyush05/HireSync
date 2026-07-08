@@ -77,7 +77,14 @@ module.exports.postReview = async(req, res, next)=>
         message : "Review Successfully Submitted",
         contract_id : contract
       })
+      const notificationClient = await notificationModel.create({
+        user : reviewee,
+        title: "New Review",
+        message : "Someone Reviewed you",
+        contract_id : contract
+      })
       emitNotification(req.user._id, notificationForFreelancer)
+      emitNotification(reviewee, notificationClient)
       res.status(201).json({newReview})
     }
     if(role==="client")
@@ -88,10 +95,16 @@ module.exports.postReview = async(req, res, next)=>
         message : "Review Successfully Submitted",
         contract_id : contract
       })
+      const notificationForFreelancer = await notificationModel.create({
+        user : reviewee,
+        title: "New Review",
+        message : "Someone Reviewed you",
+        contract_id : contract
+      })
       emitNotification(req.user._id, notificationForClient)
+      emitNotification(reviewee, notificationForFreelancer)
       res.status(201).json({newReview})
     }
-    
   }catch(error)
   {
     res.status(401).json({messgae: error?.messgae})

@@ -52,8 +52,6 @@ module.exports.createProposal = async (req, res, next) => {
       receivingAmt,
     })
 
-        const io = getIO();
-
     //forClient
     const notificationForClient = await notificationModel.create({
       user : job.client,
@@ -64,7 +62,6 @@ module.exports.createProposal = async (req, res, next) => {
     emitNotification(job.client, notificationForClient)
 
     // for freelancer
-
     const notificationForFreelancer = await notificationModel.create({
       user : req.user._id,
       title : "Proposal Submitted",
@@ -270,8 +267,6 @@ module.exports.updateProposalStatus = async (req, res) => {
         notificationForFreelancer
       });
     }
-        const io = getIO();
-
     const notificationForFreelancer = await notificationModel.create({
       user : proposal.freelancer,
       title : "Proposal Rejected",

@@ -4,13 +4,18 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const RESEND_SECONDS = 30
+const PAGE_LOAD_DELAY = 3000  
+const VERIFY_MIN_DURATION = 4000 
 
 const OtpVerification = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  
-  const email = location?.state?.email || '' 
-  const role = location?.state?.role || ''  
+
+  const email = location?.state?.email || ''
+  const role = location?.state?.role || ''
+
+  const [pageLoading, setPageLoading] = useState(true)  
+  const [isLoading, setIsLoading] = useState(false) 
 
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [isVerifying, setIsVerifying] = useState(false)
@@ -20,8 +25,13 @@ const OtpVerification = () => {
   const inputsRef = useRef([])
   const timerRef = useRef(null)
 
-  // Countdown timer
   useEffect(() => {
+    const t = setTimeout(() => setPageLoading(false), PAGE_LOAD_DELAY)
+    return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    if (pageLoading) return
     if (secondsLeft <= 0) return
 
     timerRef.current = setTimeout(() => {
@@ -29,7 +39,7 @@ const OtpVerification = () => {
     }, 1000)
 
     return () => clearTimeout(timerRef.current)
-  }, [secondsLeft])
+  }, [secondsLeft, pageLoading])
 
   const focusInput = (index) => {
     const el = inputsRef.current[index]
@@ -89,22 +99,38 @@ const OtpVerification = () => {
     }
 
     setIsVerifying(true)
+    setIsLoading(true) 
+
+    const startedAt = Date.now()
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/${role}/auth/verify-otp`, {
         email,
         otp: otpValue
       })
 
+      const elapsed = Date.now() - startedAt
+      const remaining = VERIFY_MIN_DURATION - elapsed
+      if (remaining > 0) {
+        await new Promise((res) => setTimeout(res, remaining))
+      }
+
       if (response.status === 201) {
         toast.success('Account Created Successfully!')
-        role==='freelancer'?navigate('/fl/login'):navigate('/client/login')
+        role === 'freelancer' ? navigate('/fl/login') : navigate('/client/login')
       }
     } catch (err) {
+      const elapsed = Date.now() - startedAt
+      const remaining = VERIFY_MIN_DURATION - elapsed
+      if (remaining > 0) {
+        await new Promise((res) => setTimeout(res, remaining))
+      }
       toast.error(err?.response?.data?.message || 'Invalid or expired code')
       setOtp(Array(6).fill(''))
       focusInput(0)
     } finally {
       setIsVerifying(false)
+      setIsLoading(false)
     }
   }
 
@@ -128,6 +154,65 @@ const OtpVerification = () => {
   const maskedEmail = email
     ? email.replace(/^(.{2}).*(@.*)$/, (_, start, domain) => `${start}${'*'.repeat(4)}${domain}`)
     : ''
+
+  const FullScreenLoader = ({ message }) => (
+    <div className='fixed inset-0 bg-[#0c1324] flex flex-col items-center justify-center z-[9999]'>
+      <style>{`
+        @keyframes logo-pop {
+          0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+          100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes bar-fill {
+          0% { width: 0%; }
+          30% { width: 35%; }
+          60% { width: 65%; }
+          85% { width: 88%; }
+          100% { width: 100%; }
+        }
+        @keyframes dot-bounce {
+          0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+          40% { transform: translateY(-8px); opacity: 1; }
+        }
+        .logo-anim { animation: logo-pop 0.6s ease-out forwards; }
+        .bar-anim { animation: bar-fill ${message === 'Verifying OTP please wait...' ? '4s' : '3s'} ease-in-out forwards; }
+        .dot1 { animation: dot-bounce 1.2s ease-in-out infinite 0s; }
+        .dot2 { animation: dot-bounce 1.2s ease-in-out infinite 0.2s; }
+        .dot3 { animation: dot-bounce 1.2s ease-in-out infinite 0.4s; }
+      `}</style>
+
+      <div className='absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#6366F1]/15 blur-3xl'></div>
+      <div className='absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-[#a855f7]/10 blur-3xl'></div>
+
+      <div className='relative z-10 flex flex-col items-center gap-8'>
+        <div className='logo-anim flex items-center gap-3'>
+          <span className='w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#a855f7] flex items-center justify-center text-2xl'>
+            <i className="ri-flashlight-fill text-white"></i>
+          </span>
+          <span className='text-4xl font-bold text-white'>HireSync</span>
+        </div>
+
+        <div className='flex items-center gap-2'>
+          <span className='w-2 h-2 rounded-full bg-[#6366F1] dot1'></span>
+          <span className='w-2 h-2 rounded-full bg-[#a855f7] dot2'></span>
+          <span className='w-2 h-2 rounded-full bg-[#6366F1] dot3'></span>
+        </div>
+
+        <div className='w-48 h-1 bg-[#1e2230] rounded-full overflow-hidden'>
+          <div className='h-full bg-gradient-to-r from-[#6366F1] to-[#a855f7] rounded-full bar-anim'></div>
+        </div>
+
+        <p className='text-sm text-gray-500 font-medium'>{message}</p>
+      </div>
+    </div>
+  )
+
+  if (pageLoading) {
+    return <FullScreenLoader message="Please wait..." />
+  }
+
+  if (isLoading) {
+    return <FullScreenLoader message="Verifying OTP please wait..." />
+  }
 
   return (
     <div className='bg-[#0c1324] min-h-screen w-full text-white flex items-center justify-center px-4 py-8 sm:py-10'>
