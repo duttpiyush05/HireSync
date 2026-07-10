@@ -10,10 +10,16 @@ const {Server} = require('socket.io')
 const {setIO} = require('./socket')
 const {userToSocket, socketToUser} = require('./onlineUsers');
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    process.env.FRONTEND_URL
+];
+
 const io = new Server(httpServer,{
     cors : {
-        origin: "http://localhost:5173",
-        methods : ["GET", "POST"]
+        origin: allowedOrigins,
+        methods : ["GET", "POST"],
+        credentials: true
     }
 })
 
