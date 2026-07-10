@@ -15,48 +15,53 @@ const mongoose = require('mongoose')
 
 module.exports.register = async (req, res, next) =>
 {
-  const error = validationResult(req)
-  if(!error.isEmpty())
-  {
-    return res.status(400).json({message : error.array()})
+  try {
+    const error = validationResult(req)
+    if(!error.isEmpty())
+    {
+      return res.status(400).json({message : error.array()})
+    }
+    
+    const {fullname, email, password, contactno, gender} = req.body;
+
+    const isFreelancer = await freelancerModel.findOne({email})
+    if(isFreelancer)
+    {
+      return res.status(400).json({message : "User Already exists"})
+    }
+
+    const pendingFreelancer = await pendingUserModel.find({email})
+    if(pendingFreelancer)
+    {
+      await pendingUserModel.deleteOne({email})
+    }
+
+    const hashedPassword = await pendingUserModel.hashPassword(password)
+    const otp = Math.floor(100000+Math.random() *900000).toString()
+    const otpExpire = new Date(Date.now()+5*60*1000)
+
+    const newPendingFreelancer = await pendingUserModel.create({
+      fullname:{
+        firstname: fullname.firstname,
+        lastname : fullname.lastname
+      },
+      email : email,
+      password : hashedPassword,
+      contactno : contactno,
+      gender : gender,
+      role: 'freelancer',
+      otp,
+      otpExpire,
+    })
+
+    await sendOTP(email, otp)
+    // const token = await freelancer.generateToken()
+    // res.cookie('token', token)
+    res.status(201).json({email, message: "Otp Send Successfully"})
+  } catch (err) {
+    console.error("Registration Error:", err);
+    res.status(500).json({message: "Internal Server Error", error: err.message});
   }
-  
-  const {fullname, email, password, contactno, gender} = req.body;
-
-  const isFreelancer = await freelancerModel.findOne({email})
-  if(isFreelancer)
-  {
-    return res.status(400).json({message : "User Already exists"})
-  }
-
-  const pendingFreelancer = await pendingUserModel.find({email})
-  if(pendingFreelancer)
-  {
-    await pendingUserModel.deleteOne({email})
-  }
-
-  const hashedPassword = await pendingUserModel.hashPassword(password)
-  const otp = Math.floor(100000+Math.random() *900000).toString()
-  const otpExpire = new Date(Date.now()+5*60*1000)
-
-  const newPendingFreelancer = await pendingUserModel.create({
-    fullname:{
-      firstname: fullname.firstname,
-      lastname : fullname.lastname
-    },
-    email : email,
-    password : hashedPassword,
-    contactno : contactno,
-    gender : gender,
-    role: 'freelancer',
-    otp,
-    otpExpire,
-  })
-
-  await sendOTP(email, otp)
-  // const token = await freelancer.generateToken()
-  // res.cookie('token', token)
-  res.status(201).json({email, message: "Otp Send Successfully"})
 }
 
 module.exports.verifyOtp = async(req, res, next)=>
