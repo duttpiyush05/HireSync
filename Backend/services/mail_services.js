@@ -8,6 +8,14 @@ const transporter = nodemailer.createTransport({
   }
 })
 
+transporter.verify(function (error, success) {
+    if (error) {
+        console.error("SMTP Error:", error);
+    } else {
+        console.log("SMTP Server is ready");
+    }
+});
+
 const sendOTP = async (email, otp) => {
   await transporter.sendMail({
     from: `"HireSync" <${process.env.EMAIL_USER}>`,
