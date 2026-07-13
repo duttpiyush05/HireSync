@@ -3,58 +3,67 @@ const { Resend } = require("resend");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOTP = async (email, otp) => {
-    await resend.emails.send({
-        from: "HireSync <onboarding@resend.dev>",
-        to: email,
-        subject: "Verify your HireSync Account",
+    try {
+        const { data, error } = await resend.emails.send({
+            from: "HireSync <onboarding@resend.dev>",
+            to: [email],  
+            subject: "Verify your HireSync Account",
+            html: `
+            <div style="font-family:Segoe UI,Arial,sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
 
-        html: `
-        <div style="font-family:Segoe UI,Arial,sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
+                <div style="background:#4f46e5;padding:24px;text-align:center">
+                    <h1 style="color:white;margin:0">HireSync</h1>
+                </div>
 
-            <div style="background:#4f46e5;padding:24px;text-align:center">
-                <h1 style="color:white;margin:0">
-                    HireSync
-                </h1>
-            </div>
+                <div style="padding:30px">
+                    <h2>Verify your email</h2>
 
-            <div style="padding:30px">
+                    <p>
+                        Use the OTP below to complete your registration.
+                    </p>
 
-                <h2>Verify your email</h2>
+                    <div style="
+                        text-align:center;
+                        font-size:34px;
+                        font-weight:bold;
+                        letter-spacing:8px;
+                        background:#f4f4f4;
+                        padding:20px;
+                        border-radius:8px;
+                    ">
+                        ${otp}
+                    </div>
 
-                <p>
-                    Use the OTP below to complete your registration.
-                </p>
+                    <p style="margin-top:25px">
+                        This OTP expires in <b>5 minutes</b>.
+                    </p>
+                </div>
 
                 <div style="
                     text-align:center;
-                    font-size:34px;
-                    font-weight:bold;
-                    letter-spacing:8px;
-                    background:#f4f4f4;
                     padding:20px;
-                    border-radius:8px;
+                    background:#fafafa;
+                    color:#777;
                 ">
-                    ${otp}
+                    © ${new Date().getFullYear()} HireSync
                 </div>
 
-                <p style="margin-top:25px">
-                    This OTP expires in <b>5 minutes</b>.
-                </p>
-
             </div>
+            `
+        });
 
-            <div style="
-                text-align:center;
-                padding:20px;
-                background:#fafafa;
-                color:#777;
-            ">
-                © ${new Date().getFullYear()} HireSync
-            </div>
+        if (error) {
+            console.error("Resend API Error:", error);
+            throw new Error(error.message);
+        }
 
-        </div>
-        `
-    });
+        console.log("Email sent successfully:", data);
+        return data;
+
+    } catch (err) {
+        console.error("Send OTP Error:", err);
+        throw err;
+    }
 };
 
 module.exports = { sendOTP };
