@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOTP = async (email, otp) => {
     await resend.emails.send({
-        from: "HireSync <hiresync.noreply@gmail.com>",
+        from: "HireSync <onboarding@resend.dev>",
         to: email,
         subject: "Verify your HireSync Account",
 
