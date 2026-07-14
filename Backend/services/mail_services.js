@@ -1,12 +1,23 @@
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: Number(process.env.EMAIL_PORT),
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.BREVO_API_KEY,
+    },
+});
 
 const sendOTP = async (email, otp) => {
     try {
-        const { data, error } = await resend.emails.send({
-            from: "HireSync <onboarding@resend.dev>",
-            to: [email],  
+        await transporter.verify();
+        console.log("SMTP Connected Successfully");
+
+        const info = await transporter.sendMail({
+            from: process.env.EMAIL_FROM,
+            to: email,
             subject: "Verify your HireSync Account",
             html: `
             <div style="font-family:Segoe UI,Arial,sans-serif;max-width:480px;margin:auto;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
@@ -18,9 +29,7 @@ const sendOTP = async (email, otp) => {
                 <div style="padding:30px">
                     <h2>Verify your email</h2>
 
-                    <p>
-                        Use the OTP below to complete your registration.
-                    </p>
+                    <p>Use the OTP below to complete your registration.</p>
 
                     <div style="
                         text-align:center;
@@ -49,19 +58,12 @@ const sendOTP = async (email, otp) => {
                 </div>
 
             </div>
-            `
+            `,
         });
 
-        if (error) {
-            console.error("Resend API Error:", error);
-            throw new Error(error.message);
-        }
-
-        console.log("Email sent successfully:", data);
-        return data;
-
+        console.log("Email Sent:", info.messageId);
     } catch (err) {
-        console.error("Send OTP Error:", err);
+        console.error("Mail Error:", err);
         throw err;
     }
 };
