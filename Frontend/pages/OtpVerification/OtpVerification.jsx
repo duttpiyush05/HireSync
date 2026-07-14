@@ -16,6 +16,8 @@ const OtpVerification = () => {
 
   const [pageLoading, setPageLoading] = useState(true)  
   const [isLoading, setIsLoading] = useState(false) 
+  const [progress, setProgress] = useState(0)
+  const [verifyMessage, setVerifyMessage] = useState('Please wait...')
 
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [isVerifying, setIsVerifying] = useState(false)
@@ -26,9 +28,41 @@ const OtpVerification = () => {
   const timerRef = useRef(null)
 
   useEffect(() => {
-    const t = setTimeout(() => setPageLoading(false), PAGE_LOAD_DELAY)
-    return () => clearTimeout(t)
-  }, [])
+    if (pageLoading) {
+      setProgress(0)
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval)
+            return 100
+          }
+          return prev + 1
+        })
+      }, 30) // 30ms * 100 = 3000ms
+      
+      const t = setTimeout(() => setPageLoading(false), PAGE_LOAD_DELAY)
+      return () => {
+        clearInterval(interval)
+        clearTimeout(t)
+      }
+    }
+  }, [pageLoading])
+
+  useEffect(() => {
+    if (isLoading) {
+      setProgress(0)
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval)
+            return 100
+          }
+          return prev + 1
+        })
+      }, 40) // 40ms * 100 = 4000ms
+      return () => clearInterval(interval)
+    }
+  }, [isLoading])
 
   useEffect(() => {
     if (pageLoading) return
@@ -100,6 +134,11 @@ const OtpVerification = () => {
 
     setIsVerifying(true)
     setIsLoading(true) 
+    setVerifyMessage('Contacting HireSync Auth Server...')
+
+    const msgTimer1 = setTimeout(() => setVerifyMessage('Validating security credentials...'), 1000)
+    const msgTimer2 = setTimeout(() => setVerifyMessage('Completing registration handshake...'), 2200)
+    const msgTimer3 = setTimeout(() => setVerifyMessage('Authenticating! Preparing redirection...'), 3200)
 
     const startedAt = Date.now()
 
@@ -115,11 +154,22 @@ const OtpVerification = () => {
         await new Promise((res) => setTimeout(res, remaining))
       }
 
+      clearTimeout(msgTimer1)
+      clearTimeout(msgTimer2)
+      clearTimeout(msgTimer3)
+
       if (response.status === 201) {
         toast.success('Account Created Successfully!')
-        role === 'freelancer' ? navigate('/fl/login') : navigate('/client/login')
+        if (role === 'freelancer' || role === 'freelancers') {
+          navigate('/fl/login')
+        } else {
+          navigate('/client/login')
+        }
       }
     } catch (err) {
+      clearTimeout(msgTimer1)
+      clearTimeout(msgTimer2)
+      clearTimeout(msgTimer3)
       const elapsed = Date.now() - startedAt
       const remaining = VERIFY_MIN_DURATION - elapsed
       if (remaining > 0) {
@@ -155,26 +205,18 @@ const OtpVerification = () => {
     ? email.replace(/^(.{2}).*(@.*)$/, (_, start, domain) => `${start}${'*'.repeat(4)}${domain}`)
     : ''
 
-  const FullScreenLoader = ({ message }) => (
+  const FullScreenLoader = ({ message, progress }) => (
     <div className='fixed inset-0 bg-[#0c1324] flex flex-col items-center justify-center z-[9999]'>
       <style>{`
         @keyframes logo-pop {
           0% { opacity: 0; transform: scale(0.8) translateY(10px); }
           100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        @keyframes bar-fill {
-          0% { width: 0%; }
-          30% { width: 35%; }
-          60% { width: 65%; }
-          85% { width: 88%; }
-          100% { width: 100%; }
-        }
         @keyframes dot-bounce {
           0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
           40% { transform: translateY(-8px); opacity: 1; }
         }
         .logo-anim { animation: logo-pop 0.6s ease-out forwards; }
-        .bar-anim { animation: bar-fill ${message === 'Verifying OTP please wait...' ? '4s' : '3s'} ease-in-out forwards; }
         .dot1 { animation: dot-bounce 1.2s ease-in-out infinite 0s; }
         .dot2 { animation: dot-bounce 1.2s ease-in-out infinite 0.2s; }
         .dot3 { animation: dot-bounce 1.2s ease-in-out infinite 0.4s; }
@@ -185,33 +227,39 @@ const OtpVerification = () => {
 
       <div className='relative z-10 flex flex-col items-center gap-8'>
         <div className='logo-anim flex items-center gap-3'>
-          <span className='w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#a855f7] flex items-center justify-center text-2xl'>
+          <span className='w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#a855f7] flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(99,102,241,0.5)]'>
             <i className="ri-flashlight-fill text-white"></i>
           </span>
-          <span className='text-4xl font-bold text-white'>HireSync</span>
+          <span className='text-4xl font-bold text-white tracking-wider'>HireSync</span>
         </div>
 
         <div className='flex items-center gap-2'>
-          <span className='w-2 h-2 rounded-full bg-[#6366F1] dot1'></span>
-          <span className='w-2 h-2 rounded-full bg-[#a855f7] dot2'></span>
-          <span className='w-2 h-2 rounded-full bg-[#6366F1] dot3'></span>
+          <span className='w-2.5 h-2.5 rounded-full bg-[#6366F1] dot1'></span>
+          <span className='w-2.5 h-2.5 rounded-full bg-[#a855f7] dot2'></span>
+          <span className='w-2.5 h-2.5 rounded-full bg-[#6366F1] dot3'></span>
         </div>
 
-        <div className='w-48 h-1 bg-[#1e2230] rounded-full overflow-hidden'>
-          <div className='h-full bg-gradient-to-r from-[#6366F1] to-[#a855f7] rounded-full bar-anim'></div>
+        <div className='flex flex-col items-center gap-2'>
+          <div className='w-56 h-1.5 bg-[#1e2230] rounded-full overflow-hidden shadow-inner'>
+            <div 
+              className='h-full bg-gradient-to-r from-[#6366F1] via-[#818cf8] to-[#a855f7] rounded-full transition-all duration-300 ease-out'
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+          <span className='text-xs text-indigo-400 font-semibold tracking-wider'>{progress}%</span>
         </div>
 
-        <p className='text-sm text-gray-500 font-medium'>{message}</p>
+        <p className='text-sm text-gray-300 font-semibold tracking-wide bg-[#111827]/60 px-4 py-2 rounded-full border border-[#1e2230] animate-pulse'>{message}</p>
       </div>
     </div>
   )
 
   if (pageLoading) {
-    return <FullScreenLoader message="Please wait..." />
+    return <FullScreenLoader message="Initializing workspace..." progress={progress} />
   }
 
   if (isLoading) {
-    return <FullScreenLoader message="Verifying OTP please wait..." />
+    return <FullScreenLoader message={verifyMessage} progress={progress} />
   }
 
   return (

@@ -18,6 +18,7 @@ const RegisterPage = () => {
   const [check, setcheck] = useState(false)
 
   const { client, setclient } = useContext(ClientDataContext)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -26,6 +27,9 @@ const RegisterPage = () => {
   }, [])
   const submitHandler = async (e) => {
     e.preventDefault()
+    setIsSubmitting(true)
+    const startedAt = Date.now()
+
     const clientData = {
       fullname: {
         firstname: firstname,
@@ -39,6 +43,13 @@ const RegisterPage = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/clients/register`, clientData)
+      
+      const elapsed = Date.now() - startedAt
+      const remaining = 3500 - elapsed
+      if (remaining > 0) {
+        await new Promise(resolve => setTimeout(resolve, remaining))
+      }
+
       if (response.status === 201) {
         const data = response.data
         setclient(data.client)
@@ -46,14 +57,21 @@ const RegisterPage = () => {
         navigate('/verify-otp',
           {
             state: {
-            email : response?.data?.email,
-            role : 'clients'
-          }
+              email : response?.data?.email,
+              role : 'clients'
+            }
           }
         )
       }
     } catch (err) {
-      toast.error(err.response.data?.message || "Something Went Wrong")
+      const elapsed = Date.now() - startedAt
+      const remaining = 3500 - elapsed
+      if (remaining > 0) {
+        await new Promise(resolve => setTimeout(resolve, remaining))
+      }
+      toast.error(err.response?.data?.message || "Something Went Wrong")
+    } finally {
+      setIsSubmitting(false)
     }
 
     setfirstname('')
@@ -276,10 +294,18 @@ const RegisterPage = () => {
             </div>
 
             <button
-              className='block w-full mt-6 h-11 sm:h-12 rounded-xl bg-gradient-to-r from-[#6366F1] to-[#a855f7] text-sm sm:text-base font-semibold text-white hover:opacity-90 transition-opacity'
+              disabled={isSubmitting}
+              className='block w-full mt-6 h-11 sm:h-12 rounded-xl bg-gradient-to-r from-[#6366F1] to-[#a855f7] text-sm sm:text-base font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
               type='submit'
             >
-              Create Account
+              {isSubmitting ? (
+                <>
+                  <span className='w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin'></span>
+                  Creating Account...
+                </>
+              ) : (
+                'Create Account'
+              )}
             </button>
 
             <p className='mt-6 text-center text-sm sm:text-base text-gray-400 border-t border-[#1e2230] pt-5'>

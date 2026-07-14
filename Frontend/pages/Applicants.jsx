@@ -177,10 +177,6 @@ const Applicants = () => {
                       </div>
                       <div className='bg-[#0c1324] border border-[#1e2230] rounded-xl p-3 cursor-pointer'>
                         <p className='text-base text-gray-500 mb-1'>Portfolio</p>
-                        {/* <p className='text-sm sm:text-base font-bold text-[#a5a8ff] truncate uppercase'>
-                          {console.log(`${import.meta.env.VITE_BASE_URL}/uploads/proposals/${job?.portfolio?.filename}`)
-                          }
-                          {`${import.meta.env.VITE_BASE_URL}/uploads/proposals/${job?.portfolio?.filename}` || 'N/A'}</p> */}
                           <button
                           className='font-bold cursor-pointer'
                             onClick={() =>

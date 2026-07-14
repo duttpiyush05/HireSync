@@ -61,7 +61,7 @@ const ClientAuth = ({children}) => {
       }
       catch(err)
       {
-        console.log(err)
+        console.error(err)
         navigate('/client/login')
       }
     }

@@ -16,8 +16,6 @@ const mongoose = require('mongoose')
 module.exports.register = async (req, res, next) =>
 {
   try {
-    console.log("1");
-    
     const error = validationResult(req)
     if(!error.isEmpty())
     {
@@ -37,15 +35,11 @@ module.exports.register = async (req, res, next) =>
     {
       await pendingUserModel.deleteOne({email})
     }
-    
-    console.log("1");
 
     const hashedPassword = await pendingUserModel.hashPassword(password)
     const otp = Math.floor(100000+Math.random() *900000).toString()
     const otpExpire = new Date(Date.now()+5*60*1000)
 
-    console.log("up");
-    
     const newPendingFreelancer = await pendingUserModel.create({
       fullname:{
         firstname: fullname.firstname,
@@ -60,9 +54,7 @@ module.exports.register = async (req, res, next) =>
       otpExpire,
     })
 
-    console.log("one");
     await sendOTP(email, otp)
-    console.log("sec");
 
     // const token = await freelancer.generateToken()
     // res.cookie('token', token)
